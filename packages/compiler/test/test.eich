@@ -1,0 +1,13 @@
+<eich>
+  <row>
+    <col>
+      <container>
+      Hello world!
+      </container>
+    </col>
+    <col>
+      <container>
+      </container>
+    </col>
+  </row>
+</eich>

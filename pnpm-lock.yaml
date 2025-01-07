@@ -60,6 +60,12 @@ importers:
         specifier: ^8.16.0
         version: 8.19.1(eslint@9.9.0(jiti@2.4.2))(typescript@5.7.2)
 
+  packages/compiler:
+    dependencies:
+      '@eich/script':
+        specifier: workspace:^
+        version: link:../eich-script
+
   packages/eich: {}
 
   packages/eich-script: {}
@@ -70,7 +76,11 @@ importers:
         specifier: workspace:^
         version: link:../eich-script
 
-  packages/renderer: {}
+  packages/renderer:
+    dependencies:
+      '@eich/compiler':
+        specifier: workspace:^
+        version: link:../compiler
 
 packages:
 
