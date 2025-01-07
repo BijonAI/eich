@@ -60,6 +60,18 @@ importers:
         specifier: ^8.16.0
         version: 8.19.1(eslint@9.9.0(jiti@2.4.2))(typescript@5.7.2)
 
+  packages/eich: {}
+
+  packages/eich-script: {}
+
+  packages/parser:
+    dependencies:
+      '@eich/script':
+        specifier: workspace:^
+        version: link:../eich-script
+
+  packages/renderer: {}
+
 packages:
 
   '@antfu/eslint-config@2.27.3':
