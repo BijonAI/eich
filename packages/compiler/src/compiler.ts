@@ -10,7 +10,7 @@ export function createCompiler(resolvers: Array<WidgetResolver>) {
     // 处理纯文本
     if (!xml.startsWith('<')) {
       return {
-        tag: 'text',
+        tag: 'text-content',
         attributes: { content: xml },
         children: []
       };
@@ -144,7 +144,6 @@ export function createCompiler(resolvers: Array<WidgetResolver>) {
         widget: tree,
         data,
       })
-      console.log(result)
       if (result === null) {
         result = {
           widget: {

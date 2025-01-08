@@ -1,12 +1,9 @@
 import { createRenderer } from '../dist/index.js'
 import fs from 'fs'
-import { eich, row, col, container } from '@eich/compiler'
+import { baseResolvers } from '@eich/compiler'
 
-const renderer = createRenderer([
-  row,
-  col,
-  container,
-  eich
-])
+const renderer = createRenderer(baseResolvers)
 
-console.log(renderer.renderToHTML(fs.readFileSync('./test.eich', 'utf-8')))
+fs.writeFileSync('output.html', renderer.renderToHTML(
+  fs.readFileSync('./test.eich', 'utf-8')
+))

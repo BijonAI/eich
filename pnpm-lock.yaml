@@ -70,12 +70,6 @@ importers:
 
   packages/eich-script: {}
 
-  packages/parser:
-    dependencies:
-      '@eich/script':
-        specifier: workspace:^
-        version: link:../eich-script
-
   packages/renderer:
     dependencies:
       '@eich/compiler':

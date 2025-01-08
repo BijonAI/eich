@@ -1,12 +1,42 @@
-<eich>
+<eich width="600" height="400">
   <row>
     <col>
       <container>
-      Hello world!
+        Hello world!
       </container>
     </col>
     <col>
       <container>
+      Fuck you!
+      </container>
+    </col>
+  </row>
+  <row>
+    <col>
+      <container>
+        Hello world!
+      </container>
+    </col>
+    <col>
+      <container>
+      Fuck you!
+      </container>
+    </col>
+  </row>
+  <row>
+    <col>
+      <container>
+        Hello world!
+      </container>
+    </col>
+    <col>
+      <container>
+      Fuck you!
+      </container>
+    </col>
+    <col>
+      <container>
+      Fuck you!
       </container>
     </col>
   </row>

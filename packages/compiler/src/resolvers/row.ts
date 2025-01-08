@@ -1,21 +1,24 @@
 import { defineResolver, VElement } from "../types";
+import { cheat } from "../utils/cheat";
 import { EichContainerElement, container } from "./container";
 
 export interface EichRowElement extends EichContainerElement {
-  height?: number
+  attributes: {
+    height?: number
+  }
 }
 
 export const row = defineResolver<EichRowElement>(({ widget, data }) => {
   if (widget.tag !== 'row') return null
-  const containerWidget = container({ widget, data })
+  const containerWidget = cheat(container, widget, 'container')
   const row: VElement = {
     tag: 'div',
-    attributes: {},
+    attributes: containerWidget?.widget.attributes ?? { style: '' },
     children: []
   }
-  row.attributes.style = 'display: flex; flex-direction: row;'
-  if (widget.height) {
-    row.attributes.style += `height: ${widget.height}px;`
+  row.attributes.style += ' display: flex; flex-direction: row;'
+  if (widget.attributes.height) {
+    row.attributes.style += ` height: ${widget.attributes.height};`
   }
   return { widget: row, data: containerWidget?.data ?? {} }
 })

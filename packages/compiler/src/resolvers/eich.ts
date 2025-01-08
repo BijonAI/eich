@@ -1,7 +1,25 @@
 import { EichElement } from "../types";
 import { defineResolver } from "../types"
 
-export const eich = defineResolver<EichElement>(({ widget, data }) => {
+export interface EichRootElement extends EichElement {
+  attributes: {
+    width?: number
+    height?: number
+  }
+}
+
+export const eich = defineResolver<EichRootElement>(({ widget, data }) => {
   if (widget.tag !== 'eich') return null
-  return { widget: { tag: 'div', attributes: {}, children: [] }, data }
+  const result = { widget: { tag: 'div', attributes: {
+    style: `position: absolute;`
+  }, children: [] }, data }
+  if (widget.attributes.width) {
+    result.widget.attributes.style += ` width: ${widget.attributes.width};`
+  }
+  if (widget.attributes.height) {
+    result.widget.attributes.style += ` height: ${widget.attributes.height};`
+  }
+  return result
 })
+
+

@@ -5,4 +5,4 @@ const compiler = createCompiler([
 ])
 const content = fs.readFileSync('./test.eich', 'utf-8')
 const result = compiler.compile(content, {})
-console.log(result.widget.children)
+fs.writeFileSync('output.html', result)

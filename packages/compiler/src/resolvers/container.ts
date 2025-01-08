@@ -1,46 +1,56 @@
 import { defineResolver, EichElement, VElement } from "../types"
 
 export interface EichContainerElement extends EichElement {
-  margin?: number
-  padding?: number
-  marginTop?: number
-  marginRight?: number
-  marginBottom?: number
-  marginLeft?: number
-  paddingTop?: number
-  paddingRight?: number
-  paddingBottom?: number
-  paddingLeft?: number
-  width?: number
-  height?: number
-  grow?: number
+  attributes: {
+    margin?: number
+    padding?: number
+    marginTop?: number
+    marginRight?: number
+    marginBottom?: number
+    marginLeft?: number
+    paddingTop?: number
+    paddingRight?: number
+    paddingBottom?: number
+    paddingLeft?: number
+    width?: number
+    height?: number
+    grow?: number
+  }
 }
 
 export const container = defineResolver<EichContainerElement>(({ widget, data }) => {
   if (widget.tag !== 'container') return null
   const container: VElement = {
     tag: 'div',
-    attributes: {},
+    attributes: {
+      style: ''
+    },
     children: []
   }
-  if (widget.marginBottom || widget.marginLeft || widget.marginRight || widget.marginTop) {
-    container.attributes.style = `margin: ${widget.marginTop}px ${widget.marginRight}px ${widget.marginBottom}px ${widget.marginLeft}px`
-  } else if (widget.margin) {
-    container.attributes.style = `margin: ${widget.margin}px`
+  if (widget.attributes.marginBottom || widget.attributes.marginLeft || widget.attributes.marginRight || widget.attributes.marginTop) {
+    container.attributes.style += ` margin: ${widget.attributes.marginTop} ${widget.attributes.marginRight} ${widget.attributes.marginBottom} ${widget.attributes.marginLeft};`
+  } else if (widget.attributes.margin) {
+    container.attributes.style += ` margin: ${widget.attributes.margin};`
   }
-  if (widget.paddingBottom || widget.paddingLeft || widget.paddingRight || widget.paddingTop) {
-    container.attributes.style += `padding: ${widget.paddingTop}px ${widget.paddingRight}px ${widget.paddingBottom}px ${widget.paddingLeft}px`
-  } else if (widget.padding) {
-    container.attributes.style += `padding: ${widget.padding}px`
+  if (widget.attributes.paddingBottom || widget.attributes.paddingLeft || widget.attributes.paddingRight || widget.attributes.paddingTop) {
+    container.attributes.style += ` padding: ${widget.attributes.paddingTop} ${widget.attributes.paddingRight} ${widget.attributes.paddingBottom} ${widget.attributes.paddingLeft};`
+  } else if (widget.attributes.padding) {
+    container.attributes.style += ` padding: ${widget.attributes.padding};`
   }
-  if (widget.width) {
-    container.attributes.style += `width: ${widget.width}px`
+  if (widget.attributes.width) {
+    container.attributes.style += ` width: ${widget.attributes.width};`
+  } else {
+    container.attributes.style += ` width: 100%;`
   }
-  if (widget.height) {
-    container.attributes.style += `height: ${widget.height}px`
+  if (widget.attributes.height) {
+    container.attributes.style += ` height: ${widget.attributes.height};`
+  } else {
+    container.attributes.style += ` height: 100%;`
   }
-  if (widget.grow) {
-    container.attributes.style += `flex-grow: ${widget.grow}`
+  if (widget.attributes.grow) {
+    container.attributes.style += ` flex-grow: ${widget.attributes.grow};`
+  } else if (widget.attributes.grow === undefined) {
+    container.attributes.style += ` flex-grow: 1;`
   }
   return { widget: container, data }
 })

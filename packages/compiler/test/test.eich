@@ -1,7 +1,7 @@
 <eich>
   <row>
     <col>
-      <container>
+      <container padding="3">
       Hello world!
       </container>
     </col>
