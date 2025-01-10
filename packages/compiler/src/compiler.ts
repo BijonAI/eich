@@ -1,10 +1,32 @@
-import { WidgetResolver, EichElement, VElement } from "./types";
+import { WidgetResolver, EichElement, VElement, WidgetContext, WidgetPresolver } from "./types";
 import { virtualize } from "./virsualize";
+import { createSandbox } from "./utils/sandbox";
 
-export function createCompiler(resolvers: Array<WidgetResolver>) {
+export function createCompiler(resolvers: Array<WidgetResolver>, presolvers: Array<WidgetPresolver>) {
   const additionalResolvers: Array<WidgetResolver> = []
+  let globalData: Record<string, any> = {}
 
-  function parse(xml: string): EichElement {
+  async function collectVariables(tree: EichElement, parentData: Record<string, any>) {
+    for (const presolver of presolvers) {
+      const context = presolver({ widget: tree, context: { data: parentData, global: globalData } })
+      if (context === null) continue
+      const sandbox = createSandbox({
+        ...parentData,
+        ...globalData,
+      });
+      Object.entries(context.global).forEach(async ([key, value]) => {
+        globalData[key] = await sandbox.run(value.value)
+      })
+    }
+
+    if (tree.children) {
+      for (const child of tree.children) {
+        await collectVariables(child, parentData);
+      }
+    }
+  }
+
+  function parse(xml: string, parent?: VElement): EichElement {
     xml = xml.trim();
 
     // 处理纯文本
@@ -66,11 +88,16 @@ export function createCompiler(resolvers: Array<WidgetResolver>) {
 
     const innerContent = xml.slice(fullMatch.length, endIndex);
 
-    return {
+    const result: EichElement = {
       tag: tagName,
       attributes: parseAttributes(attributesStr),
-      children: splitTopLevelTags(innerContent).map(child => parse(child))
+      children: [],
+      parent,
     };
+    const children = splitTopLevelTags(innerContent).map(child => parse(child, result))
+    result.children = children
+
+    return result
   }
 
   function splitTopLevelTags(content: string): string[] {
@@ -117,7 +144,16 @@ export function createCompiler(resolvers: Array<WidgetResolver>) {
     matches.forEach(match => {
       const [key, value] = match.split('=');
       if (key) {
-        attrs[key] = value ? value.replace(/"/g, '') : '';
+        // Check if the attribute starts with $
+        if (key.startsWith('$')) {
+          const actualKey = key.slice(1); // Remove the $ prefix
+          attrs[actualKey] = {
+            type: 'expression',
+            value: value ? value.replace(/"/g, '') : ''
+          };
+        } else {
+          attrs[key] = value ? value.replace(/"/g, '') : '';
+        }
       }
     });
 
@@ -128,46 +164,80 @@ export function createCompiler(resolvers: Array<WidgetResolver>) {
     additionalResolvers.push(resolver)
   }
 
-  function compile(eich: EichElement | string, data: Record<string, any>) {
+  async function compile(eich: EichElement | string, parentData: Record<string, any>) {
     let tree: EichElement
     if (typeof eich === "string") {
       tree = parse(eich)
     } else {
       tree = eich
     }
+    
+    await collectVariables(tree, parentData);
+    
+    const sandbox = createSandbox({
+      ...parentData,
+      ...globalData,
+    });
+    
+    const processedAttributes = await Promise.all(
+      Object.entries(tree.attributes).map(async ([key, value]) => {
+        if (value && typeof value === 'object' && value.type === 'expression') {
+          const evaluatedValue = await sandbox.run(value.value);
+          globalData = {
+            ...globalData,
+            [key]: evaluatedValue
+          };
+          return [key, evaluatedValue];
+        }
+        return [key, value];
+      })
+    );
+
+    const processedTree = {
+      ...tree,
+      attributes: Object.fromEntries(processedAttributes)
+    };
+
     let result: {
       widget: VElement,
-      data: Record<string, any>
-    } | null = null
+      context: WidgetContext
+    } | null = null;
+    
     for (const resolver of [...resolvers, ...additionalResolvers]) {
       result = resolver({
-        widget: tree,
-        data,
+        widget: processedTree,
+        context: {
+          data: parentData,
+          global: globalData
+        },
       })
-      if (result === null) {
-        result = {
-          widget: {
-            tag: 'div',
-            attributes: {},
-            children: []
-          },
-          data: {}
+      if (result !== null && result.context.global) {
+        globalData = {
+          ...globalData,
+          ...result.context.global
         }
-      } else break
+      }
+      if (result !== null) break
     }
-    result!.widget.children = result!.widget.children || []
-
-    if (tree.children && tree.children.length > 0) {
-      const compiledChildren = tree.children.map(child =>
-        compile(child, result!.data)
-      ).filter(Boolean)
-
-      result!.widget.children.push(
-        ...compiledChildren.map(child => child!.widget)
-      )
+    if (result?.widget) {
+      result!.widget.children = result!.widget.children || []
+      if (tree.children && tree.children.length > 0) {
+        const childData = {
+          ...parentData,
+          ...(result?.context?.data || {})
+        };
+  
+        const compiledChildren = await Promise.all(
+          tree.children.map(child => compile(child, childData))
+        );
+  
+        result!.widget.children.push(
+          ...compiledChildren.filter(Boolean).map(child => child!.widget)
+        );
+      }
     }
 
-    return result
+    return result;
   }
 
   return {

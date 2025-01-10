@@ -6,6 +6,9 @@ export function cheat(resolver: WidgetResolver, widget: EichElement, tagName: st
       ...widget,
       tag: tagName
     },
-    data: {}
+    context: {
+      data: {},
+      global: {}
+    }
   })
 }

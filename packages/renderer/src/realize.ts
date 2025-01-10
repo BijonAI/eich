@@ -1,6 +1,6 @@
 import { VElement } from "@eich/compiler";
 
-export function realize(widget: VElement, data: Record<string, any>) {
+export function realize(widget: VElement) {
   if (typeof window !== 'undefined') {
     if (widget.tag === 'text-content') {
       return document.createTextNode(widget.attributes.content ?? '')
@@ -11,7 +11,7 @@ export function realize(widget: VElement, data: Record<string, any>) {
         node.setAttribute(key, widget.attributes[key])
       }
     }
-    node.textContent = widget.children.map(child => realize(child, data)).join('')
+    node.textContent = widget.children.map(child => realize(child)).join('')
     return node
   }
   if (widget.tag === 'text-content') {
@@ -25,6 +25,6 @@ export function realize(widget: VElement, data: Record<string, any>) {
       }
     }
   }
-  result += `>${widget.children.map(child => realize(child, data)).join('')}</${widget.tag}>`
+  result += `>${widget.children.map(child => realize(child)).join('')}</${widget.tag}>`
   return result
 }

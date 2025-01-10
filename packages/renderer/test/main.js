@@ -1,9 +1,9 @@
 import { createRenderer } from '../dist/index.js'
 import fs from 'fs'
-import { baseResolvers } from '@eich/compiler'
+import { baseResolvers, basePresolvers } from '@eich/compiler'
 
-const renderer = createRenderer(baseResolvers)
+const renderer = createRenderer(baseResolvers, basePresolvers)
 
-fs.writeFileSync('output.html', renderer.renderToHTML(
+fs.writeFileSync('output.html', await renderer.renderToHTML(
   fs.readFileSync('./test.eich', 'utf-8')
 ))

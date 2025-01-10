@@ -1,43 +1,55 @@
 <eich width="600" height="400">
-  <row>
-    <col>
-      <container>
-        Hello world!
-      </container>
-    </col>
-    <col>
-      <container>
-      Fuck you!
-      </container>
-    </col>
-  </row>
-  <row>
-    <col>
-      <container>
-        Hello world!
-      </container>
-    </col>
-    <col>
-      <container>
-      Fuck you!
-      </container>
-    </col>
-  </row>
-  <row>
-    <col>
-      <container>
-        Hello world!
-      </container>
-    </col>
-    <col>
-      <container>
-      Fuck you!
-      </container>
-    </col>
-    <col>
-      <container>
-      Fuck you!
-      </container>
-    </col>
-  </row>
+  <var key="x" $value="109999 + 111">
+    <row>
+      <col>
+        <container align="center" baseline="center" $padding="222+222">
+          Hello world!
+        </container>
+      </col>
+      <col>
+        <container>
+        Fuck you!
+        </container>
+      </col>
+    </row>
+    <row>
+      <col>
+        <container>
+          Hello world!
+        </container>
+      </col>
+      <col>
+        <container>
+        Fuck you!
+        </container>
+      </col>
+    </row>
+    <row>
+      <col>
+        <container>
+          Hello world!
+        </container>
+      </col>
+      <col>
+        <container>
+        Fuck you!
+        </container>
+      </col>
+      <col>
+        <container>
+        Fuck you!
+        </container>
+      </col>
+      <col>
+        <container>
+        Fuck you!
+        </container>
+      </col>
+      <col>
+        <container>
+        Fuck you!
+        </container>
+      </col>
+    </row>
+  </var>
 </eich>

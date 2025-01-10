@@ -8,7 +8,7 @@ export interface EichColElement extends EichContainerElement {
   }
 }
 
-export const col = defineResolver<EichColElement>(({ widget, data }) => {
+export const col = defineResolver<EichColElement>(({ widget, context }) => {
   if (widget.tag !== 'col') return null
   const containerWidget = cheat(container, widget, 'container')
   const col: VElement = {
@@ -20,5 +20,5 @@ export const col = defineResolver<EichColElement>(({ widget, data }) => {
   if (widget.attributes.width) {
     col.attributes.style += ` width: ${widget.attributes.width};`
   }
-  return { widget: col, data: containerWidget?.data ?? {} }
+  return { widget: col, context }
 })

@@ -15,15 +15,17 @@ export interface EichContainerElement extends EichElement {
     width?: number
     height?: number
     grow?: number
+    align?: 'center' | 'left' | 'right'
+    baseline?: 'center' | 'top' | 'bottom'
   }
 }
 
-export const container = defineResolver<EichContainerElement>(({ widget, data }) => {
+export const container = defineResolver<EichContainerElement>(({ widget, context }) => {
   if (widget.tag !== 'container') return null
   const container: VElement = {
     tag: 'div',
     attributes: {
-      style: ''
+      style: 'display: flex;'
     },
     children: []
   }
@@ -52,5 +54,11 @@ export const container = defineResolver<EichContainerElement>(({ widget, data })
   } else if (widget.attributes.grow === undefined) {
     container.attributes.style += ` flex-grow: 1;`
   }
-  return { widget: container, data }
+  if (widget.attributes.align) {
+    container.attributes.style += ` align-items: ${widget.attributes.align === 'left' ? 'flex-start' : widget.attributes.align === 'right' ? 'flex-end' : 'center'};`
+  }
+  if (widget.attributes.baseline) {
+    container.attributes.style += ` justify-content: ${widget.attributes.baseline === 'top' ? 'flex-start' : widget.attributes.baseline === 'bottom' ? 'flex-end' : 'center'};`
+  }
+  return { widget: container, context }
 })

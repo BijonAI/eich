@@ -8,7 +8,7 @@ export interface EichRowElement extends EichContainerElement {
   }
 }
 
-export const row = defineResolver<EichRowElement>(({ widget, data }) => {
+export const row = defineResolver<EichRowElement>(({ widget, context }) => {
   if (widget.tag !== 'row') return null
   const containerWidget = cheat(container, widget, 'container')
   const row: VElement = {
@@ -16,9 +16,9 @@ export const row = defineResolver<EichRowElement>(({ widget, data }) => {
     attributes: containerWidget?.widget.attributes ?? { style: '' },
     children: []
   }
-  row.attributes.style += ' display: flex; flex-direction: row;'
+  row.attributes.style += ' flex-direction: row;'
   if (widget.attributes.height) {
     row.attributes.style += ` height: ${widget.attributes.height};`
   }
-  return { widget: row, data: containerWidget?.data ?? {} }
+  return { widget: row, context }
 })

@@ -1,4 +1,4 @@
-import { createCompiler, WidgetResolver } from "@eich/compiler"
+import { createCompiler, WidgetPresolver, WidgetResolver } from "@eich/compiler"
 import {
   row,
   col,
@@ -9,19 +9,13 @@ import { realize } from "./realize"
 
 export * from './realize'
 
-export function createRenderer(resolvers: WidgetResolver[]) {
-  const compiler = createCompiler([
-    ...resolvers,
-    eich,
-    row,
-    col,
-    container
-  ])
+export function createRenderer(resolvers: WidgetResolver[], presolvers: WidgetPresolver[]) {
+  const compiler = createCompiler(resolvers, presolvers)
 
-  function renderToHTML(eich: string) {
-    const widget = compiler.compile(eich, {})
+  async function renderToHTML(eich: string) {
+    const widget = await compiler.compile(eich, {})
     if (!widget) return ''
-    return realize(widget.widget, widget.data)
+    return realize(widget.widget)
   }
 
   return { renderToHTML }

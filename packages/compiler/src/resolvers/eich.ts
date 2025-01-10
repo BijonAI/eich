@@ -8,11 +8,11 @@ export interface EichRootElement extends EichElement {
   }
 }
 
-export const eich = defineResolver<EichRootElement>(({ widget, data }) => {
+export const eich = defineResolver<EichRootElement>(({ widget, context }) => {
   if (widget.tag !== 'eich') return null
   const result = { widget: { tag: 'div', attributes: {
     style: `position: absolute;`
-  }, children: [] }, data }
+  }, children: [] }, context }
   if (widget.attributes.width) {
     result.widget.attributes.style += ` width: ${widget.attributes.width};`
   }
