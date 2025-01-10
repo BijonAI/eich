@@ -21,7 +21,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^15.2.10",
     "prettier": "3.4.1",
-    "rimraf": "^3.0.2",
+    "rimraf": "^4.4.1",
     "simple-git-hooks": "^2.11.1",
     "taze": "^0.13.9",
     "tsup": "^8.3.0",
