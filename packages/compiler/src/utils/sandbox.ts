@@ -12,7 +12,7 @@ export function createSandbox(data: Record<string, any>) {
       if (typeof v === 'object' && v.type === 'expression') return v.value;
       return JSON.stringify(v);
     }).join(', ');
-    console.log(variableNames, variableValues)
+    
 
     return window.URL.createObjectURL(
       new Blob([
@@ -35,7 +35,7 @@ export function createSandbox(data: Record<string, any>) {
         if (typeof v === 'object' && v.type === 'expression') return v.value;
         return JSON.stringify(v);
       });
-      // console.log(variableNames, variableValues)
+      
       
       const code = `
         return (function(${variableNames.join(',')}) {
@@ -44,6 +44,7 @@ export function createSandbox(data: Record<string, any>) {
       `;
       
       const result = (new Function(code))();
+      
       resolve(result);
     });
   }

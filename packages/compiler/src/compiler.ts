@@ -8,17 +8,20 @@ export function createCompiler(resolvers: Array<WidgetResolver>, presolvers: Arr
 
   async function collectVariables(tree: EichElement, parentData: Record<string, any>) {
     for (const presolver of presolvers) {
+      
       const context = presolver({ widget: tree, context: { data: parentData, global: globalData } })
+      
       if (context === null) continue
+      
       const sandbox = createSandbox({
         ...parentData,
         ...globalData,
       });
       Object.entries(context.global).forEach(async ([key, value]) => {
         globalData[key] = await sandbox.run(value.value)
+        
       })
     }
-
     if (tree.children) {
       for (const child of tree.children) {
         await collectVariables(child, parentData);
@@ -34,96 +37,151 @@ export function createCompiler(resolvers: Array<WidgetResolver>, presolvers: Arr
       return {
         tag: 'text-content',
         attributes: { content: xml },
-        children: []
+        children: [],
+        parent
       };
     }
 
-    // 处理自闭合标签
-    if (xml.endsWith('/>')) {
-      const tagMatch = xml.match(/<([^\s>]+)/);
-      const tagName = tagMatch?.[1] || '';
-      return {
-        tag: tagName,
-        attributes: parseAttributes(xml),
-        children: []
-      };
-    }
+    const elements: EichElement[] = [];
+    let currentIndex = 0;
 
-    // 处理普通标签
-    const startTagMatch = xml.match(/<([^\s>]+)([^>]*)>/);
-    if (!startTagMatch) {
-      throw new Error('Invalid XML');
-    }
-
-    const [fullMatch, tagName, attributesStr] = startTagMatch;
-    const endTag = `</${tagName}>`;
-
-    // 找到对应的结束标签
-    let endIndex = -1;
-    let depth = 1;
-    let searchStartIndex = fullMatch.length;
-
-    while (searchStartIndex < xml.length) {
-      const nextStart = xml.indexOf(`<${tagName}`, searchStartIndex);
-      const nextEnd = xml.indexOf(endTag, searchStartIndex);
-
-      if (nextEnd === -1) break;
-
-      if (nextStart !== -1 && nextStart < nextEnd) {
-        depth++;
-        searchStartIndex = nextStart + 1;
-      } else {
-        depth--;
-        if (depth === 0) {
-          endIndex = nextEnd;
-          break;
-        }
-        searchStartIndex = nextEnd + 1;
+    while (currentIndex < xml.length) {
+      const remainingXml = xml.slice(currentIndex);
+      
+      // 检查自闭合标签
+      const selfClosingMatch = remainingXml.match(/^<([^\s/>]+)([^>]*?)\/>/);
+      if (selfClosingMatch) {
+        const [fullMatch, tagName, attributesStr] = selfClosingMatch;
+        elements.push({
+          tag: tagName,
+          attributes: parseAttributes(attributesStr.trim()),
+          children: [],
+          parent
+        });
+        currentIndex += fullMatch.length;
+        continue;
       }
+
+      // 处理普通标签
+      const startTagMatch = remainingXml.match(/^<([^\s>]+)([^>]*)>/);
+      if (!startTagMatch) {
+        // 如果没有找到开始标签，可能是文本内容
+        const textContent = remainingXml.match(/^[^<]+/);
+        if (textContent) {
+          elements.push({
+            tag: 'text-content',
+            attributes: { content: textContent[0].trim() },
+            children: [],
+            parent
+          });
+          currentIndex += textContent[0].length;
+        } else {
+          currentIndex++;
+        }
+        continue;
+      }
+
+      const [fullMatch, tagName, attributesStr] = startTagMatch;
+      const endTag = `</${tagName}>`;
+      
+      // 找到对应的结束标签
+      let endIndex = -1;
+      let depth = 1;
+      let searchStartIndex = currentIndex + fullMatch.length;
+
+      while (searchStartIndex < xml.length) {
+        const nextStart = xml.indexOf(`<${tagName}`, searchStartIndex);
+        const nextEnd = xml.indexOf(endTag, searchStartIndex);
+
+        if (nextEnd === -1) break;
+
+        if (nextStart !== -1 && nextStart < nextEnd) {
+          depth++;
+          searchStartIndex = nextStart + 1;
+        } else {
+          depth--;
+          if (depth === 0) {
+            endIndex = nextEnd;
+            break;
+          }
+          searchStartIndex = nextEnd + 1;
+        }
+      }
+
+      if (endIndex === -1) {
+        throw new Error(`Missing closing tag for ${tagName}`);
+      }
+
+      const innerContent = xml.slice(currentIndex + fullMatch.length, endIndex);
+      const element: EichElement = {
+        tag: tagName,
+        attributes: parseAttributes(attributesStr.trim()),
+        children: [],
+        parent
+      };
+
+      // 递归解析子内容
+      const children = splitTopLevelTags(innerContent).map(child => parse(child, element));
+      element.children = children;
+      elements.push(element);
+
+      currentIndex = endIndex + endTag.length;
     }
 
-    if (endIndex === -1) {
-      throw new Error(`Missing closing tag for ${tagName}`);
+    // 如果只有一个元素，直接返回它
+    if (elements.length === 1) {
+      return elements[0];
     }
 
-    const innerContent = xml.slice(fullMatch.length, endIndex);
-
-    const result: EichElement = {
-      tag: tagName,
-      attributes: parseAttributes(attributesStr),
-      children: [],
-      parent,
+    // 如果有多个元素，创建一个根元素包含它们
+    return {
+      tag: 'fragment',
+      attributes: {},
+      children: elements,
+      parent
     };
-    const children = splitTopLevelTags(innerContent).map(child => parse(child, result))
-    result.children = children
-
-    return result
   }
 
   function splitTopLevelTags(content: string): string[] {
     const result: string[] = [];
     let current = '';
     let depth = 0;
+    let inTag = false;
 
     for (let i = 0; i < content.length; i++) {
       const char = content[i];
 
       if (char === '<') {
-        if (content[i + 1] === '/') {
+        // 检查是否是自闭合标签
+        const remainingContent = content.slice(i);
+        if (remainingContent.match(/^<[^>]*?\/>/)) {
+          inTag = true;
+        } else if (content[i + 1] === '/') {
           depth--;
+          inTag = false;
         } else {
           if (depth === 0 && current.trim()) {
             result.push(current.trim());
             current = '';
           }
           depth++;
+          inTag = true;
         }
       }
 
       current += char;
 
-      if (depth === 0 && char === '>') {
-        if (current.trim()) {
+      // 处理自闭合标签的结束
+      if (inTag && char === '>' && content[i - 1] === '/') {
+        if (depth === 0 && current.trim()) {
+          result.push(current.trim());
+          current = '';
+        }
+        inTag = false;
+      }
+      // 处理普通标签的结束
+      else if (char === '>' && !inTag) {
+        if (depth === 0 && current.trim()) {
           result.push(current.trim());
           current = '';
         }
@@ -134,7 +192,7 @@ export function createCompiler(resolvers: Array<WidgetResolver>, presolvers: Arr
       result.push(current.trim());
     }
 
-    return result;
+    return result.filter(tag => tag.length > 0);
   }
 
   function parseAttributes(attrStr: string): Record<string, any> {
@@ -156,6 +214,8 @@ export function createCompiler(resolvers: Array<WidgetResolver>, presolvers: Arr
         }
       }
     });
+
+    console.log(attrs)
 
     return attrs;
   }
@@ -182,11 +242,9 @@ export function createCompiler(resolvers: Array<WidgetResolver>, presolvers: Arr
     const processedAttributes = await Promise.all(
       Object.entries(tree.attributes).map(async ([key, value]) => {
         if (value && typeof value === 'object' && value.type === 'expression') {
+          console.log('[Expression] ', value)
           const evaluatedValue = await sandbox.run(value.value);
-          globalData = {
-            ...globalData,
-            [key]: evaluatedValue
-          };
+          console.log('[evaluatedValue] ', evaluatedValue)
           return [key, evaluatedValue];
         }
         return [key, value];
@@ -202,7 +260,7 @@ export function createCompiler(resolvers: Array<WidgetResolver>, presolvers: Arr
       widget: VElement,
       context: WidgetContext
     } | null = null;
-    
+
     for (const resolver of [...resolvers, ...additionalResolvers]) {
       result = resolver({
         widget: processedTree,
