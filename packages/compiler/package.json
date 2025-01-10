@@ -27,6 +27,5 @@
     "access": "public"
   },
   "dependencies": {
-    "@eich/script": "workspace:^"
   }
 }
