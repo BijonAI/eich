@@ -13,7 +13,7 @@ export const row = defineResolver<EichRowElement>(({ widget, context }) => {
   const containerWidget = cheat(container, widget, 'container')
   const row: VElement = {
     tag: 'div',
-    attributes: containerWidget?.widget.attributes ?? { style: '' },
+    attributes: (containerWidget as { widget: VElement }).widget.attributes ?? { style: '' },
     children: []
   }
   row.attributes.style += ' flex-direction: row;'

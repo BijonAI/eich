@@ -1,10 +1,17 @@
-<eich width="600" height="400">
-  <var key="x" $value="109999 + 111"/>
+<eich width="2000" height="400">
+  <var key="c" $value="'U ARE THE MOST FOOLISH PERSON IN THE WORLD'"/>
   <row>
-    <col>
-      <container align="center" baseline="center" $padding="x + 222">
-        Hello world!
-      </container>
-    </col>
+    <for $in="Array(c.length).keys()" key="x">
+      <col $grow="x * 2">
+        <value $data="x"/>
+      </col>
+    </for>
+  </row>
+  <row>
+    <for $in="Array(c.length).keys()" key="x">
+      <col $grow="x * 2">
+        <value $data="c[x]"/>
+      </col>
+    </for>
   </row>
 </eich>

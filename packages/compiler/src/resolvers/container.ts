@@ -39,20 +39,23 @@ export const container = defineResolver<EichContainerElement>(({ widget, context
   } else if (widget.attributes.padding) {
     container.attributes.style += ` padding: ${widget.attributes.padding};`
   }
-  if (widget.attributes.width) {
-    container.attributes.style += ` width: ${widget.attributes.width};`
+  if (typeof widget.attributes.grow === 'undefined') {
+    if (widget.attributes.width) {
+      container.attributes.style += ` width: ${widget.attributes.width};`
+    } else {
+      container.attributes.style += ` width: 100%;`
+    }
+    if (widget.attributes.height) {
+      container.attributes.style += ` height: ${widget.attributes.height};`
+    } else {
+      container.attributes.style += ` height: 100%;`
+    }
   } else {
-    container.attributes.style += ` width: 100%;`
-  }
-  if (widget.attributes.height) {
-    container.attributes.style += ` height: ${widget.attributes.height};`
-  } else {
-    container.attributes.style += ` height: 100%;`
-  }
-  if (widget.attributes.grow) {
-    container.attributes.style += ` flex-grow: ${widget.attributes.grow};`
-  } else if (widget.attributes.grow === undefined) {
-    container.attributes.style += ` flex-grow: 1;`
+    if (widget.attributes.grow) {
+      container.attributes.style += ` flex-grow: ${widget.attributes.grow};`
+    } else if (widget.attributes.grow === undefined) {
+      container.attributes.style += ` flex-grow: 1;`
+    }
   }
   if (widget.attributes.align) {
     container.attributes.style += ` align-items: ${widget.attributes.align === 'left' ? 'flex-start' : widget.attributes.align === 'right' ? 'flex-end' : 'center'};`

@@ -27,7 +27,5 @@ export const varPresolver = definePresolver<EichVarElement>(({ widget, context }
 
 export const varResolver = defineResolver<EichVarElement>(({ widget, context }) => {
   if (widget.tag !== 'var') return null
-  return { widget: { tag: 'div', attributes: {
-    style: `position: absolute;`
-  }, children: [] }, context }
+  return { widget: { tag: 'template', attributes: {}, children: [] }, context }
 })

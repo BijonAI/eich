@@ -2,6 +2,7 @@ export function createSandbox(data: Record<string, any>) {
   const dataInside = {
     ...data
   }
+  
 
   // Browser implementation
   function createWorkerBlob(code: string) {
@@ -42,6 +43,7 @@ export function createSandbox(data: Record<string, any>) {
           return (${fn.toString()});
         })(${variableValues.join(',')})
       `;
+      
       
       const result = (new Function(code))();
       

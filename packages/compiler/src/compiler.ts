@@ -9,7 +9,7 @@ export function createCompiler(resolvers: Array<WidgetResolver>, presolvers: Arr
   async function collectVariables(tree: EichElement, parentData: Record<string, any>) {
     for (const presolver of presolvers) {
       
-      const context = presolver({ widget: tree, context: { data: parentData, global: globalData } })
+      const context = presolver({ widget: tree, context: { data: parentData, global: globalData, resolvers: [...resolvers, ...additionalResolvers] } })
       
       if (context === null) continue
       
@@ -195,6 +195,10 @@ export function createCompiler(resolvers: Array<WidgetResolver>, presolvers: Arr
     return result.filter(tag => tag.length > 0);
   }
 
+  function kebabToCamelCase(str: string): string {
+    return str.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
+  }
+
   function parseAttributes(attrStr: string): Record<string, any> {
     const attrs: Record<string, any> = {};
     const matches = attrStr.match(/([^\s=]+)(?:="([^"]*)")?/g) || [];
@@ -202,20 +206,21 @@ export function createCompiler(resolvers: Array<WidgetResolver>, presolvers: Arr
     matches.forEach(match => {
       const [key, value] = match.split('=');
       if (key) {
-        // Check if the attribute starts with $
+        // 转换属性名为驼峰式
+        const camelKey = kebabToCamelCase(key);
+        
+        // 检查是否是表达式属性（以$开头）
         if (key.startsWith('$')) {
-          const actualKey = key.slice(1); // Remove the $ prefix
+          const actualKey = camelKey.slice(1); // 移除$前缀
           attrs[actualKey] = {
             type: 'expression',
             value: value ? value.replace(/"/g, '') : ''
           };
         } else {
-          attrs[key] = value ? value.replace(/"/g, '') : '';
+          attrs[camelKey] = value ? value.replace(/"/g, '') : '';
         }
       }
     });
-
-    console.log(attrs)
 
     return attrs;
   }
@@ -225,6 +230,7 @@ export function createCompiler(resolvers: Array<WidgetResolver>, presolvers: Arr
   }
 
   async function compile(eich: EichElement | string, parentData: Record<string, any>) {
+    
     let tree: EichElement
     if (typeof eich === "string") {
       tree = parse(eich)
@@ -234,6 +240,7 @@ export function createCompiler(resolvers: Array<WidgetResolver>, presolvers: Arr
     
     await collectVariables(tree, parentData);
     
+    
     const sandbox = createSandbox({
       ...parentData,
       ...globalData,
@@ -242,10 +249,12 @@ export function createCompiler(resolvers: Array<WidgetResolver>, presolvers: Arr
     const processedAttributes = await Promise.all(
       Object.entries(tree.attributes).map(async ([key, value]) => {
         if (value && typeof value === 'object' && value.type === 'expression') {
-          console.log('[Expression] ', value)
-          const evaluatedValue = await sandbox.run(value.value);
-          console.log('[evaluatedValue] ', evaluatedValue)
-          return [key, evaluatedValue];
+          try {
+            const evaluatedValue = await sandbox.run(value.value)
+            return [key, evaluatedValue]
+          } catch {
+            return [key, value]
+          }
         }
         return [key, value];
       })
@@ -262,11 +271,16 @@ export function createCompiler(resolvers: Array<WidgetResolver>, presolvers: Arr
     } | null = null;
 
     for (const resolver of [...resolvers, ...additionalResolvers]) {
-      result = resolver({
+      result = await resolver({
         widget: processedTree,
         context: {
           data: parentData,
-          global: globalData
+          global: globalData,
+          resolvers: [...resolvers, ...additionalResolvers],
+          resolveChildren: async (children, context) => {
+            const resolveds = await Promise.all(children.map(child => compile(child, context.data ?? {})))
+            return resolveds.filter(Boolean).map(resolved => resolved!.widget)
+          }
         },
       })
       if (result !== null && result.context.global) {
