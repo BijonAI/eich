@@ -12,21 +12,21 @@
   "license": "MIT",
   "devDependencies": {
     "@antfu/eslint-config": "^2.27.3",
-    "@eslint/js": "^9.15.0",
+    "@eslint/js": "^9.18.0",
     "@types/node": "22.5.0",
-    "bumpp": "^9.8.1",
+    "bumpp": "^9.10.0",
     "eslint": "9.9.0",
     "eslint-config-prettier": "^9.1.0",
-    "globals": "^15.12.0",
+    "globals": "^15.14.0",
     "husky": "^9.1.7",
-    "lint-staged": "^15.2.10",
+    "lint-staged": "^15.3.0",
     "prettier": "3.4.1",
     "rimraf": "^4.4.1",
     "simple-git-hooks": "^2.11.1",
     "taze": "^0.13.9",
-    "tsup": "^8.3.0",
-    "typedoc": "^0.26.8",
-    "typescript": "^5.6.2",
-    "typescript-eslint": "^8.16.0"
+    "tsup": "^8.3.5",
+    "typedoc": "^0.26.11",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.19.1"
   }
 }
