@@ -3,7 +3,7 @@
   <row>
     <for $in="Array(c.length).keys()" key="x">
       <col $grow="x * 2">
-        <if $condition="Boolean(x % 2)">
+        <if $condition="x % 2 === 0">
           <value $data="x"/>
         </if>
       </col>
