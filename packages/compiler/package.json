@@ -27,5 +27,6 @@
     "access": "public"
   },
   "dependencies": {
+    "htmlparser2": "^10.0.0"
   }
 }
