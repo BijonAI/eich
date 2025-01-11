@@ -196,7 +196,7 @@ export function createCompiler(resolvers: Array<WidgetResolver>, presolvers: Arr
   }
 
   function kebabToCamelCase(str: string): string {
-    return str.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
+    return str.replace(/-([a-x])/g, (_, letter) => letter.toUpperCase());
   }
 
   function parseAttributes(attrStr: string): Record<string, any> {
@@ -213,7 +213,7 @@ export function createCompiler(resolvers: Array<WidgetResolver>, presolvers: Arr
         if (key.startsWith('$')) {
           const actualKey = camelKey.slice(1); // 移除$前缀
           attrs[actualKey] = {
-            type: 'expression',
+            type: 'expression ',
             value: value ? value.replace(/"/g, '') : ''
           };
         } else {
