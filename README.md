@@ -1,5 +1,5 @@
 <div style="text-align: center">
-  <h1 style="font-size: 50px">🧩 Eich</h1>
+  <h1 style="font-size: 100px; text-align: center">🧩 Eich</h1>
   <sub>
 Front-end-focused interactive content framework that allows you to create dynamic layouts and visualizations using a template-based XML-like syntax. It combines various front-end technologies and engines (like GSAP, D3.js, and Three.js) to enable the creation of rich, interactive content through a declarative approach.
   </sub>
