@@ -18,7 +18,7 @@ export interface EichConditionElement extends EichElement {
 export const forResolver = defineResolver<EichForElement>(async ({ widget, context }) => {
   if (widget.tag !== 'for') return null
   const { in: iterable, key } = widget.attributes
-  
+  console.log(iterable)
   const result: VElement[] = []
 
   if (!key) {
@@ -74,38 +74,38 @@ export const forResolver = defineResolver<EichForElement>(async ({ widget, conte
 export const conditionResolver = defineResolver<EichConditionElement>(async ({ widget, context }) => {
   if (widget.tag !== 'if' && widget.tag !== 'else' && widget.tag !== 'elif') return null
   const { condition } = widget.attributes
-  if (widget.tag === 'if' && condition) {
-    return {
+  if (widget.tag === 'if') {
+    return condition ? {
       widget: {
-        tag: 'template',
+        tag: 'div',
         attributes: {
-          display: condition ? 'block' : 'none'
+          style: 'display: flex; width: 100%; height: 100%;'
         },
         children: []
       },
       context
-    }
+    } : null
   } else if (widget.parent?.children.find(child => child.tag === 'if' && child.attributes.condition === false) && widget.tag === 'elif') {
-    return {
+    return condition ? {
       widget: {
-        tag: 'template',
+        tag: 'div',
         attributes: {
-          display: 'none'
+          style: 'display: flex; width: 100%; height: 100%;'
         },
         children: []
       },
       context
-    }
+    } : null
   } else {
-    return {
+    return condition ? {
       widget: {
-        tag: 'template',
+        tag: 'div',
         attributes: {
-          display: 'block'
+          style: 'display: flex; width: 100%; height: 100%;'
         },
         children: []
       },
       context
-    }
+    } : null
   }
 })

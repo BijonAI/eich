@@ -213,7 +213,7 @@ export function createCompiler(resolvers: Array<WidgetResolver>, presolvers: Arr
         if (key.startsWith('$')) {
           const actualKey = camelKey.slice(1); // 移除$前缀
           attrs[actualKey] = {
-            type: 'expression ',
+            type: 'expression',
             value: value ? value.replace(/"/g, '') : ''
           };
         } else {
@@ -239,7 +239,6 @@ export function createCompiler(resolvers: Array<WidgetResolver>, presolvers: Arr
     }
     
     await collectVariables(tree, parentData);
-    
     
     const sandbox = createSandbox({
       ...parentData,

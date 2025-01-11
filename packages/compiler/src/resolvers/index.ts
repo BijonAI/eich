@@ -16,10 +16,10 @@ export const baseResolvers = [
   row,
   container,
   eich,
+  conditionResolver,
   forResolver,
   varResolver,
   valueResolver,
-  conditionResolver,
 ]
 
 export const basePresolvers = [

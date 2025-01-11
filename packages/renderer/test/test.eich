@@ -3,14 +3,9 @@
   <row>
     <for $in="Array(c.length).keys()" key="x">
       <col $grow="x * 2">
-        <value $data="x"/>
-      </col>
-    </for>
-  </row>
-  <row>
-    <for $in="Array(c.length).keys()" key="x">
-      <col $grow="x * 2">
-        <value $data="c[x]"/>
+        <if $condition="Boolean(x % 2)">
+          <value $data="x"/>
+        </if>
       </col>
     </for>
   </row>
