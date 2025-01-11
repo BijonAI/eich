@@ -302,6 +302,7 @@ export function createCompiler(resolvers: Array<WidgetResolver>, presolvers: Arr
         const compiledChildren = await Promise.all(
           tree.children.map(child => compile(child, childData))
         );
+
   
         result!.widget.children.push(
           ...compiledChildren.filter(Boolean).map(child => child!.widget)

@@ -2,7 +2,7 @@ import { EichElement } from "../types";
 import { col, EichColElement } from "./col";
 import { container, EichContainerElement } from "./container";
 import { eich } from "./eich";
-import { forResolver } from "./functionality";
+import { conditionResolver, forResolver } from "./functionality";
 import { EichRowElement, row } from "./row";
 import { textContent } from "./text";
 import { valueResolver } from "./value";
@@ -19,6 +19,7 @@ export const baseResolvers = [
   forResolver,
   varResolver,
   valueResolver,
+  conditionResolver,
 ]
 
 export const basePresolvers = [
