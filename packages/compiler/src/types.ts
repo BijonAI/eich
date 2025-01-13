@@ -7,26 +7,26 @@ export interface VElement {
 
 export interface WidgetContext {
   data?: Record<string, any>
-  global: Record<string, any>
   resolvers?: Array<WidgetResolver>
   resolveChildren?: (children: Array<VElement>, context: WidgetContext) => Promise<Array<VElement>>
+  set?: (key: string, value: any, dataContext?: Record<string, any>) => Promise<void>
+  get?: (key: string) => any
 }
+
+export type MaybePromise<T> = T | Promise<T>
 
 export type WidgetResolver<T extends EichElement = EichElement> = (tag: {
   widget: T,
   context: WidgetContext
-}) => Promise<{
+}) => MaybePromise<{
   widget: VElement
   context: WidgetContext
-} | null> | {
-  widget: VElement
-  context: WidgetContext
-} | null
+} | null>
 
 export type WidgetPresolver<T extends EichElement = EichElement> = (tag: {
   widget: T,
   context: WidgetContext
-}) => WidgetContext | null
+}) => MaybePromise<WidgetContext | null>
 
 export type EichElementBase<T extends Record<string, any>> = VElement & T
 
@@ -38,4 +38,10 @@ export function defineResolver<T extends EichElement>(resolver: WidgetResolver<T
 
 export function definePresolver<T extends EichElement>(resolver: WidgetPresolver<T>): WidgetPresolver<T> {
   return resolver
+}
+
+declare global {
+  interface Window {
+    EICH_ENV: Record<string, any>
+  }
 }

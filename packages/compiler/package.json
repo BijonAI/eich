@@ -27,6 +27,7 @@
     "access": "public"
   },
   "dependencies": {
+    "@vue/reactivity": "^3.5.13",
     "htmlparser2": "^10.0.0"
   }
 }

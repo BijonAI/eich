@@ -12,15 +12,15 @@ export interface EichVarElement extends EichElement {
   }
 }
 
-export const varPresolver = definePresolver<EichVarElement>(({ widget, context }) => {
+export const varPresolver = definePresolver<EichVarElement>(async ({ widget, context }) => {
   if (widget.tag !== 'var') return null
   
   const { key, value } = widget.attributes
   
-  context.global[key] = typeof value === 'object' ? value : {
+  await context.set!(key, typeof value === 'object' ? value : {
     type: 'expression',
     value: value
-  }
+  }, context.data)
   
   return context
 })

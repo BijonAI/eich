@@ -1,26 +1,22 @@
 import { WidgetResolver, EichElement, VElement, WidgetContext, WidgetPresolver } from "./types";
 import { createSandbox } from "./utils/sandbox";
 import { parse } from "./parse";
+import * as reactivity from '@vue/reactivity'
 
-export function createCompiler(resolvers: Array<WidgetResolver>, presolvers: Array<WidgetPresolver>) {
+export function createCompiler(resolvers: Array<WidgetResolver<any>>, presolvers: Array<WidgetPresolver<any>>) {
   const additionalResolvers: Array<WidgetResolver> = []
-  let globalData: Record<string, any> = {}
+  window.EICH_ENV ?? (window.EICH_ENV = {})
 
   async function collectVariables(tree: EichElement, parentData: Record<string, any>) {
     for (const presolver of presolvers) {
-      
-      const context = presolver({ widget: tree, context: { data: parentData, global: globalData, resolvers: [...resolvers, ...additionalResolvers] } })
+      const context = await presolver({ widget: tree, context: { data: parentData, set, get, resolvers: [...resolvers, ...additionalResolvers] } })
       
       if (context === null) continue
       
       const sandbox = createSandbox({
         ...parentData,
-        ...globalData,
+        ...window.EICH_ENV,
       });
-      Object.entries(context.global).forEach(async ([key, value]) => {
-        globalData[key] = await sandbox.run(value.value)
-        
-      })
     }
     if (tree.children) {
       for (const child of tree.children) {
@@ -34,7 +30,7 @@ export function createCompiler(resolvers: Array<WidgetResolver>, presolvers: Arr
   }
 
   async function compile(eich: EichElement | string, parentData: Record<string, any>) {
-    
+
     let tree: EichElement
     if (typeof eich === "string") {
       tree = parse(eich)
@@ -44,10 +40,7 @@ export function createCompiler(resolvers: Array<WidgetResolver>, presolvers: Arr
     
     await collectVariables(tree, parentData);
     
-    const sandbox = createSandbox({
-      ...parentData,
-      ...globalData,
-    });
+    const sandbox = createSandbox(parentData);
     
     const processedAttributes = await Promise.all(
       Object.entries(tree.attributes).map(async ([key, value]) => {
@@ -78,20 +71,15 @@ export function createCompiler(resolvers: Array<WidgetResolver>, presolvers: Arr
         widget: processedTree,
         context: {
           data: parentData,
-          global: globalData,
+          set,
+          get,
           resolvers: [...resolvers, ...additionalResolvers],
           resolveChildren: async (children, context) => {
             const resolveds = await Promise.all(children.map(child => compile(child, context.data ?? {})))
-            return resolveds.filter(Boolean).map(resolved => resolved!.widget)
+            return resolveds.map(resolved => resolved!.widget)
           }
         },
       })
-      if (result !== null && result.context.global) {
-        globalData = {
-          ...globalData,
-          ...result.context.global
-        }
-      }
       if (result !== null) break
     }
     if (result?.widget) {
@@ -105,20 +93,33 @@ export function createCompiler(resolvers: Array<WidgetResolver>, presolvers: Arr
         const compiledChildren = await Promise.all(
           tree.children.map(child => compile(child, childData))
         );
-
   
         result!.widget.children.push(
-          ...compiledChildren.filter(Boolean).map(child => child!.widget)
+          ...compiledChildren.map(child => child!.widget)
         );
       }
     }
-
+    
     return result;
+  }
+
+  async function set(key: string, value: any, dataContext: Record<string, any> = {}) {
+    if (typeof value === 'object' && value.type === 'expression' && typeof value.value === 'string') {
+      window.EICH_ENV[key] = await createSandbox(dataContext).run(value.value)
+    } else {
+      window.EICH_ENV[key] = value
+    }
+  }
+
+  function get(key: string) {
+    return window.EICH_ENV[key]
   }
 
   return {
     compile,
     addResolver,
-    parse
+    parse,
+    set,
+    get,
   }
 }
