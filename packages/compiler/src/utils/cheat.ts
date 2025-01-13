@@ -1,14 +1,13 @@
-import { EichElement, WidgetResolver } from "../types";
+import { EichElement, WidgetEvaluater } from "../types";
 
-export function cheat(resolver: WidgetResolver, widget: EichElement, tagName: string) {
-  return resolver({
+export function cheat(evaluater: WidgetEvaluater, widget: EichElement, tagName: string) {
+  return evaluater({
     widget: {
       ...widget,
       tag: tagName
     },
     context: {
-      data: {},
-      global: {}
+      data: {}
     }
   })
 }

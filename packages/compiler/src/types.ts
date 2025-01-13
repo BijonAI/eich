@@ -1,3 +1,5 @@
+import { ComputedRef, WatchSource } from "@vue/reactivity"
+
 export interface VElement {
   tag: string
   attributes: Record<string, any>
@@ -5,39 +7,44 @@ export interface VElement {
   parent?: VElement
 }
 
-export interface WidgetContext {
+export interface Widget {
+  element?: Element
+  injections?: Record<string, any>
+}
+
+export interface WidgetContext<T extends EichElement> {
   data?: Record<string, any>
-  resolvers?: Array<WidgetResolver>
-  resolveChildren?: (children: Array<VElement>, context: WidgetContext) => Promise<Array<VElement>>
+  resolveChildren?: (children: T['children'], context: WidgetContext<T>) => Promise<Array<Element>>
   set?: (key: string, value: any, dataContext?: Record<string, any>) => Promise<void>
-  get?: (key: string) => any
+  get?: (key: string) => any,
+}
+
+export function defineWidget(widget: Widget): Widget {
+  return widget
 }
 
 export type MaybePromise<T> = T | Promise<T>
 
+export type WidgetEvaluater<T extends EichElement = EichElement> = (tag: {
+  widget: T,
+  context: WidgetContext<T>
+}) => MaybePromise<Widget>
+
 export type WidgetResolver<T extends EichElement = EichElement> = (tag: {
   widget: T,
-  context: WidgetContext
-}) => MaybePromise<{
-  widget: VElement
-  context: WidgetContext
-} | null>
-
-export type WidgetPresolver<T extends EichElement = EichElement> = (tag: {
-  widget: T,
-  context: WidgetContext
-}) => MaybePromise<WidgetContext | null>
+  context: WidgetContext<T>
+}) => MaybePromise<WidgetContext<T> | null>
 
 export type EichElementBase<T extends Record<string, any>> = VElement & T
 
 export type EichElement = EichElementBase<Record<string, any>>
 
-export function defineResolver<T extends EichElement>(resolver: WidgetResolver<T>): WidgetResolver<T> {
-  return resolver
+export function defineEvaluater<T extends EichElement>(evaluater: WidgetEvaluater<T>): WidgetEvaluater<T> {
+  return evaluater
 }
 
-export function definePresolver<T extends EichElement>(resolver: WidgetPresolver<T>): WidgetPresolver<T> {
-  return resolver
+export function defineResolver<T extends EichElement>(evaluater: WidgetResolver<T>): WidgetResolver<T> {
+  return evaluater
 }
 
 declare global {

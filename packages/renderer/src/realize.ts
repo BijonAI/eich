@@ -1,9 +1,7 @@
 import { VElement } from "@eich/compiler";
 
 export function realize(widget: VElement) {
-  console.log(widget)
   if (widget.tag === 'text-content') {
-    console.log(widget.attributes.content)
     return widget.attributes.content ?? ''
   }
   let result = `<${widget.tag}`

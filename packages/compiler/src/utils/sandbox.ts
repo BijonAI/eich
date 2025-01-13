@@ -40,7 +40,7 @@ export function createSandbox(data: Record<string, any>) {
   }
 
   // Node.js implementation
-  function runInNode(fn: () => any) {
+  function runInNode(expression: string) {
     return new Promise((resolve) => {
       const variableNames = [
         ...Object.keys(dataInside),
@@ -52,15 +52,15 @@ export function createSandbox(data: Record<string, any>) {
           return typeof window.EICH_ENV[name] !== 'object' ? `window.EICH_ENV.${name}` : `window.EICH_ENV.${name}.value`
         if (typeof dataInside[name] === 'string') return `"${dataInside[name]}"`;
         if (typeof dataInside[name] === 'number') return dataInside[name];
-        if (typeof dataInside[name] === 'object' && dataInside[name].type === 'expression') return dataInside[name].value;
-        return JSON.stringify(dataInside[name]);
+        if (typeof dataInside[name] === 'object' && dataInside[name].value) return dataInside[name].value;
+        return dataInside[name];
       })
 
       console.log(variableValues)
       
       const code = `
         return (function(${variableNames.join(',')}) {
-          return (${fn.toString()});
+          return (${expression});
         })(${variableValues.join(',')})
       `;
 
@@ -72,8 +72,8 @@ export function createSandbox(data: Record<string, any>) {
     });
   }
 
-  function run(fn: () => any) {
-    return runInNode(fn);
+  function run(expression: string) {
+    return runInNode(expression);
   }
 
   return {

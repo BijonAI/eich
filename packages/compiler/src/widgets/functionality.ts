@@ -1,9 +1,10 @@
 import { warn } from "../utils/logs";
-import { defineResolver, EichElement, VElement, WidgetContext } from "../types";
+import { defineEvaluater, EichElement, VElement } from "../types";
+import { unref, MaybeRef } from "@vue/reactivity";
 
 export interface EichForElement extends EichElement {
   attributes: {
-    in: Iterable<any>
+    in: MaybeRef<Iterable<any>>
     key: string
   }
 }
@@ -11,11 +12,11 @@ export interface EichForElement extends EichElement {
 export interface EichConditionElement extends EichElement {
   tag: string,
   attributes: {
-    condition?: boolean
+    condition: MaybeRef<boolean>
   }
 }
 
-export const forResolver = defineResolver<EichForElement>(async ({ widget, context }) => {
+export const forEvaluater = defineEvaluater<EichForElement>(async ({ widget, context }) => {
   if (widget.tag !== 'for') return null
   const { in: iterable, key } = widget.attributes
   console.log(iterable)
@@ -32,7 +33,7 @@ export const forResolver = defineResolver<EichForElement>(async ({ widget, conte
     data: { ...context.data }
   }
 
-  for (const item of iterable) {
+  for (const item of unref(iterable)) {
     
     const iterationContext = {
       ...baseContext,
@@ -64,7 +65,7 @@ export const forResolver = defineResolver<EichForElement>(async ({ widget, conte
   }
 })
 
-export const conditionResolver = defineResolver<EichConditionElement>(async ({ widget, context }) => {
+export const conditionEvaluater = defineEvaluater<EichConditionElement>(async ({ widget, context }) => {
   if (widget.tag !== 'if' && widget.tag !== 'else' && widget.tag !== 'elif') return null
   const { condition } = widget.attributes
   if (widget.tag === 'if') {

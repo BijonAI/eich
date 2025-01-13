@@ -1301,7 +1301,7 @@ packages:
   eslint-flat-config-utils@0.3.1:
     resolution: {integrity: sha512-eFT3EaoJN1hlN97xw4FIEX//h0TiFUobgl2l5uLkIwhVN9ahGq95Pbs+i1/B5UACA78LO3rco3JzuvxLdTUOPA==}
 
-  eslint-import-resolver-node@0.3.9:
+  eslint-import-evaluater-node@0.3.9:
     resolution: {integrity: sha512-WFj2isz22JahUv+B788TlO3N6zL3nNJGU8CcZbPZvVEkBPaJdCV4vy5wyghty5ROFbCRnm132v8BScu5/1BQ8g==}
 
   eslint-json-compat-utils@0.2.1:
@@ -3711,7 +3711,7 @@ snapshots:
       '@types/eslint': 9.6.1
       pathe: 1.1.2
 
-  eslint-import-resolver-node@0.3.9:
+  eslint-import-evaluater-node@0.3.9:
     dependencies:
       debug: 3.2.7
       is-core-module: 2.16.1
@@ -3755,7 +3755,7 @@ snapshots:
       doctrine: 3.0.0
       enhanced-resolve: 5.18.0
       eslint: 9.9.0(jiti@2.4.2)
-      eslint-import-resolver-node: 0.3.9
+      eslint-import-evaluater-node: 0.3.9
       get-tsconfig: 4.8.1
       is-glob: 4.0.3
       minimatch: 9.0.5

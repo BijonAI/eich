@@ -1,32 +1,32 @@
-import { WidgetResolver, EichElement, VElement, WidgetContext, WidgetPresolver } from "./types";
+import { WidgetEvaluater, EichElement, WidgetContext, WidgetResolver, Widget } from "./types";
 import { createSandbox } from "./utils/sandbox";
 import { parse } from "./parse";
 import * as reactivity from '@vue/reactivity'
 
-export function createCompiler(resolvers: Array<WidgetResolver<any>>, presolvers: Array<WidgetPresolver<any>>) {
-  const additionalResolvers: Array<WidgetResolver> = []
-  window.EICH_ENV ?? (window.EICH_ENV = {})
+export function createCompiler(evaluaters: Array<WidgetEvaluater<EichElement>>, resolvers: Array<WidgetResolver<EichElement>>) {
+  const additionalEvaluaters: Array<WidgetEvaluater> = []
+  window.EICH_ENV ?? (window.EICH_ENV = {
+    watch: reactivity.watch,
+    ref: reactivity.ref,
+    reactive: reactivity.reactive,
+    computed: reactivity.computed,
+    effect: reactivity.effect,
+  })
 
   async function collectVariables(tree: EichElement, parentData: Record<string, any>) {
-    for (const presolver of presolvers) {
-      const context = await presolver({ widget: tree, context: { data: parentData, set, get, resolvers: [...resolvers, ...additionalResolvers] } })
-      
-      if (context === null) continue
-      
-      const sandbox = createSandbox({
-        ...parentData,
-        ...window.EICH_ENV,
-      });
-    }
-    if (tree.children) {
-      for (const child of tree.children) {
-        await collectVariables(child, parentData);
+    for (const resolver of resolvers) {
+      const context = await resolver({ widget: tree, context: { data: parentData, set, get } })
+
+      if (tree.children) {
+        for (const child of tree.children) {
+          await collectVariables(child, parentData);
+        }
       }
     }
   }
 
-  function addResolver(resolver: WidgetResolver) {
-    additionalResolvers.push(resolver)
+  function addEvaluater(evaluater: WidgetEvaluater) {
+    additionalEvaluaters.push(evaluater)
   }
 
   async function compile(eich: EichElement | string, parentData: Record<string, any>) {
@@ -37,17 +37,18 @@ export function createCompiler(resolvers: Array<WidgetResolver<any>>, presolvers
     } else {
       tree = eich
     }
-    
+
     await collectVariables(tree, parentData);
-    
+
+    console.log(parentData)
     const sandbox = createSandbox(parentData);
-    
+
     const processedAttributes = await Promise.all(
       Object.entries(tree.attributes).map(async ([key, value]) => {
-        if (value && typeof value === 'object' && value.type === 'expression') {
+        if (value && typeof value === 'object' && (value.type === 'expression' || value.type === 'ref')) {
           try {
-            const evaluatedValue = await sandbox.run(value.value)
-            return [key, evaluatedValue]
+            if (value.type === 'ref') return [key, await sandbox.run(`computed(() => ${value.value})`)]
+            return [key, await sandbox.run(value.value)]
           } catch {
             return [key, value]
           }
@@ -61,51 +62,46 @@ export function createCompiler(resolvers: Array<WidgetResolver<any>>, presolvers
       attributes: Object.fromEntries(processedAttributes)
     };
 
-    let result: {
-      widget: VElement,
-      context: WidgetContext
-    } | null = null;
+    let result: Widget | null = null
 
-    for (const resolver of [...resolvers, ...additionalResolvers]) {
-      result = await resolver({
+    for (const evaluater of [...evaluaters, ...additionalEvaluaters]) {
+      result = await evaluater({
         widget: processedTree,
         context: {
           data: parentData,
           set,
           get,
-          resolvers: [...resolvers, ...additionalResolvers],
           resolveChildren: async (children, context) => {
             const resolveds = await Promise.all(children.map(child => compile(child, context.data ?? {})))
-            return resolveds.map(resolved => resolved!.widget)
+            return resolveds.map(resolved => resolved!.element).filter((item) => typeof item !== 'undefined')
           }
         },
       })
       if (result !== null) break
     }
-    if (result?.widget) {
-      result!.widget.children = result!.widget.children || []
+    if (result?.element) {
       if (tree.children && tree.children.length > 0) {
         const childData = {
           ...parentData,
-          ...(result?.context?.data || {})
+          ...(result?.injections || {})
         };
-  
+
         const compiledChildren = await Promise.all(
-          tree.children.map(child => compile(child, childData))
+          [...tree.children].map(child => compile(child, childData))
         );
-  
-        result!.widget.children.push(
-          ...compiledChildren.map(child => child!.widget)
+
+        result!.element.append(
+          ...compiledChildren.map(child => child!.element).filter((item) => typeof item !== 'undefined')
         );
       }
     }
-    
+
     return result;
   }
 
   async function set(key: string, value: any, dataContext: Record<string, any> = {}) {
-    if (typeof value === 'object' && value.type === 'expression' && typeof value.value === 'string') {
-      window.EICH_ENV[key] = await createSandbox(dataContext).run(value.value)
+    if (typeof value === 'object' && (value.type === 'expression' || value.type === 'ref') && typeof value.value === 'string') {
+      window.EICH_ENV[key] = await createSandbox(dataContext).run(value.type === 'expression' ? value.value : `ref(${value.value})`)
     } else {
       window.EICH_ENV[key] = value
     }
@@ -117,7 +113,7 @@ export function createCompiler(resolvers: Array<WidgetResolver<any>>, presolvers
 
   return {
     compile,
-    addResolver,
+    addEvaluater,
     parse,
     set,
     get,

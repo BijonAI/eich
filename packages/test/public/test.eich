@@ -2,8 +2,8 @@
   <var key="c" $value="'U ARE THE MOST FOOLISH PERSON IN THE WORLD'"/>
   <row>
     <for $in="Array(c.length).keys()" key="x">
-      <col $grow="x * 2">
-        <if $condition="x % 2 === 0">
+      <col $grow="x.value * 2">
+        <if $condition="x.value % 2 === 0">
           <value $data="x"/>
         </if>
       </col>
