@@ -1,9 +1,9 @@
-import { WidgetEvaluater, EichElement, WidgetContext, WidgetResolver, Widget } from "./types";
+import { WidgetEvaluater, EichElement, WidgetContext, WidgetResolver, Widget, MaybeArray } from "./types";
 import { createSandbox } from "./utils/sandbox";
 import { parse } from "./parse";
 import * as reactivity from '@vue/reactivity'
 
-export function createCompiler(evaluaters: Array<WidgetEvaluater<EichElement>>, resolvers: Array<WidgetResolver<EichElement>>) {
+export function createCompiler(evaluaters: Array<WidgetEvaluater<any>>, resolvers: Array<WidgetResolver<any>>) {
   const additionalEvaluaters: Array<WidgetEvaluater> = []
   window.EICH_ENV ?? (window.EICH_ENV = {
     watch: reactivity.watch,
@@ -40,7 +40,7 @@ export function createCompiler(evaluaters: Array<WidgetEvaluater<EichElement>>, 
 
     await collectVariables(tree, parentData);
 
-    console.log(parentData)
+    
     const sandbox = createSandbox(parentData);
 
     const processedAttributes = await Promise.all(
@@ -57,12 +57,14 @@ export function createCompiler(evaluaters: Array<WidgetEvaluater<EichElement>>, 
       })
     );
 
+    console.log(processedAttributes)
+
     const processedTree = {
       ...tree,
       attributes: Object.fromEntries(processedAttributes)
     };
 
-    let result: Widget | null = null
+    let result: MaybeArray<Widget> | null = null
 
     for (const evaluater of [...evaluaters, ...additionalEvaluaters]) {
       result = await evaluater({
@@ -72,27 +74,40 @@ export function createCompiler(evaluaters: Array<WidgetEvaluater<EichElement>>, 
           set,
           get,
           resolveChildren: async (children, context) => {
-            const resolveds = await Promise.all(children.map(child => compile(child, context.data ?? {})))
+            const resolveds = await Promise.all(children.map((child: EichElement) => compile(child, context.data ?? {})))
+            console.log(resolveds)
             return resolveds.map(resolved => resolved!.element).filter((item) => typeof item !== 'undefined')
           }
         },
       })
       if (result !== null) break
     }
-    if (result?.element) {
-      if (tree.children && tree.children.length > 0) {
-        const childData = {
-          ...parentData,
-          ...(result?.injections || {})
-        };
+    const widgets = Array.isArray(result) ? result : [result]
+    for (const widget of widgets) {
+      if (widget?.element) {
+        if (tree.children && tree.children.length > 0) {
+          const childData = {
+            ...parentData,
+            ...(widget?.injections || {})
+          };
 
-        const compiledChildren = await Promise.all(
-          [...tree.children].map(child => compile(child, childData))
-        );
+          console.log(tree.children)
 
-        result!.element.append(
-          ...compiledChildren.map(child => child!.element).filter((item) => typeof item !== 'undefined')
-        );
+          const compiledChildren = await Promise.all(
+            [...tree.children].map(child => compile(child, childData))
+          );
+
+          console.log(compiledChildren)
+
+          if (widget.element instanceof Element) {
+            widget.element.append(
+              ...compiledChildren.map(child => {
+                const children = Array.isArray(child) ? child : [child]
+                return children.map(child => child!.element).filter((item) => typeof item !== 'undefined')
+              }).filter((item) => typeof item !== 'undefined').flat()
+            );
+          }
+        }
       }
     }
 
@@ -105,6 +120,7 @@ export function createCompiler(evaluaters: Array<WidgetEvaluater<EichElement>>, 
     } else {
       window.EICH_ENV[key] = value
     }
+    console.log(window.EICH_ENV)
   }
 
   function get(key: string) {

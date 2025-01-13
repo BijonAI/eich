@@ -1,11 +1,10 @@
-import { MaybeRef, unref } from "@vue/reactivity"
 import { defineResolver, defineEvaluater, EichElement, VElement } from "../types"
 
 export interface EichVarElement extends EichElement {
   tag: 'var'
   attributes: {
     key: string
-    value: MaybeRef<unknown>
+    value: unknown
   }
 }
 
@@ -16,7 +15,7 @@ export const varResolver = defineResolver<EichVarElement>(async ({ widget, conte
   
   await context.set!(key, typeof value === 'object' ? value : {
     type: 'ref',
-    value: unref(value)
+    value
   }, context.data)
   
   return context

@@ -3,7 +3,6 @@ import { col, EichColElement } from "./col";
 import { container, EichContainerElement } from "./container";
 import { eich } from "./eich";
 import { conditionEvaluater, forEvaluater } from "./functionality";
-import { refResolver } from "./ref";
 import { EichRowElement, row } from "./row";
 import { textContent } from "./text";
 import { valueEvaluater } from "./value";
@@ -24,5 +23,4 @@ export const baseEvaluaters = [
 
 export const baseResolvers = [
   varResolver,
-  refResolver,
 ]

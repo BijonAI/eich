@@ -4,7 +4,6 @@ const renderer = createRenderer()
 
 const HTMLContent = await fetch('/test.eich').then(res => res.text())
 
-const finalHTML = await renderer.renderToHTML(HTMLContent)
+const finalHTML = await renderer.renderToNode(HTMLContent)
 
-
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = finalHTML
+document.querySelector<HTMLDivElement>('#app')!.appendChild(finalHTML!)

@@ -1,26 +1,36 @@
-import { EichElement } from "../types";
+import { defineWidget, EichElement } from "../types";
 import { defineEvaluater } from "../types"
-import { unref, MaybeRef } from "@vue/reactivity";
 
 export interface EichRootElement extends EichElement {
   attributes: {
-    width?: MaybeRef<number>
-    height?: MaybeRef<number>
+    width?: number
+    height?: number
   }
 }
 
 export const eich = defineEvaluater<EichRootElement>(({ widget, context }) => {
   if (widget.tag !== 'eich') return null
-  const result = { widget: { tag: 'div', attributes: {
-    style: `position: absolute;`
-  }, children: [] }, context }
-  if (widget.attributes.width) {
-    result.widget.attributes.style += ` width: ${unref(widget.attributes.width)};`
-  }
-  if (widget.attributes.height) {
-    result.widget.attributes.style += ` height: ${unref(widget.attributes.height)};`
-  }
-  return result
+  const element = document.createElement('div')
+  element.style.position = 'absolute'
+  element.style.width = `${widget.attributes.width}px`
+  element.style.height = `${widget.attributes.height}px`
+  return defineWidget({
+    get width() {
+      return widget.attributes.width!
+    },
+    set width(value: number) {
+      element.style.width = `${value}px`
+      widget.attributes.width = value
+    },
+    get height() {
+      return widget.attributes.height!
+    },
+    set height(value: number) {
+      element.style.height = `${value}px`
+      widget.attributes.height = value
+    },
+    element,
+  })
 })
 
 

@@ -1,30 +1,23 @@
-import { defineEvaluater, EichElement } from "../types";
-import { MaybeRef, unref } from "@vue/reactivity";
+import { defineEvaluater, defineWidget, EichElement } from "../types";
 export interface EichValueElement extends EichElement {
   tag: 'value'
   attributes: {
-    data: MaybeRef<any>
+    data: any
   }
 }
 
 export const valueEvaluater = defineEvaluater<EichValueElement>(({ widget, context }) => {
   const { data } = widget.attributes
-  return {
-    widget: {
-      tag: 'text-content',
-      attributes: {
-        content: unref(data)
-      },
-      children: []
+  const node = document.createTextNode(data)
+  return defineWidget({
+    ...widget,
+    element: node,
+    get content() {
+      return data
     },
-    context,
-  }
+    set content(value: any) {
+      node.textContent = value
+      widget.attributes.data = value
+    },
+  })
 })
-
-const data = {
-  _x: 3,
-  y: 4,
-  get x() {
-    return this._x
-  },
-}

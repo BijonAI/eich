@@ -46,7 +46,7 @@ export function createSandbox(data: Record<string, any>) {
         ...Object.keys(dataInside),
         ...Object.keys(window.EICH_ENV)
       ]
-      console.log(variableNames)
+      
       const variableValues = variableNames.map(name => {
         if (!Object.keys(dataInside).includes(name))
           return typeof window.EICH_ENV[name] !== 'object' ? `window.EICH_ENV.${name}` : `window.EICH_ENV.${name}.value`
@@ -56,18 +56,16 @@ export function createSandbox(data: Record<string, any>) {
         return dataInside[name];
       })
 
-      console.log(variableValues)
+      
       
       const code = `
         return (function(${variableNames.join(',')}) {
           return (${expression});
         })(${variableValues.join(',')})
       `;
-
-      console.log(code)
       
       const result = (new Function(code))();
-      
+
       resolve(result);
     });
   }

@@ -1,5 +1,3 @@
-import { ComputedRef, WatchSource } from "@vue/reactivity"
-
 export interface VElement {
   tag: string
   attributes: Record<string, any>
@@ -8,27 +6,28 @@ export interface VElement {
 }
 
 export interface Widget {
-  element?: Element
+  element?: Element | Text
   injections?: Record<string, any>
 }
 
 export interface WidgetContext<T extends EichElement> {
   data?: Record<string, any>
-  resolveChildren?: (children: T['children'], context: WidgetContext<T>) => Promise<Array<Element>>
+  resolveChildren?: (children: T['children'], context: WidgetContext<T>) => Promise<Array<Widget>>
   set?: (key: string, value: any, dataContext?: Record<string, any>) => Promise<void>
   get?: (key: string) => any,
 }
 
-export function defineWidget(widget: Widget): Widget {
+export function defineWidget(widget: Widget & Record<string, any>): Widget & Record<string, any> {
   return widget
 }
 
 export type MaybePromise<T> = T | Promise<T>
+export type MaybeArray<T> = T | T[]
 
 export type WidgetEvaluater<T extends EichElement = EichElement> = (tag: {
   widget: T,
   context: WidgetContext<T>
-}) => MaybePromise<Widget>
+}) => MaybePromise<MaybeArray<Widget> | null>
 
 export type WidgetResolver<T extends EichElement = EichElement> = (tag: {
   widget: T,

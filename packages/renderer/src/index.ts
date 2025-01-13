@@ -1,5 +1,6 @@
 import { baseResolvers, baseEvaluaters, createCompiler, WidgetResolver, WidgetEvaluater } from "@eich/compiler"
 import { realize } from "./realize"
+import { Widget } from "@eich/compiler"
 
 export * from './realize'
 
@@ -15,12 +16,12 @@ export function createRenderer(evaluaters: WidgetEvaluater<any>[] = [], resolver
 
   async function renderToHTML(eich: string) {
     
-    const widget = await compiler.compile(eich, {})
-    if (!widget) return ''
-    
-    return realize(widget.widget)
   }
 
-  return { renderToHTML }
+  async function renderToNode(eich: string) {
+    return ((await compiler.compile(eich, {})) as Widget).element
+  }
+
+  return { renderToHTML, renderToNode }
 }
 
