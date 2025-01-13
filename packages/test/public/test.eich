@@ -1,5 +1,5 @@
 <eich width="100%" height="100%">
-  <var key="c" $value="'U ARE THE MOST FOOLISH PERSON IN THE WORLD'"/>
+  <var key="c" $value="'U ARE THE MOST FOOLISH PERSON IN THE WORLD HHHHHHHHHHHHHHHHHHHHHHHHHHH'"/>
   wwwwwwwwwwwwwwwww
   <row>
     <for $in="Array(c.length).keys()" key="x">

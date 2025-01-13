@@ -15,7 +15,7 @@ export function createCompiler(evaluaters: Array<WidgetEvaluater<any>>, resolver
 
   async function collectVariables(tree: EichElement, parentData: Record<string, any>) {
     for (const resolver of resolvers) {
-      const context = await resolver({ widget: tree, context: { data: parentData, set, get } })
+      await resolver({ widget: tree, context: { data: parentData, set, get } })
 
       if (tree.children) {
         for (const child of tree.children) {
@@ -39,7 +39,6 @@ export function createCompiler(evaluaters: Array<WidgetEvaluater<any>>, resolver
     }
 
     await collectVariables(tree, parentData);
-
     
     const sandbox = createSandbox(parentData);
 
@@ -57,8 +56,6 @@ export function createCompiler(evaluaters: Array<WidgetEvaluater<any>>, resolver
       })
     );
 
-    console.log(processedAttributes)
-
     const processedTree = {
       ...tree,
       attributes: Object.fromEntries(processedAttributes)
@@ -74,9 +71,8 @@ export function createCompiler(evaluaters: Array<WidgetEvaluater<any>>, resolver
           set,
           get,
           resolveChildren: async (children, context) => {
-            const resolveds = await Promise.all(children.map((child: EichElement) => compile(child, context.data ?? {})))
-            console.log(resolveds)
-            return resolveds.map(resolved => resolved!.element).filter((item) => typeof item !== 'undefined')
+            const resolveds = children.map((child: EichElement) => compile(child, context.data ?? {}))
+            return (await Promise.all(resolveds))
           }
         },
       })
@@ -84,21 +80,15 @@ export function createCompiler(evaluaters: Array<WidgetEvaluater<any>>, resolver
     }
     const widgets = Array.isArray(result) ? result : [result]
     for (const widget of widgets) {
-      if (widget?.element) {
+      if (widget && widget?.element) {
         if (tree.children && tree.children.length > 0) {
           const childData = {
             ...parentData,
             ...(widget?.injections || {})
           };
-
-          console.log(tree.children)
-
           const compiledChildren = await Promise.all(
             [...tree.children].map(child => compile(child, childData))
           );
-
-          console.log(compiledChildren)
-
           if (widget.element instanceof Element) {
             widget.element.append(
               ...compiledChildren.map(child => {
