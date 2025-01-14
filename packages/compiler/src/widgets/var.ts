@@ -20,3 +20,8 @@ export const varResolver = defineResolver<EichVarElement>(async ({ widget, conte
   
   return context
 })
+
+export const varEvaluater = defineEvaluater<EichVarElement>(async ({ widget, context }) => {
+  if (widget.tag !== 'var') return null
+  return []
+})

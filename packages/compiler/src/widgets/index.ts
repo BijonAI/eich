@@ -6,11 +6,12 @@ import { conditionEvaluater, forEvaluater } from "./functionality";
 import { EichRowElement, row } from "./row";
 import { textContent } from "./text";
 import { valueEvaluater } from "./value";
-import { varResolver } from "./var";
+import { varEvaluater, varResolver } from "./var";
 
 export type EichBaseElement = EichElement | EichColElement | EichRowElement | EichContainerElement
 
 export const baseEvaluaters = [
+  varEvaluater,
   textContent,
   col,
   row,
@@ -19,9 +20,6 @@ export const baseEvaluaters = [
   conditionEvaluater,
   forEvaluater,
   valueEvaluater,
-  defineEvaluater((_) => {
-    return []
-  })
 ]
 
 export const baseResolvers = [
