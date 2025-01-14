@@ -9,6 +9,7 @@ export interface EichValueElement extends EichElement {
 export const valueEvaluater = defineEvaluater<EichValueElement>(({ widget, context }) => {
   const { data } = widget.attributes
   const node = document.createTextNode(data)
+  console.log('Processed value:', data)
   return defineWidget({
     ...widget,
     element: node,

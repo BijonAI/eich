@@ -12,7 +12,8 @@ export function parse(content: string): EichElement {
         tag: name,
         attributes: {},
         children: [],
-        parent: currentElement || undefined
+        parent: currentElement || undefined,
+        compiled: false
       };
 
       // 处理属性，转换为驼峰命名
@@ -48,7 +49,8 @@ export function parse(content: string): EichElement {
           tag: 'text-content',
           attributes: { content: trimmedText },
           children: [],
-          parent: currentElement
+          parent: currentElement,
+          compiled: false
         });
       }
     },
@@ -71,7 +73,8 @@ export function parse(content: string): EichElement {
       tag: 'fragment',
       attributes: {},
       children: [],
-      parent: undefined
+      parent: undefined,
+      compiled: false
     };
   }
 

@@ -42,27 +42,37 @@ export const forEvaluater = defineEvaluater<EichForElement>(async ({ widget, con
       widget.children,
       iterationContext
     )
+    widget.children.forEach(child => child.compiled = false)
 
     if (resolvedChildren) {
       result.push(...resolvedChildren)
     }
   }
+  widget.children.forEach(child => child.compiled = true)
+  widget.compiled = true
 
-  return result
+  console.log('for result', result)
+
+  return result.flat()
 })
 
 export const conditionEvaluater = defineEvaluater<EichConditionElement>(async ({ widget, context }) => {
   if (widget.tag !== 'if' && widget.tag !== 'else' && widget.tag !== 'elif') return null
   const { condition } = widget.attributes
-  const result: Widget[] = await context.resolveChildren?.(widget.children, context) ?? []
+  async function process() {
+    return context.resolveChildren?.(widget.children.map(child => {
+      child.compiled = false
+      return child
+    }), context) ?? []
+  }
   if (widget.tag === 'if') {
-    return condition ? result : null
+    return condition ? await process() : []
   } else if (
     widget.tag === 'elif' &&
     widget.parent?.children.find(child => child.tag === 'if' && child.attributes.condition === false)
   ) {
-    return condition ? result : null
+    return condition ? await process() : []
   } else {
-    return result
+    return await process()
   }
 })

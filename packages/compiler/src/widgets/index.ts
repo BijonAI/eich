@@ -1,4 +1,4 @@
-import { EichElement } from "../types";
+import { defineEvaluater, EichElement } from "../types";
 import { col, EichColElement } from "./col";
 import { container, EichContainerElement } from "./container";
 import { eich } from "./eich";
@@ -19,6 +19,9 @@ export const baseEvaluaters = [
   conditionEvaluater,
   forEvaluater,
   valueEvaluater,
+  defineEvaluater((_) => {
+    return []
+  })
 ]
 
 export const baseResolvers = [

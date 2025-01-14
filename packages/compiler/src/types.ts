@@ -3,6 +3,7 @@ export interface VElement {
   attributes: Record<string, any>
   children: Array<VElement>
   parent?: VElement
+  compiled: boolean
 }
 
 export interface Widget {

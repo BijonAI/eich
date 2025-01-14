@@ -1,6 +1,5 @@
 export * from "./types"
 export * from "./compiler"
-export * from './virsualize'
 export * from './widgets/col'
 export * from './widgets/row'
 export * from './widgets/container'

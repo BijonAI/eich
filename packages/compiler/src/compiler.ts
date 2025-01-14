@@ -61,7 +61,7 @@ export function createCompiler(evaluaters: Array<WidgetEvaluater<any>>, resolver
       attributes: Object.fromEntries(processedAttributes)
     };
 
-    let result: MaybeArray<Widget> | null = null
+    let result: MaybeArray<Widget> | null = []
 
     for (const evaluater of [...evaluaters, ...additionalEvaluaters]) {
       result = await evaluater({
@@ -71,7 +71,10 @@ export function createCompiler(evaluaters: Array<WidgetEvaluater<any>>, resolver
           set,
           get,
           resolveChildren: async (children, context) => {
-            const resolveds = children.map((child: EichElement) => compile(child, context.data ?? {}))
+            const resolveds = children.filter((child: EichElement) => !child.compiled).map((child: EichElement) => {
+              child.compiled = true
+              return compile(child, context.data ?? {})
+            })
             return (await Promise.all(resolveds))
           }
         },
@@ -86,22 +89,49 @@ export function createCompiler(evaluaters: Array<WidgetEvaluater<any>>, resolver
             ...parentData,
             ...(widget?.injections || {})
           };
+          
+          console.log('Processing children:', {
+            parentTag: tree.tag,
+            uncompiled: tree.children.filter(child => !child.compiled).map(c => c.tag)
+          });
+
           const compiledChildren = await Promise.all(
-            [...tree.children].map(child => compile(child, childData))
+            [...tree.children].filter(child => !child.compiled).map(child => compile(child, childData))
           );
+          
+          console.log('Compiled results:', {
+            results: compiledChildren.map(child => ({
+              isArray: Array.isArray(child),
+              hasElement: Array.isArray(child) 
+                ? child.some(c => c?.element)
+                : child?.element != null
+            }))
+          });
+
           if (widget.element instanceof Element) {
-            widget.element.append(
-              ...compiledChildren.map(child => {
-                const children = Array.isArray(child) ? child : [child]
-                return children.map(child => child!.element).filter((item) => typeof item !== 'undefined')
-              }).filter((item) => typeof item !== 'undefined').flat()
-            );
+            const elementsToAppend = compiledChildren
+              .flatMap(child => Array.isArray(child) ? child : [child]) // 展平数组
+              .filter(child => child != null) // 过滤null
+              .map(child => child.element)
+              .filter(element => element != null); // 过滤没有element的项
+
+            console.log('Appending elements:', {
+              count: elementsToAppend.length,
+              elements: elementsToAppend.map(el => ({
+                tagName: el instanceof Element ? el.tagName : 'non-element',
+                type: typeof el
+              }))
+            });
+
+            if (elementsToAppend.length > 0) {
+              widget.element.append(...elementsToAppend);
+            }
           }
         }
       }
     }
 
-    return result;
+    return result ?? [];
   }
 
   async function set(key: string, value: any, dataContext: Record<string, any> = {}) {

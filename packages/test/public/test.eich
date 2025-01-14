@@ -1,13 +1,10 @@
 <eich width="100%" height="100%">
-  <var key="c" $value="'U ARE THE MOST FOOLISH PERSON IN THE WORLD HHHHHHHHHHHHHHHHHHHHHHHHHHH'"/>
-  wwwwwwwwwwwwwwwww
+  <var key="c" $value="'TEST STRING FUCK FUCKVFUCK'"/>
   <row>
     <for $in="Array(c.length).keys()" key="x">
-      <col $grow="x * 2">
-        <if $condition="x % 2 === 0">
-          <value $data="x"/>
-        </if>
-      </col>
+      <if $condition="x % 2 === 0">
+        <value $data="'Index Filtered: ' + x"/>
+      </if>
     </for>
   </row>
 </eich>
