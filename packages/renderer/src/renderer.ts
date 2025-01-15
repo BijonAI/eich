@@ -1,8 +1,17 @@
-import { ComputedRef, MaybeRef } from "@vue/reactivity";
-import { getActiveContext, Serializable } from "./context";
-import { Replacer } from "./context";
+import { computed, ComputedRef, watch } from "@vue/reactivity";
+import { Context, getActiveContext, runInContext } from "./context";
 import { EichBasicNode } from "./node";
-import { CommonRecord } from "./utils";
+import { CommonRecord, MaybeNull } from "./utils";
+
+export function processAttrs(attrs: CommonRecord<string>) {
+  return Object.fromEntries(
+    Object.keys(attrs).map(key => {
+      if (key.startsWith('$')) return [key.slice(1), runInContext(attrs[key], getActiveContext())]
+      if (key.startsWith('@')) return [key, runInContext(`() => (${attrs[key]})`, getActiveContext())]
+      return [key, attrs[key]]
+    })
+  )
+}
 
 export const RegistryComponent = {
   intrinsics: new Map<string, Component<any>>(),
@@ -17,27 +26,39 @@ export const RegistryComponent = {
   }
 }
 
-export type Component<T extends EichBasicNode> = (props: T['props']) => (context: CommonRecord<Serializable | Replacer>) => ComputedRef<string>
+export type Component<T extends EichBasicNode> = (props: T['props'], slots: () => ComputedRef<string>[]) => (context: Context) => MaybeNull<ComputedRef<string>>
 
 export function defineComponent<T extends EichBasicNode>(component: Component<T>) {
   return component
 }
 
-export function render(node: EichBasicNode) {
-  let htmlNode: ComputedRef<string> | undefined
+export function renderToString(node: EichBasicNode): ComputedRef<string> {
   if (RegistryComponent.has(node.tag)) {
     const component = RegistryComponent.get(node.tag)
     if (!component) {
       console.warn(`Component ${node.tag} not found`)
     }
-    htmlNode = component && component(node.props)(getActiveContext())
+    const processedAttrs = processAttrs(node.props)
+    const maybeNode = component && component(processedAttrs, () => node.children.map(child => renderToString(child)))(getActiveContext())
+
+    if (maybeNode && maybeNode !== null) return maybeNode
+    else return computed(() => '')
   }
-  if (htmlNode) {
-    const element = document.createElement('div')
-    element.innerHTML = htmlNode.value
-    return [...element.childNodes].filter(child => child instanceof HTMLElement) as HTMLElement[]
+  return computed(() => '')
+}
+
+export function render(node: EichBasicNode) {
+  const htmlNode = renderToString(node)
+  if (htmlNode && htmlNode !== null) {
+    watch(htmlNode, (newHtmlNode) => {
+      const element = document.createElement('div')
+      element.innerHTML = newHtmlNode
+      return [...element.childNodes].filter(child => child instanceof HTMLElement) as HTMLElement[]
+    }, {
+      immediate: true
+    })
   }
-  return []
+  return htmlNode
 }
 
 

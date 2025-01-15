@@ -1,8 +1,13 @@
-import { render, toRoot } from "@eich/renderer"
+import { render, toRoot, effect } from "@eich/renderer"
 
 const HTMLContent = await fetch('/test.eich').then(res => res.text())
 
-const finalHTML = render(toRoot(HTMLContent))
+const root = toRoot(HTMLContent)
+
+const finalHTML = render(root)
 
 console.log(finalHTML)
-document.querySelector<HTMLDivElement>('#app')!.appendChild(finalHTML![0])
+
+effect(() => {
+  document.querySelector<HTMLDivElement>('#app')!.innerHTML = finalHTML.value
+})

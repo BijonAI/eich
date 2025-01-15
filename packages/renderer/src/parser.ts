@@ -1,20 +1,6 @@
-import { runInContext } from "./context";
-import { EichBasicNode, EichTextNode } from "./node";
+import { EichBasicNode } from "./node";
 import { CommonRecord } from "./utils";
-import { getActiveContext } from "./context";
 import { Parser } from "htmlparser2";
-
-export function processAttrs(attrs: CommonRecord<string>) {
-  return Object.fromEntries(
-    Object.keys(attrs).map(
-      key => {
-        if (key.startsWith('$')) return [key, runInContext(attrs[key], getActiveContext())]
-        if (key.startsWith('@')) return [key, attrs[key]]
-        return [key, attrs[key]]
-      }
-    )
-  )
-}
 
 export function prefix(eichString: string) {
   const nodes: EichBasicNode[] = []
@@ -23,10 +9,9 @@ export function prefix(eichString: string) {
   
   const parser = new Parser({
     onopentag(tag, attrs) {
-      const processedAttrs = processAttrs(attrs)
       currentNode = {
         tag,
-        props: processedAttrs,
+        props: attrs,
         value: '',
         children: []
       }
@@ -56,6 +41,8 @@ export function prefix(eichString: string) {
       stack.pop()
       currentNode = stack[stack.length - 1] || null
     }
+  }, {
+    xmlMode: true
   })
   parser.write(eichString)
   parser.end()
@@ -65,6 +52,7 @@ export function prefix(eichString: string) {
 
 export function toRoot(eichString: string): EichBasicNode<string, CommonRecord<any>> {
   const nodes = prefix(eichString)
+  
   return Array.isArray(nodes) && nodes.length === 1 ? nodes[0] : {
     tag: '#root',
     props: {},
