@@ -12,7 +12,7 @@ export function createCompiler(evaluaters: Array<WidgetEvaluater<any>>, resolver
     computed: reactivity.computed,
     effect: reactivity.effect,
   })
-
+  window.EICH_ROOT = { children: [] } as Widget
   async function collectVariables(tree: EichElement, parentData: Record<string, any>) {
     for (const resolver of resolvers) {
       await resolver({ widget: tree, context: { data: parentData, set, get } })
@@ -24,12 +24,14 @@ export function createCompiler(evaluaters: Array<WidgetEvaluater<any>>, resolver
       }
     }
   }
-
   function addEvaluater(evaluater: WidgetEvaluater) {
     additionalEvaluaters.push(evaluater)
   }
 
-  async function compile(eich: EichElement | string, parentData: Record<string, any>) {
+  let currentPositionSet: Array<number> = []
+  async function compile(eich: EichElement | string, parentData: Record<string, any>, parent?: Widget): Promise<MaybeArray<Widget>> {
+    const currentLevel = currentPositionSet.length
+    currentPositionSet[currentLevel] = 0
 
     let tree: EichElement
     if (typeof eich === "string") {
@@ -39,9 +41,7 @@ export function createCompiler(evaluaters: Array<WidgetEvaluater<any>>, resolver
     }
 
     await collectVariables(tree, parentData);
-    
     const sandbox = createSandbox(parentData);
-
     const processedAttributes = await Promise.all(
       Object.entries(tree.attributes).map(async ([key, value]) => {
         if (value && typeof value === 'object' && (value.type === 'expression' || value.type === 'ref')) {
@@ -60,9 +60,7 @@ export function createCompiler(evaluaters: Array<WidgetEvaluater<any>>, resolver
       ...tree,
       attributes: Object.fromEntries(processedAttributes)
     };
-
     let result: MaybeArray<Widget> | null = []
-
     for (const evaluater of [...evaluaters, ...additionalEvaluaters]) {
       result = await evaluater({
         widget: processedTree,
@@ -70,10 +68,10 @@ export function createCompiler(evaluaters: Array<WidgetEvaluater<any>>, resolver
           data: parentData,
           set,
           get,
-          resolveChildren: async (children, context) => {
+          resolveChildren: async (children, context, widget) => {
             const resolveds = children.filter((child: EichElement) => !child.compiled).map((child: EichElement) => {
               child.compiled = true
-              return compile(child, context.data ?? {})
+              return compile(child, context.data ?? {}, widget)
             })
             return (await Promise.all(resolveds))
           }
@@ -82,6 +80,67 @@ export function createCompiler(evaluaters: Array<WidgetEvaluater<any>>, resolver
       if (result !== null) break
     }
     const widgets = Array.isArray(result) ? result : [result]
+
+    // 根据 currentPositionSet 找到正确的父级位置并插入
+    if (currentLevel === 0) {
+      // 根级别，直接设置为 EICH_ROOT，但要确保 children 数组结构正确
+      window.EICH_ROOT = {
+        children: [{
+          element: widgets[0]?.element,
+          children: widgets.slice(1).filter((widget): widget is Widget => widget != null)
+        }]
+      }
+    } else {
+      // 根据位置数组找到正确的父级
+      let currentParent = window.EICH_ROOT
+      for (let i = 0; i < currentLevel - 1; i++) {
+        if (currentParent.children?.[0]?.children?.[currentPositionSet[i]]) {
+          currentParent = currentParent.children[0].children[currentPositionSet[i]]
+        }
+      }
+
+      // 确保父级的结构正确
+      if (!currentParent.children) {
+        currentParent.children = []
+      }
+
+      // 在正确的位置插入或更新 widgets
+      const position = currentPositionSet[currentLevel - 1]
+      if (widgets.length === 1) {
+        // 如果是第一个widget，它应该作为父节点
+        if (position === 0) {
+          const existingChildren = currentParent.children[0]?.children || [] // 保存现有的子节点
+          currentParent.children = [{
+            element: widgets[0]?.element,
+            ...widgets[0],
+            children: existingChildren
+          }]
+        } else {
+          // 非第一个位置的widget应该插入到父节点的children中
+          if (!currentParent.children[0]) {
+            currentParent.children[0] = { children: [] }
+          }
+          if (!currentParent.children[0].children) {
+            currentParent.children[0].children = []
+          }
+          currentParent.children[0].children[position - 1] = widgets[0] as Widget
+        }
+      } else {
+        // 多个widget的情况，作为子节点插入
+        if (!currentParent.children[0]) {
+          currentParent.children[0] = { children: [] }
+        }
+        if (!currentParent.children[0].children) {
+          currentParent.children[0].children = []
+        }
+        currentParent.children[0].children.splice(
+          position - 1, 
+          1, 
+          ...widgets.filter(widget => widget != null)
+        )
+      }
+    }
+
     for (const widget of widgets) {
       if (widget && widget?.element) {
         if (tree.children && tree.children.length > 0) {
@@ -89,40 +148,19 @@ export function createCompiler(evaluaters: Array<WidgetEvaluater<any>>, resolver
             ...parentData,
             ...(widget?.injections || {})
           };
-          
-          console.log('Processing children:', {
-            parentTag: tree.tag,
-            uncompiled: tree.children.filter(child => !child.compiled).map(c => c.tag)
-          });
-
           const compiledChildren = await Promise.all(
-            [...tree.children].filter(child => !child.compiled).map(child => compile(child, childData))
+            [...tree.children].filter(child => !child.compiled).map((child, index) => {
+              // 更新子元素的位置信息
+              currentPositionSet[currentLevel] = index
+              return compile(child, childData, widget)
+            })
           );
-          
-          console.log('Compiled results:', {
-            results: compiledChildren.map(child => ({
-              isArray: Array.isArray(child),
-              hasElement: Array.isArray(child) 
-                ? child.some(c => c?.element)
-                : child?.element != null
-            }))
-          });
-
           if (widget.element instanceof Element) {
             const elementsToAppend = compiledChildren
               .flatMap(child => Array.isArray(child) ? child : [child]) // 展平数组
               .filter(child => child != null) // 过滤null
               .map(child => child.element)
               .filter(element => element != null); // 过滤没有element的项
-
-            console.log('Appending elements:', {
-              count: elementsToAppend.length,
-              elements: elementsToAppend.map(el => ({
-                tagName: el instanceof Element ? el.tagName : 'non-element',
-                type: typeof el
-              }))
-            });
-
             if (elementsToAppend.length > 0) {
               widget.element.append(...elementsToAppend);
             }
@@ -130,7 +168,8 @@ export function createCompiler(evaluaters: Array<WidgetEvaluater<any>>, resolver
         }
       }
     }
-
+    // 处理完当前层级后，移除该层级的位置信息
+    currentPositionSet.length = currentLevel
     return result ?? [];
   }
 
@@ -140,9 +179,7 @@ export function createCompiler(evaluaters: Array<WidgetEvaluater<any>>, resolver
     } else {
       window.EICH_ENV[key] = value
     }
-    console.log(window.EICH_ENV)
   }
-
   function get(key: string) {
     return window.EICH_ENV[key]
   }

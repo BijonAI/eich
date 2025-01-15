@@ -1,14 +1,7 @@
 import { defineWidget, EichElement } from "../types";
 import { defineEvaluater } from "../types"
-
-export interface EichRootElement extends EichElement {
-  attributes: {
-    width?: number
-    height?: number
-  }
-}
-
-export const eich = defineEvaluater<EichRootElement>(({ widget, context }) => {
+  
+export const eich = defineEvaluater<'eich', { width?: number, height?: number }>(({ widget, context }) => {
   if (widget.tag !== 'eich') return null
   const element = document.createElement('div')
   element.style.position = 'absolute'

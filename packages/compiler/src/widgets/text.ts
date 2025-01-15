@@ -1,7 +1,7 @@
 import { defineWidget, EichElement } from "../types";
 import { defineEvaluater } from "../types"
 
-export const textContent = defineEvaluater<EichElement>(({ widget, context }) => {
+export const textContent = defineEvaluater<'text-content', { content: string }>(({ widget, context }) => {
   if (widget.tag !== 'text-content') return null
   const node = document.createTextNode(widget.attributes.content ?? '')
   return defineWidget({

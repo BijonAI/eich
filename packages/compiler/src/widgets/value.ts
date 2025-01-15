@@ -1,17 +1,9 @@
-import { defineEvaluater, defineWidget, EichElement } from "../types";
-export interface EichValueElement extends EichElement {
-  tag: 'value'
-  attributes: {
-    data: any
-  }
-}
+import { defineEvaluater, defineWidget } from "../types";
 
-export const valueEvaluater = defineEvaluater<EichValueElement>(({ widget, context }) => {
+export const valueEvaluater = defineEvaluater<'value', { data: any }>(({ widget, context }) => {
   const { data } = widget.attributes
   const node = document.createTextNode(data)
-  console.log('Processed value:', data)
   return defineWidget({
-    ...widget,
     element: node,
     get content() {
       return data

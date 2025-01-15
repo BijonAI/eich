@@ -1,26 +1,22 @@
-import { defineEvaluater, defineWidget, EichElement, VElement } from "../types"
+import { defineEvaluater, defineWidget } from "../types"
 
-export interface EichContainerElement extends EichElement {
-  attributes: {
-    margin?: number
-    padding?: number
-    marginTop?: number
-    marginRight?: number
-    marginBottom?: number
-    marginLeft?: number
-    paddingTop?: number
-    paddingRight?: number
-    paddingBottom?: number
-    paddingLeft?: number
-    width?: number
-    height?: number
-    grow?: number
-    align?: 'center' | 'left' | 'right'
-    baseline?: 'center' | 'top' | 'bottom'
-  }
-}
-
-export const container = defineEvaluater<EichContainerElement>(async ({ widget, context }) => {
+export const container = defineEvaluater<'container', {
+  margin?: number
+  padding?: number
+  marginTop?: number
+  marginRight?: number
+  marginBottom?: number
+  marginLeft?: number
+  paddingTop?: number
+  paddingRight?: number
+  paddingBottom?: number
+  paddingLeft?: number
+  width?: number
+  height?: number
+  grow?: number
+  align?: 'center' | 'left' | 'right'
+  baseline?: 'center' | 'top' | 'bottom'
+}>(async ({ widget, context }) => {
   if (widget.tag !== 'container') return null
   const element = document.createElement('div')
   element.style.margin = `${widget.attributes.margin}px`

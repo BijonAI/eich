@@ -1,35 +1,15 @@
 import { defineEvaluater, Widget } from "../types";
-import { EichElement } from "../types";
 import { warn } from "../utils/logs";
 
-export interface EichForElement extends EichElement {
-  attributes: {
-    in: Iterable<any>
-    key: string
-  }
-}
-
-export interface EichConditionElement extends EichElement {
-  tag: string,
-  attributes: {
-    condition: boolean
-  }
-}
-
-export const forEvaluater = defineEvaluater<EichForElement>(async ({ widget, context }) => {
+export const forEvaluater = defineEvaluater<'for', { in: Iterable<any>, key: string }>(async ({ widget, context }) => {
   if (widget.tag !== 'for') return null
   const { in: iterable, key } = widget.attributes
-
-  console.log(iterable)
-
   if (!key) {
     warn('You must specify a key for the for attribute')
     return null
   }
-
   const result: Widget[] = []
   for (const item of iterable) {
-    
     const iterationContext = {
       ...context,
       data: {
@@ -37,33 +17,33 @@ export const forEvaluater = defineEvaluater<EichForElement>(async ({ widget, con
         [key]: item
       }
     }
-    
     const resolvedChildren = await context.resolveChildren?.(
       widget.children,
-      iterationContext
+      iterationContext,
+      {
+        children: []
+      }
     )
     widget.children.forEach(child => child.compiled = false)
-
     if (resolvedChildren) {
       result.push(...resolvedChildren)
     }
   }
   widget.children.forEach(child => child.compiled = true)
   widget.compiled = true
-
-  console.log('for result', result)
-
   return result.flat()
 })
 
-export const conditionEvaluater = defineEvaluater<EichConditionElement>(async ({ widget, context }) => {
+export const conditionEvaluater = defineEvaluater<'if' | 'else' | 'elif', { condition: boolean }>(async ({ widget, context }) => {
   if (widget.tag !== 'if' && widget.tag !== 'else' && widget.tag !== 'elif') return null
   const { condition } = widget.attributes
   async function process() {
     return context.resolveChildren?.(widget.children.map(child => {
       child.compiled = false
       return child
-    }), context) ?? []
+    }), context, {
+      children: []
+    }) ?? []
   }
   if (widget.tag === 'if') {
     return condition ? await process() : []
