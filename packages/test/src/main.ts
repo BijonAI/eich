@@ -1,9 +1,8 @@
-import { createRenderer } from "@eich/renderer"
-
-const renderer = createRenderer()
+import { render, toRoot } from "@eich/renderer"
 
 const HTMLContent = await fetch('/test.eich').then(res => res.text())
 
-const finalHTML = await renderer.renderToNode(HTMLContent)
+const finalHTML = render(toRoot(HTMLContent))
 
-document.querySelector<HTMLDivElement>('#app')!.appendChild(finalHTML!)
+console.log(finalHTML)
+document.querySelector<HTMLDivElement>('#app')!.appendChild(finalHTML![0])

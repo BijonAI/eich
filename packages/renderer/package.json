@@ -27,6 +27,11 @@
     "access": "public"
   },
   "dependencies": {
-    "@eich/compiler": "workspace:^"
+    "@rbardini/html": "^1.0.1",
+    "@vue/reactivity": "^3.5.13",
+    "@vue/shared": "^3.5.13",
+    "es-html-parser": "^0.0.10",
+    "htmlparser2": "^10.0.0",
+    "morphdom": "^2.7.4"
   }
 }
