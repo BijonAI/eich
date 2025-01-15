@@ -1,4 +1,4 @@
-<eich width="100" height="100">
+<eich width="100" height="100" @click="console.log('click')">
   <ref key="a" $value="3"/>
   <value $data="a"/>
 </eich>

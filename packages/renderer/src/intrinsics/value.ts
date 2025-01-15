@@ -6,13 +6,8 @@ import { reactiveHtml } from "../utils";
 export const component = defineComponent<EichBasicNode<"value", {
   data: Ref<unknown>
 }>>(props => {
-  return () => {
-    
-    const html = reactiveHtml`<div>${props.data}</div>`
-    watch(html, (newHtml) => {
-      
-    })
-    return html
+  return (context) => {
+    return reactiveHtml`<div>${props.data}</div>`
   }
 })
 

@@ -1,15 +1,13 @@
-import { ref, Ref } from "@vue/reactivity"
+import { ref, Ref, watch } from "@vue/reactivity"
 import { defineComponent, RegistryComponent } from "../renderer"
-import { reactiveHtml } from "../utils"
+import { reactiveHtml, resolveSlots } from "../utils"
 import { EichBasicNode } from "../node"
 
 export const eich = defineComponent<EichBasicNode<'eich', {
   width: Ref<number>
   height: Ref<number>
 }>>(({ width, height }, slots) => (context) => {
-  const test = slots()[1]
-  
-  return reactiveHtml`<div style="width: ${width.value}px; height: ${height.value}px;">${test}</div>`
+  return resolveSlots(slots(), reactiveHtml`<div><slot></slot></div>`)
 })
 
 RegistryComponent.register('eich', eich)

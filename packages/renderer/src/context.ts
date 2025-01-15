@@ -34,9 +34,9 @@ export function run(expr: string, context: Context) {
     console.warn(`Variable ${name} not found`)
     return name
   }
-  console.log(`return ((${Object.keys(context).join(', ')}) => (${expr}))(${Object.keys(context).map(key => `window.resolve('${key}')`).join(', ')})`)
+  
   const result = new Function(`return ((${Object.keys(context).join(', ')}) => (${expr}))(${Object.keys(context).map(key => `window.resolve('${key}')`).join(', ')})`)()
-  console.log(result)
+  
   return result
 }
 

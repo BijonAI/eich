@@ -6,8 +6,9 @@ const root = toRoot(HTMLContent)
 
 const finalHTML = render(root)
 
-console.log(finalHTML)
 
 effect(() => {
-  document.querySelector<HTMLDivElement>('#app')!.innerHTML = finalHTML.value
+  const app = document.querySelector<HTMLDivElement>('#app')!
+  app.innerHTML = ''
+  app.append(...finalHTML.value)
 })

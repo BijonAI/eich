@@ -9,7 +9,6 @@ export const component = defineComponent<EichBasicNode<'ref', {
   value: any
 }>>(({ key, value }) => (context) => {
   setActiveContext(key, ref(value))
-  
   return null
 })
 
