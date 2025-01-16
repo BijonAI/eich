@@ -27,7 +27,7 @@ export const RegistryComponent = {
   }
 }
 
-export type Component<T extends EichBasicNode> = (props: T['props'], slots: () => ComputedRef<HTMLElement[]>[]) => (context: Context) => MaybeNull<ComputedRef<HTMLElement[]>>
+export type Component<T extends EichBasicNode> = (props: T['props'], slots: (beforeRender?: (index: number) => void) => ComputedRef<HTMLElement[]>[]) => (context: Context) => MaybeNull<ComputedRef<HTMLElement[]>>
 
 export function defineComponent<T extends EichBasicNode>(component: Component<T>) {
   return component
@@ -40,12 +40,18 @@ export function renderToElement(node: EichBasicNode): ComputedRef<HTMLElement[]>
       console.warn(`Component ${node.tag} not found`)
     }
     const processedAttrs = processAttrs(node.props)
-    const slots = () => node.children.map(child => renderToElement(child))
+    const slots = (beforeRender?: (index: number) => void) => node.children.map((child, index) => {
+      if (beforeRender) beforeRender(index)
+      
+      const rendered = renderToElement(child)
+      
+      return rendered
+    })
     const maybeNode = component && component(processedAttrs, slots)(getActiveContext())
     Object.keys(processedAttrs).forEach(key => {
       if (key.startsWith('@')) {
         const event = processedAttrs[key]
-        
+
         maybeNode?.value.forEach(node => node.addEventListener(key.slice(1), event))
       }
     })

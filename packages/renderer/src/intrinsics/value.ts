@@ -7,7 +7,7 @@ export const component = defineComponent<EichBasicNode<"value", {
   data: Ref<unknown>
 }>>(props => {
   return (context) => {
-    return reactiveHtml`<div>${props.data}</div>`
+    return reactiveHtml`${props.data}`
   }
 })
 

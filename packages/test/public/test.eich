@@ -1,4 +1,6 @@
 <eich width="100" height="100" @click="console.log('click')">
-  <ref key="a" $value="3"/>
-  <value $data="a"/>
+  <ref key="a" $value="[1,3,5,7,9,4,5,5,6,7,7]"/>
+  <for key="i" $in="a">
+    <value $data="i"/>
+  </for>
 </eich>

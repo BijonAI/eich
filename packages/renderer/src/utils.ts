@@ -16,29 +16,30 @@ export function compileToHtml(htmlString: string) {
 }
 
 export function reactiveHtml(strings: TemplateStringsArray, ...values: MaybeRef<any>[]) {
-  const htmlNodes = computed(() => compileToHtml(strings.map((string, index) => {
+  return computed(() => compileToHtml(strings.map((string, index) => {
     if (isRef(values[index])) return string + (values[index].value ?? '')
     return string + (values[index] ?? '')
   }).join('')) as HTMLElement[])
-  return htmlNodes
 }
 
 export function resolveSlots(slots: ComputedRef<HTMLElement[]>[], htmlNodes: ComputedRef<HTMLElement[]>) {
-  const resolvedSlots = computed(() => {
+  return computed(() => {
     const clonedHtmlNodes = htmlNodes.value.map(node => node.cloneNode(true)) as HTMLElement[]
-    const result = clonedHtmlNodes.map(node => {
-      const slotElements = [...(node as HTMLElement).getElementsByTagName('slot')]
-      slots.map(slot => slot.value).flat().forEach((slot) => {
-        if (slotElements.length === 0) return
-        const parent = slotElements[0].parentElement
-        if (parent) {
-          parent.insertBefore(slot, slotElements[0])
-          parent.removeChild(slotElements[0])
+    const slotElements: HTMLSlotElement[] = []
+    clonedHtmlNodes.forEach((node) => slotElements.push(...(node as HTMLElement).getElementsByTagName('slot')))
+    for (const slotElement of slotElements) {
+      for (const slot of slots) {
+        if (slot.value && slot.value.length > 0) {
+          for (const minifiedSlot of slot.value) {
+            if (minifiedSlot && slotElement && slotElement.parentElement) {
+              slotElement.parentElement?.insertBefore(minifiedSlot, slotElement)
+            }
+          }
+          slotElement.parentElement?.removeChild(slotElement)
         }
-      })
-      return node
-    })
-    return result
+      }
+    }
+    return clonedHtmlNodes
   })
-  return resolvedSlots
 }
+
