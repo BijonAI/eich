@@ -1,13 +1,19 @@
 <eich>
   <container>
-    <for key="x" $in="Array(10).keys()">
-      <col>
-        <for key="y" $in="Array(9).keys()">
-          <row $color="`rgb(${x.value * 10},${y.value * 10},${x.value * y.value * 10})`" $transform="`rotate(${x.value * 10}deg) scale(${x.value/3},${y.value/3})`">
-            <value $data="x" />
-          </row>
-        </for>
-      </col>
-    </for>
+    <line-chart
+      $width="600"
+      $height="400"
+      $data="[
+        { x: 0, y: 10 },
+        { x: 1, y: 15 },
+        { x: 2, y: 35 },
+        { x: 3, y: 20 }
+      ]"
+      xKey="x"
+      yKey="y"
+      curve="natural"
+      strokeColor="#ff6b6b"
+      $strokeWidth="2"
+    />
   </container>
 </eich>
