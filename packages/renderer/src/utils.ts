@@ -15,7 +15,7 @@ export function compileToHtml(htmlString: string) {
   return [...element.childNodes]
 }
 
-export function reactiveHtml(strings: TemplateStringsArray, ...values: MaybeRef<any>[]) {
+export function template(strings: TemplateStringsArray, ...values: MaybeRef<any>[]) {
   return computed(() => compileToHtml(strings.map((string, index) => {
     if (isRef(values[index])) return string + (values[index].value ?? '')
     return string + (values[index] ?? '')
@@ -26,7 +26,15 @@ export function resolveSlots(slots: ComputedRef<HTMLElement[]>[], htmlNodes: Com
   return computed(() => {
     const clonedHtmlNodes = htmlNodes.value.map(node => node.cloneNode(true)) as HTMLElement[]
     const slotElements: HTMLSlotElement[] = []
-    clonedHtmlNodes.forEach((node) => slotElements.push(...(node as HTMLElement).getElementsByTagName('slot')))
+    const slotParentIfItIsRoot = document.createElement('div')
+    clonedHtmlNodes.forEach((node) => {
+      if (node instanceof HTMLSlotElement) {
+        slotParentIfItIsRoot.appendChild(node)
+        slotElements.push(node)
+      } else {
+        slotElements.push(...(node as HTMLElement).getElementsByTagName('slot'))
+      }
+    })
     for (const slotElement of slotElements) {
       for (const slot of slots) {
         if (slot.value && slot.value.length > 0) {
@@ -39,7 +47,32 @@ export function resolveSlots(slots: ComputedRef<HTMLElement[]>[], htmlNodes: Com
         }
       }
     }
+    clonedHtmlNodes.push(...[...slotParentIfItIsRoot.children] as HTMLElement[])
     return clonedHtmlNodes
   })
 }
 
+export function convertToSnakeCase(str: string) {
+  return str.replace(/([A-Z])/g, '-$1').toLowerCase()
+}
+export function convertToCamelCase(str: string) {
+  return str.replace(/-([a-z])/g, (match, p1) => p1.toUpperCase())
+}
+
+export function style<T extends CommonRecord<any>>(styles: T, prefixers: {
+  [K in keyof T]?: string | (() => string | undefined)
+} & CommonRecord<string | (() => string | undefined)> = {}) {
+  return computed(() => Object.entries({
+    ...prefixers,
+    ...styles
+  }).filter(([_, value]) => typeof value !== 'undefined' ? typeof value === 'function' ? value() !== undefined : true : false).map(([key, value]) => `${convertToSnakeCase(key)}: ${typeof value === 'function' ? value() : value}`).join(';'))
+}
+
+export function props<T extends CommonRecord<any>>(props: T, prefixers: {
+  [K in keyof T]?: string | (() => string | undefined)
+} & CommonRecord<string | (() => string | undefined)> = {}) {
+  return computed(() => Object.entries({
+    ...prefixers,
+    ...props
+  }).filter(([_, value]) => typeof value !== 'undefined' ? typeof value === 'function' ? value() !== undefined : true : false).map(([key, value]) => `${convertToSnakeCase(key)}="${typeof value === 'function' ? value() : value}"`).join(' '))
+}

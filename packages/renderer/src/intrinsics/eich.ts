@@ -1,6 +1,6 @@
 import { ref, Ref, watch } from "@vue/reactivity"
 import { defineComponent, RegistryComponent } from "../renderer"
-import { reactiveHtml, resolveSlots } from "../utils"
+import { template, resolveSlots } from "../utils"
 import { EichBasicNode } from "../node"
 
 export const eich = defineComponent<EichBasicNode<'eich', {
@@ -8,7 +8,7 @@ export const eich = defineComponent<EichBasicNode<'eich', {
   height: Ref<number>
 }>>(({ width, height }, slots) => (context) => {
   return resolveSlots(slots(),
-    reactiveHtml`<div style="width: ${width ?? '100%'}px; height: ${height ?? '100%'}px; position: absolute; top: 0; left: 0; right: 0; bottom: 0;"><slot/></div>`
+    template`<div style="width: ${width ?? '100%'}px; height: ${height ?? '100%'}px; position: absolute; top: 0; left: 0; right: 0; bottom: 0;"><slot/></div>`
   )
 })
 

@@ -1,7 +1,7 @@
 import { computed, MaybeRef, ref, toValue } from "@vue/reactivity";
 import { EichBasicNode } from "../node";
 import { defineComponent, RegistryComponent } from "../renderer";
-import { reactiveHtml, resolveSlots } from "../utils";
+import { template, resolveSlots } from "../utils";
 import { setActiveContext } from "../context";
 
 export const component = defineComponent<EichBasicNode<'for', {
@@ -15,7 +15,7 @@ export const component = defineComponent<EichBasicNode<'for', {
   return computed(() => {
     return slotSets.flatMap(slotSet => resolveSlots(
       slotSet,
-      reactiveHtml`${`<div><slot/></div>`}`
+      template`<slot/>`
     ).value)
   })
 })
