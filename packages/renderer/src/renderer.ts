@@ -1,71 +1,103 @@
-import { computed, ComputedRef, effect, watch } from "@vue/reactivity";
-import { Context, getActiveContext, runInContext } from "./context";
-import { EichBasicNode } from "./node";
-import { CommonRecord, convertToCamelCase, MaybeNull } from "./utils";
+import { type Reactive, reactive, toRefs } from '@vue/reactivity'
 import patch from 'morphdom'
+import { type EachBasicNode, type EachSourceNode, isEachTextNode, parse } from './parser'
 
-export function processAttrs(attrs: CommonRecord<string>) {
-  return Object.fromEntries(
-    Object.keys(attrs).map(key => {
-      if (key.startsWith('$')) return [convertToCamelCase(key.slice(1)), runInContext(attrs[key], getActiveContext())]
-      if (key.startsWith('@')) return [convertToCamelCase(key), runInContext(`function() { ${attrs[key]} }`, getActiveContext())]
-      return [convertToCamelCase(key), attrs[key]]
-    })
-  )
+export type Attributes = Record<string, any>
+export type Context = Reactive<Record<string, any>>
+export type Component<T extends Attributes = Attributes> =
+  (props: T, children: () => Node[], node: EachSourceNode) => Node | Node[] | void
+
+export const intrinsics = new Map<string, Component<any>>()
+
+let activeContext: Context | null = null
+
+export { patch }
+
+export function hasContext(): boolean {
+  return activeContext != null
 }
 
-export const RegistryComponent = {
-  intrinsics: new Map<string, Component<any>>(),
-  styles: new Set<string>(),
-  register(name: string, component: Component<any>) {
-    this.intrinsics.set(name, component)
-  },
-  get(name: string) {
-    return this.intrinsics.get(name)
-  },
-  has(name: string) {
-    return this.intrinsics.has(name)
-  },
-  style(style: string) {
-    this.styles.add(style)
-  },
-}
-
-export type Component<T extends EichBasicNode> = (props: T['props'], slots: (beforeRender?: (index: number) => void) => ComputedRef<HTMLElement[]>[]) => (context: Context) => MaybeNull<ComputedRef<HTMLElement[]>>
-
-export function defineComponent<T extends EichBasicNode>(component: Component<T>) {
-  return component
-}
-
-export function renderToElement(node: EichBasicNode): ComputedRef<HTMLElement[]> {
-  if (RegistryComponent.has(node.tag)) {
-    const component = RegistryComponent.get(node.tag)
-    if (!component) {
-      console.warn(`Component ${node.tag} not found`)
-    }
-    const processedAttrs = processAttrs(node.props)
-    const slots = (beforeRender?: (index: number) => void) => node.children.map((child, index) => {
-      if (beforeRender) beforeRender(index)
-      
-      const rendered = renderToElement(child)
-      
-      return rendered
-    })
-    const maybeNode = component && component(processedAttrs, slots)(getActiveContext())
-    effect(() => {
-      Object.keys(processedAttrs).forEach(key => {
-        if (key.startsWith('@')) {
-          const event = processedAttrs[key]
-          maybeNode?.value.forEach(node => node.addEventListener(key.slice(1), event))
-        }
-      })
-    })
-    if (maybeNode && maybeNode !== null) return maybeNode
-    else return computed(() => [])
+export function getCurrentContext(): Context {
+  if (activeContext == null) {
+    throw new Error('no active context')
   }
-  return computed(() => [])
+
+  return activeContext
 }
 
-export function render(node: EichBasicNode) {
-  return renderToElement(node)
+export function setCurrentContext(context: Context): void {
+  activeContext = context
+}
+
+export function mergeContext(target: Context, from: Context): Context {
+  return reactive(Object.assign(toRefs(target), toRefs(from)))
+}
+
+export function runInContext<T extends Context, R>(
+  context: T,
+  fn: () => R,
+): R {
+  const oldContext = activeContext
+  activeContext = context
+  try {
+    return fn()
+  }
+  finally {
+    activeContext = oldContext
+  }
+}
+
+export function createAdhoc<T = unknown>(src: string, context: Context): () => T
+export function createAdhoc<T = unknown>(src: string): (context: Context) => T
+export function createAdhoc<T = unknown>(src: string, context?: Context): (context?: Context) => T {
+  // eslint-disable-next-line no-new-func
+  const adhoc = new Function(`return (function($__eich_ctx){with($__eich_ctx){return (${src});}});`)() as any
+  return (ctx) => {
+    if (ctx == null && context == null) {
+      throw new TypeError('missing context')
+    }
+
+    return adhoc(ctx ?? context!)
+  }
+}
+
+const noopComp = defineComponent(
+  (_, children, node) => {
+    if (node.tag != 'noop') {
+      console.warn(`[eich] ignoring <${node.tag}>, instead of using <noop>`)
+    }
+    return children()
+  },
+)
+
+export function renderComp(comp: Component<any>, node: EachBasicNode): Node | Node[] {
+  return comp(node.attrs, () => node.children.flatMap(renderNode), node) ?? []
+}
+
+export function renderNode(node: EachSourceNode): Node | Node[] {
+  if (isEachTextNode(node)) {
+    return document.createTextNode(node.value)
+  }
+
+  if (intrinsics.has(node.tag)) {
+    return renderComp(intrinsics.get(node.tag)!, node)
+  }
+
+  return renderComp(noopComp, node)
+}
+
+export function renderRoots(roots: EachSourceNode[], target?: Node, initialContext: Reactive<Context> = {}): [Node[], Reactive<Context>] {
+  const context = reactive(initialContext)
+  const children = runInContext(context, () => roots.flatMap(renderNode))
+  target && children.forEach(child => target.appendChild(child))
+  return [children, context]
+}
+
+export function render(source: string, target?: Node, initialContext: Reactive<Context> = {}): [Node[], Reactive<Context>] {
+  const ast = parse(source)
+  return renderRoots(ast, target, initialContext)
+}
+
+export function defineComponent<T extends Attributes = Attributes>(comp: Component<T>): Component<T> {
+  return comp
 }

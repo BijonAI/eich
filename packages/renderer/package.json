@@ -3,7 +3,10 @@
   "type": "module",
   "version": "0.0.1",
   "description": "🧩 A front-end-based interactive content format, focus on composing the front-end ecosystem.",
-  "author": "BugDuck Team",
+  "author": {
+    "name": "Takamatsu Tomori",
+    "url": "https://github.com/tomoriny"
+  },
   "license": "MIT",
   "exports": {
     ".": {
@@ -27,11 +30,10 @@
     "access": "public"
   },
   "dependencies": {
-    "@rbardini/html": "^1.0.1",
     "@vue/reactivity": "^3.5.13",
     "@vue/shared": "^3.5.13",
+    "clsx": "^2.1.1",
     "es-html-parser": "^0.0.10",
-    "htmlparser2": "^10.0.0",
     "morphdom": "^2.7.4"
   }
 }
