@@ -110,7 +110,7 @@ function _setRxAttr(el: Element, name: string, value: unknown): void {
     effect(() => {
       const style = toValue(value) as any
       typeof style == 'object'
-        ? el.setAttribute(name, Object.assign((el as HTMLElement).style, style))
+        ? Object.assign((el as HTMLElement).style, style)
         : el.setAttribute('style', toDisplayString(style))
     })
   }
