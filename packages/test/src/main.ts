@@ -1,8 +1,12 @@
-import { render, effect, eich, intrinsics } from "@eich/renderer"
-import { Container } from "@eich/layout"
+import { eich, intrinsics } from "@eich/renderer"
+import { Container, Row, Col } from "@eich/layout"
+import { Button, Input } from "@eich/components"
 
 intrinsics.set('container', Container)
-const HTMLContent = await fetch('/test.eich').then(res => res.text())
+intrinsics.set('row', Row)
+intrinsics.set('column', Col)
+intrinsics.set('button', Button)
+intrinsics.set('input', Input)
 
 const app = document.querySelector<HTMLDivElement>('#app')!
 app.append(...eich`
@@ -17,5 +21,18 @@ app.append(...eich`
     <button @click="list = 'Love you!'">Love</button>
     <button @click="list = [1,2,3]">un-love</button>
   </container>
+
+  <input model="name" />
+  <value $data="name" />
+  
+  <for key="x" $in="list">
+    <column>
+      <for key="y" $in="list">
+        <row>
+          <value $data="x + y" />
+        </row>
+      </for>
+    </column>
+  </for>
 </eich>
 `)

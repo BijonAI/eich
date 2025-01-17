@@ -141,6 +141,9 @@ importers:
 
   packages/test:
     dependencies:
+      '@eich/components':
+        specifier: workspace:^
+        version: link:../components
       '@eich/layout':
         specifier: workspace:^
         version: link:../layout

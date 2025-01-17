@@ -15,6 +15,7 @@
   "dependencies": {
     "@eich/layout": "workspace:^",
     "@eich/renderer": "workspace:^",
+    "@eich/components": "workspace:^",
     "@eich/support-d3": "workspace:^"
   }
 }
