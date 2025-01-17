@@ -48,7 +48,8 @@ export function runInContext<T extends Context, R>(
 }
 
 export function createAdhoc<T = unknown>(src: string, context: Context): () => T
-export function createAdhoc<T = unknown>(src: string): (context: Context) => T
+export function createAdhoc<T = unknown>(src: string): (context?: Context) => T
+export function createAdhoc<T = unknown>(src: string, context?: Context): (context?: Context) => T
 export function createAdhoc<T = unknown>(src: string, context?: Context): (context?: Context) => T {
   // eslint-disable-next-line no-new-func
   const adhoc = new Function(`return (function($__eich_ctx){with($__eich_ctx){return (${src});}});`)() as any
