@@ -54,3 +54,12 @@ export function createDelegate(map: Record<string, any>, eventNames?: string[], 
 
   return node => delegates.forEach(([event, handler]) => node.addEventListener(event, handler))
 }
+
+export function withDefaults<const T extends Record<string, unknown>, const U extends Partial<T>>(defaults: Partial<T>, target: Partial<T>): Partial<T & U>
+export function withDefaults<const T extends Record<string, unknown>, const U extends Partial<T>>(defaults: Required<T>, target: Partial<T>): Required<T & U>
+export function withDefaults<const T extends Record<string, unknown>, const U extends Partial<T>>(defaults: Required<T>, target: Partial<T>): Required<T & U> {
+  for (const key in defaults) {
+    target[key] ??= defaults[key]
+  }
+  return target as any
+}
