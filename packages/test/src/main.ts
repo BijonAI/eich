@@ -13,10 +13,8 @@ app.append(...eich`
     <button @click="list = 'Love you!'">Love</button>
     <button @click="list = [1,2,3]">un-love</button>
   </container>
-
   <input model="name" />
   <value $data="name" />
-  
   <for key="x" $in="list">
     <column>
       <for key="y" $in="list">
@@ -26,7 +24,6 @@ app.append(...eich`
       </for>
     </column>
   </for>
-
   <line-chart
     $width="900"
     $height="600"
@@ -45,7 +42,7 @@ app.append(...eich`
     y-key="y"
     curve="natural"
   >
-    <line-chart-title>Fuck you</line-chart-title>  
+    <line-chart-title>Fuck you</line-chart-title>
     <line-chart-x-label>Fuck you</line-chart-x-label>
     <line-chart-y-label>Fuck you</line-chart-y-label>
   </line-chart>

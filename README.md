@@ -22,19 +22,37 @@ Front-end-focused interactive content framework that allows you to create dynami
 ### 📖 Engine support
 
 - [ ] Basic figures (GSAP base)
+  - [ ] Arc
+  - [ ] Circle
+  - [ ] Ellipse
+  - [ ] Line
+  - [ ] Path
+  - [ ] Polygon
+  - [ ] Polyline
+  - [ ] Rect
 - [ ] Tex Formula (katex base)
 - [ ] Code block (Shikijs base)
+  - [ ] Codes Rendering
+  - [ ] Magic Move
 - [ ] Mathematics (MafsJs base)
-- [ ] Charts (D3js base)
-- [ ] Maps (D3js base)
-- [ ] Interactive (Moveablejs base)
-- [ ] Audio (Web Audio API base)
-- [ ] Video (Video.js base)
-- [ ] 3D (Three.js base)
+  - [ ] Vector
+  - [ ] Matrix
+  - [ ] Vector Field
+  - [ ] Differentation
+  - [ ] Integration
+  - [ ] Coordinate System
+- [ ] Charts (Echarts base)
+  - [ ] Line Chart
+  - [ ] Bar Chart
+  - [ ] Pie Chart
+  - [ ] Scatter Chart
+  - [ ] Map Chart
+- [ ] Maps (Echarts base)
 - [ ] Lottie (Lottie Web base)
 - [ ] MindMap (JsMind base)
 - [ ] Circuit (SVG-Circuit base)
 - [ ] Music Notes (ABCJs base)
+- [ ] Physics
 - [ ] More...
 
 ### 🧩 Plugins
