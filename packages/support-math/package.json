@@ -1,0 +1,31 @@
+{
+  "name": "@eich/support-math",
+  "type": "module",
+  "version": "0.0.1",
+  "description": "Math support for Eich framework",
+  "author": "BugDuck Team",
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "dev": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "dependencies": {
+    "@eich/renderer": "workspace:^",
+    "d3": "^7.8.5"
+  },
+  "devDependencies": {
+    "@types/d3": "^7.4.3"
+  }
+}

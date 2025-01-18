@@ -1,12 +1,4 @@
-import { eich, intrinsics } from "@eich/renderer"
-import { Container, Row, Col } from "@eich/layout"
-import { Button, Input } from "@eich/components"
-
-intrinsics.set('container', Container)
-intrinsics.set('row', Row)
-intrinsics.set('column', Col)
-intrinsics.set('button', Button)
-intrinsics.set('input', Input)
+import { eich } from "eichjs"
 
 const app = document.querySelector<HTMLDivElement>('#app')!
 app.append(...eich`
@@ -34,5 +26,28 @@ app.append(...eich`
       </for>
     </column>
   </for>
+
+  <line-chart
+    $width="900"
+    $height="600"
+    $data="[
+      { x: 1, y: 2 },
+      { x: 333, y: 34 },
+      { x: 4000, y: 4 },
+      { x: 4000, y: 4000 },
+      { x: 4000, y: 3000 },
+      { x: 4000, y: 2000 },
+      { x: 4000, y: 1000 },
+      { x: 4000, y: 500 },
+      { x: 4000, y: 100 },
+    ]"
+    x-key="x"
+    y-key="y"
+    curve="natural"
+  >
+    <line-chart-title>Fuck you</line-chart-title>  
+    <line-chart-x-label>Fuck you</line-chart-x-label>
+    <line-chart-y-label>Fuck you</line-chart-y-label>
+  </line-chart>
 </eich>
 `)

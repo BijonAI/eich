@@ -1,13 +1,13 @@
 import { defineComponent, getCurrentContext, intrinsics } from "@eich/renderer"
 
 export interface PathAttributes {
-  d?: string
+  $d?: string
 }
 
 export const component = defineComponent<PathAttributes>((attrs, children) => {
   const { _IS_IN_FIELD_TAG } = getCurrentContext()
   const path = document.createElementNS('http://www.w3.org/2000/svg', 'path')
-  path.setAttribute('d', attrs.d ?? '')
+  path.setAttribute('d', attrs.$d ?? '')
   path.append(...children())
 
   if (!_IS_IN_FIELD_TAG) {
