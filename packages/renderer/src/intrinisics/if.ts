@@ -1,5 +1,5 @@
 import type { EffectScope } from '@vue/reactivity'
-import type { EachIfNode } from '../parser'
+import type { EachIfNode } from '../resolver'
 import { effect, effectScope } from '@vue/reactivity'
 import { createAdhoc, defineComponent, getCurrentContext, intrinsics, patch, renderNode, runInContext } from '../renderer'
 

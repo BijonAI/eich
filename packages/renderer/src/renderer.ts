@@ -1,6 +1,6 @@
 import { type Reactive, reactive, toRefs } from '@vue/reactivity'
 import patch from 'morphdom'
-import { type EachBasicNode, type EachSourceNode, isEachTextNode, parse } from './parser'
+import { type EachBasicNode, type EachSourceNode, isEachTextNode, parse } from './resolver'
 
 export type Attributes = Record<string, any>
 export type Context = Reactive<Record<string, any>>
@@ -65,7 +65,7 @@ export function createAdhoc<T = unknown>(src: string, context?: Context): (conte
 const noopComp = defineComponent(
   (_, children, node) => {
     if (node.tag != 'noop') {
-      console.warn(`[eich] ignoring <${node.tag}>, instead of using <noop>`)
+      console.warn(`[eich] ignoring <${String(node.tag)}>, instead of using <noop>`)
     }
     return children()
   },
@@ -102,3 +102,5 @@ export function render(source: string, target?: Node, initialContext: Reactive<C
 export function defineComponent<T extends Attributes = Attributes>(comp: Component<T>): Component<T> {
   return comp
 }
+
+export { textMode } from './resolver'

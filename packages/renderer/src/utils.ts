@@ -2,7 +2,7 @@ import type { Context } from './renderer'
 import { effect, type MaybeRefOrGetter, shallowReactive, stop, toRefs, toValue, unref } from '@vue/reactivity'
 import { toDisplayString } from '@vue/shared'
 import { createAdhoc } from './adhoc'
-import { parse } from './parser'
+import { parse } from './resolver'
 import { getCurrentContext, hasContext, renderRoots } from './renderer'
 
 export function style(source: TemplateStringsArray, ...values: MaybeRefOrGetter<unknown>[]): () => void {
