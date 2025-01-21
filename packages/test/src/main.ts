@@ -1,9 +1,11 @@
-import { parse, parseRaw } from "@eich/renderer"
+import { parse, parseRaw, TextMode, textMode, modeResolver } from "@eich/renderer"
+
+textMode.set('line-chart', TextMode.RAWTEXT)
 
 const source = `
-<value $data="x + y" />
-{{ x + y }}
+<line-chart><line-chart-a>aa</line-chart-a></line-chart>
+<![CDATA[AAA]]>
 `
 
 console.log(parse(source))
-console.log(parseRaw(source))
+console.log(parseRaw(source, { resolver: modeResolver }))

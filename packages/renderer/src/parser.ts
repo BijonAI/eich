@@ -83,6 +83,10 @@ export class ParserContext {
     return this.source.slice(this.idx, end)
   }
 
+  slice(start?: number, end?: number): string {
+    return this.source.slice(start, end)
+  }
+
   advance(num: number): void {
     this.idx += num
     if (this.eof) {
@@ -117,7 +121,7 @@ export class ParserContext {
 
 export type ModeResolver = (tag: string) => TextMode
 
-export function isEnd(context: ParserContext, ancestors: Node[]): boolean {
+export function isEnd(context: ParserContext, ancestors: ChildNode[]): boolean {
   if (context.eof) {
     return true
   }
@@ -253,7 +257,7 @@ export function parseAttributes(context: ParserContext): AttributeNode[] {
   return attrs
 }
 
-export function parseElement(context: ParserContext, ancestors: Node[]): ElementNode {
+export function parseElement(context: ParserContext, ancestors: ChildNode[]): ElementNode {
   const element = parseTag(context)
   if (element.selfClosing) {
     return element
@@ -261,28 +265,12 @@ export function parseElement(context: ParserContext, ancestors: Node[]): Element
 
   const mode = context.resolver(element.tag)
 
-  if (mode == TextMode.RAWTEXT) {
-    const endIdx = context.indexOf(`</${element.tag}`)
-    if (endIdx == -1) {
-      console.error('[eich/parser debug] ', context)
-      throw new Error(`[eich/parser] unclosed rawtext element tag <${element.tag}> at input:${context.idx}`)
-    }
-    const raw = context.remaining(endIdx)
-    context.advance(raw.length)
-    element.raw = raw
-  }
-  else if (mode == TextMode.DATA || mode == TextMode.RCDATA) {
-    let oldMode = context.mode
-    ancestors.push(element)
-    context.mode = mode
-    element.children = parseChildren(context, ancestors)
-    ancestors.pop()
-    context.mode = oldMode
-  }
-  else {
-    console.error('[eich/parser debug] ', context)
-    throw new Error(`[eich/parser] unknown text mode ${mode} at input:${context.idx}`)
-  }
+  let oldMode = context.mode
+  ancestors.push(element)
+  context.mode = mode
+  element.children = parseChildren(context, ancestors)
+  ancestors.pop()
+  context.mode = oldMode
 
   if (!context.eof) {
     const endTag = parseTag(context, false)
@@ -314,30 +302,59 @@ export function parseValue(context: ParserContext): ValueNode {
   }
 }
 
-export function parseText(context: ParserContext): TextNode {
+export function parseText(context: ParserContext, ancestors: ChildNode[]): TextNode {
   let endIdx = context.source.length
-  const ltIdx = context.indexOf('<')
-  const valIdx = context.indexOf('{{')
 
-  if (ltIdx != -1 && ltIdx < endIdx) {
-    endIdx = ltIdx
+  const rawMode = context.mode != TextMode.DATA 
+    && ancestors.length > 0 
+    && ancestors[ancestors.length - 1].type == NodeType.ELEMENT
+
+  if (rawMode) {
+    if (context.mode == TextMode.CDATA) {
+      console.error('[eich/parser debug] ', context)
+      throw new Error(`[eich/parser] unexpected CDATA TextMode at input:${context.idx}`)
+    }
+
+    let nextIdx = context.indexOf('</')
+    while (nextIdx != -1) {
+      const remaining = context.slice(nextIdx)
+      const match = remaining.match(/^<\/(\p{ID_Start}[\p{ID_Continue}:.$@\-]*)/u)
+      if (match && match[1] == (ancestors[ancestors.length - 1] as ElementNode).tag) {
+        endIdx = nextIdx
+        break
+      }
+      nextIdx = context.source.indexOf('</', nextIdx + 2)
+    }
+
+    if (nextIdx == -1) {
+      throw new Error()
+    }
+  }
+  else {
+    const valIdx = context.indexOf('{{')
+    const ltIdx = context.indexOf('<')
+
+    if (ltIdx != -1 && ltIdx < endIdx) {
+      endIdx = ltIdx
+    }
+
+    if (valIdx != -1 && valIdx < endIdx) {
+      endIdx = valIdx
+    }  
   }
 
-  if (valIdx != -1 && valIdx < endIdx) {
-    endIdx = valIdx
-  }
-
+  
   const raw = context.remaining(endIdx)
   context.advance(raw.length)
 
   return {
     type: NodeType.TEXT,
-    content: parseEntities(raw),
+    content: context.mode != TextMode.RAWTEXT ? parseEntities(raw) : '',
     raw,
   }
 }
 
-export function parseChildren(context: ParserContext, ancestors: Node[]) {
+export function parseChildren(context: ParserContext, ancestors: ChildNode[]) {
   const nodes: ChildNode[] = []
   while (!isEnd(context, ancestors)) {
     let node: ChildNode | null = null
@@ -370,7 +387,7 @@ export function parseChildren(context: ParserContext, ancestors: Node[]) {
     }
 
     if (node == null) {
-      node = parseText(context)
+      node = parseText(context, ancestors)
     }
 
     nodes.push(node)
