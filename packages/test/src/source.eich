@@ -14,3 +14,10 @@
     Count: {{ count }}
   </button>
 </scope>
+
+<component name="counter">
+  <let :count="$props.count ?? 0" />
+  <button @click="count++">
+    Count: {{ count }}
+  </button>
+</component>
