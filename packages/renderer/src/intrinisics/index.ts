@@ -4,4 +4,4 @@ export { default as Let } from './let'
 export { default as Memo, type MemoAttributes } from './memo'
 export { default as Value, type ValueAttributes } from './value'
 export { default as Var, type VarAttributes } from './var'
-
+export { default as Scope, type ScopeAttributes } from './scope'

@@ -32,25 +32,31 @@ export type Node =
   | ChildNode
   | AttributeNode
 
-export interface ValueNode {
+export interface BaseNode {
+  type: NodeType
+  parent?: Node
+}
+
+export interface ValueNode extends BaseNode {
   type: NodeType.VALUE
   value: string
 }
-export interface DocumentNode {
+
+export interface DocumentNode extends BaseNode {
   type: NodeType.DOCUMENT
   children: ChildNode[]
   filename: string
   raw: string
 }
 
-export interface AttributeNode {
+export interface AttributeNode extends BaseNode {
   type: NodeType.ATTRIBUTE
   name: string
   value: string
   raw: string
 }
 
-export interface ElementNode {
+export interface ElementNode extends BaseNode {
   type: NodeType.ELEMENT
   tag: string
   selfClosing: boolean
@@ -59,25 +65,25 @@ export interface ElementNode {
   raw?: string
 }
 
-export interface TextNode {
+export interface TextNode extends BaseNode {
   type: NodeType.TEXT
   raw: string
   content: string
 }
 
-export interface CDATANode {
+export interface CDATANode extends BaseNode {
   type: NodeType.CDATA
   content: string
 }
 
-export interface CommentNode {
+export interface CommentNode extends BaseNode {
   type: NodeType.COMMENT
   content: string
 }
 
-export interface FragmentNode {
-  type: NodeType.FRAGMENT;
-  children: ChildNode[];
+export interface FragmentNode extends BaseNode {
+  type: NodeType.FRAGMENT
+  children: ChildNode[]
 }
 
 export class ParserContext {
@@ -235,10 +241,10 @@ export function parseComment(context: ParserContext): CommentNode {
   }
 }
 
-const TAG_START_REG = /^<(\p{ID_Start}[\p{ID_Continue}:.$@\-]*)/u;
-const TAG_END_REG = /^<\/(\p{ID_Start}[\p{ID_Continue}:.$@\-]*)/u;
-const ATTR_NAME_REG = /^[\p{ID_Start}@:$][\p{ID_Continue}@:$\-]*/u;
-const WHITESPACE_REG = /^[\t\r\n\f ]+/;
+export const TAG_START_REG = /^<(\p{ID_Start}[\p{ID_Continue}:.$@\-]*)/u;
+export const TAG_END_REG = /^<\/(\p{ID_Start}[\p{ID_Continue}:.$@\-]*)/u;
+export const ATTR_NAME_REG = /^[\p{ID_Start}@:$][\p{ID_Continue}@:$\-]*/u;
+export const WHITESPACE_REG = /^[\t\r\n\f ]+/;
 
 export function parseTag(context: ParserContext, start: boolean = true): ElementNode {
   const match = (
@@ -331,6 +337,11 @@ export function parseAttributes(context: ParserContext): AttributeNode[] {
 
 export function parseElement(context: ParserContext): ElementNode {
   const element = parseTag(context);
+  
+  element.attributes.forEach(attr => {
+    attr.parent = element
+  })
+  
   if (element.selfClosing) {
     return element;
   }
@@ -426,6 +437,8 @@ export function parseText(context: ParserContext): TextNode {
 
 export function parseChildren(context: ParserContext) {
   const nodes: ChildNode[] = []
+  const parent = context.ancestors[context.ancestors.length - 1]?.[0]
+  
   while (!isEnd(context)) {
     let node: ChildNode | null = null
 
@@ -464,19 +477,32 @@ export function parseChildren(context: ParserContext) {
       node = parseText(context)
     }
 
-    nodes.push(node)
+    if (node) {
+      node.parent = parent
+      if (node.type === NodeType.ELEMENT) {
+        node.attributes.forEach(attr => {
+          attr.parent = node as ElementNode
+        })
+      }
+      nodes.push(node)
+    }
   }
 
   return nodes
 }
 
 export function parseDocument(context: ParserContext): DocumentNode {
-  return {
+  const children = parseChildren(context)
+  const document: DocumentNode = {
     type: NodeType.DOCUMENT,
-    children: parseChildren(context),
+    children,
     filename: context.filename,
     raw: context.source,
   }
+  children.forEach(child => {
+    child.parent = document
+  })
+  return document
 }
 
 export interface ParseOptions {
@@ -504,8 +530,7 @@ export class ParserError extends Error {
       `Location: ${context.filename}:${position.line}:${position.column} (${position.idx})\n` +
       `Code: ${code}\n` +
       `Ancestors:\n${getAncestorsPreview(context)}` +
-      `Preview:\n${preview}\n` +
-      `        ${'^'.padStart(position.column)}`
+      `Preview:\n${preview}\n`
     );
   }
 }
@@ -527,7 +552,7 @@ export function getSourcePreview(context: ParserContext): string {
       const lineNum = startLine + i;
       const isErrorLine = lineNum === pos.line;
       const paddedLineNum = lineNum.toString().padStart(4, ' ');
-      return `${paddedLineNum} | ${line}${isErrorLine ? ' <--' : ''}`;
+      return `${paddedLineNum} | ${line}${isErrorLine ?       `\n     | ${'^'.padStart(pos.column)}` : ''}`;
     })
     .join('\n');
 }
@@ -536,7 +561,7 @@ export function getAncestorsPreview(context: ParserContext): string {
   console.log(context.ancestors)
   return context.ancestors.reduce((acc, [node, pos]) => {
     return acc + `   - ${node.type == NodeType.ELEMENT ? `<${node.tag}>` : '(Fragment)'} at ${pos.line}:${pos.column} (${pos.idx})\n`
-  }, '')
+  }, '   - (Root)\n') 
 }
 
 export function parseFragment(context: ParserContext): FragmentNode {
@@ -547,7 +572,6 @@ export function parseFragment(context: ParserContext): FragmentNode {
     children: [],
   };
 
-  
   context.push(fragment);
   fragment.children = parseChildren(context);
   if (!context.startsWith('</>')) {
@@ -557,8 +581,64 @@ export function parseFragment(context: ParserContext): FragmentNode {
       'INVALID_FRAGMENT_END'
     );
   }
-  context.pop()
+  context.pop();
   context.advance(3);
 
   return fragment;
 }
+
+export function traverse<T>(traverser: (node: ChildNode, context: T) => false | void, node: ChildNode[] | ChildNode, context: T, maxDepth: false | number = false): T {
+  const nodes = Array.isArray(node) ? node : [node]
+  
+  function visit(nodes: ChildNode[], depth: number): boolean {
+    for (const node of nodes) {
+      if (traverser(node, context) === false) {
+        return true
+      }
+
+      if (maxDepth === false || depth < maxDepth) {
+        if (node.type === NodeType.ELEMENT || node.type === NodeType.FRAGMENT || node.type === NodeType.DOCUMENT) {
+          if (visit(node.children, depth + 1)) {
+            return true
+          }
+        }
+      }
+    }
+
+    return false
+  }
+
+  visit(nodes, 1)
+  return context
+}
+
+
+export function queryNode(filter: (node: ChildNode) => boolean, node: ChildNode[] | ChildNode, maxNum: false | number = false, maxDepth: false | number = false): Set<ChildNode> {
+  const results = new Set<ChildNode>()
+  const nodes = Array.isArray(node) ? node : [node]
+  
+  function visit(nodes: ChildNode[], depth: number): boolean {
+    for (const node of nodes) {
+      if (filter(node)) {
+        results.add(node)
+        if (maxNum !== false && results.size >= maxNum) {
+          return true
+        }
+      }
+
+      if (maxDepth === false || depth < maxDepth) {
+        if (node.type === NodeType.ELEMENT || node.type === NodeType.FRAGMENT || node.type === NodeType.DOCUMENT) {
+          if (visit(node.children, depth + 1)) {
+            return true
+          }
+        }
+      }
+    }
+
+    return false
+  }
+
+  visit(nodes, 1)
+  return results
+}
+
