@@ -1,11 +1,1 @@
-<button @click="count++">
-  <value $data="count1" />
-  <aaa>
-    <value $data="count2" />
-    <value $data="count3" />
-  </aaa>
-  <value $data="count4" />
-</button>
-
-<bbb a></bbb>
-<bbb b></bbb>
+<!doctype html>

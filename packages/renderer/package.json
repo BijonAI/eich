@@ -12,8 +12,17 @@
     ".": {
       "dev": "./src/index.ts",
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "import": "./dist/index.js"
+    },
+    "./intrinisics": {
+      "types": "./dist/intrinisics/index.d.ts",
+      "import": "./dist/intrinisics/index.js",
+      "dev": "./src/intrinisics/index.ts"
+    },
+    "./intrinisics/*": {
+      "types": "./dist/intrinisics/*.d.ts",
+      "import": "./dist/intrinisics/*.js",
+      "dev": "./src/intrinisics/*.ts"
     }
   },
   "types": "./dist/index.d.ts",

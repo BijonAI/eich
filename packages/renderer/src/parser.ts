@@ -84,6 +84,7 @@ export interface CDATANode extends BaseNode {
 export interface CommentNode extends BaseNode {
   type: NodeType.COMMENT
   content: string
+  directive: boolean
 }
 
 export interface FragmentNode extends BaseNode {
@@ -244,6 +245,7 @@ export function parseComment(context: ParserContext): CommentNode {
   return {
     type: NodeType.COMMENT,
     content: raw,
+    directive: false,
   }
 }
 
@@ -453,7 +455,21 @@ export function parseChildren(context: ParserContext) {
             node = parseComment(context)
           }
           else {
-            throw new ParserError('Invalid <!> markup', context, 'INVALID_MARKUP')
+            context.advance(2) // <!
+            const endIdx = context.indexOf('>')
+            if (endIdx == -1) {
+              throw new ParserError('Invalid <! markup', context, 'INVALID_MARKUP')
+            }
+            const content = context.remaining(endIdx)
+            if (!/^[\p{ID_Start}@:$!][\p{ID_Continue}@:$\-!\s]*/u.test(content)) {
+              throw new ParserError('Invalid <! markup', context, 'INVALID_MARKUP')
+            }
+            context.advance(content.length + 1)
+            node = {
+              type: NodeType.COMMENT,
+              content,
+              directive: true,
+            }
           }
         }
         else if (context.char(1) == '/') {
