@@ -399,11 +399,6 @@ export function parseText(context: ParserContext): TextNode {
       }
       nextIdx = context.source.indexOf('</', nextIdx + 2)
     }
-
-    if (nextIdx == -1) {
-      context.idx = context.source.length
-      throw new ParserError('Unexpected end of file', context, 'UNEXPECTED_EOF')
-    }
   }
   else {
     const valIdx = context.indexOf('{{')
