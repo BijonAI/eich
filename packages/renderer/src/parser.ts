@@ -504,8 +504,7 @@ export class ParserError extends Error {
       `Location: ${context.filename}:${position.line}:${position.column} (${position.idx})\n` +
       `Code: ${code}\n` +
       `Ancestors:\n${getAncestorsPreview(context)}` +
-      `Preview:\n${preview}\n` +
-      `        ${'^'.padStart(position.column)}`
+      `Preview:\n${preview}\n`
     );
   }
 }
@@ -527,7 +526,7 @@ export function getSourcePreview(context: ParserContext): string {
       const lineNum = startLine + i;
       const isErrorLine = lineNum === pos.line;
       const paddedLineNum = lineNum.toString().padStart(4, ' ');
-      return `${paddedLineNum} | ${line}${isErrorLine ? ' <--' : ''}`;
+      return `${paddedLineNum} | ${line}${isErrorLine ?       `\n     | ${'^'.padStart(pos.column)}` : ''}`;
     })
     .join('\n');
 }
