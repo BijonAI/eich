@@ -71,6 +71,9 @@ const noopComp = defineComponent(
   },
 )
 
+intrinsics.set('fragment', noopComp)
+intrinsics.set('noop', noopComp)
+
 export function renderComp(comp: Component<any>, node: EachBasicNode): Node | Node[] {
   return comp(node.attrs, () => node.children.flatMap(renderNode), node) ?? []
 }

@@ -16,6 +16,7 @@ export enum NodeType {
   RAW,
   ATTRIBUTE,
   VALUE,
+  FRAGMENT,
 }
 
 export type ChildNode =
@@ -25,6 +26,7 @@ export type ChildNode =
   | CommentNode
   | ValueNode
   | DocumentNode
+  | FragmentNode
 
 export type Node =
   | ChildNode
@@ -37,6 +39,8 @@ export interface ValueNode {
 export interface DocumentNode {
   type: NodeType.DOCUMENT
   children: ChildNode[]
+  filename: string
+  raw: string
 }
 
 export interface AttributeNode {
@@ -71,13 +75,60 @@ export interface CommentNode {
   content: string
 }
 
+export interface FragmentNode {
+  type: NodeType.FRAGMENT;
+  children: ChildNode[];
+}
+
 export class ParserContext {
+  public readonly lines: string[];
+  public readonly lineStarts: number[];
+
   constructor(
-    public source: string,
+    public readonly source: string,
+    public readonly filename: string = 'unknown',
     public idx: number = 0,
     public mode: TextMode = TextMode.DATA,
     public resolver: ModeResolver = () => TextMode.DATA,
-  ) {}
+  ) {
+    this.lines = source.split('\n');
+    this.lineStarts = [];
+    let index = 0;
+    for (let i = 0; i < this.lines.length; i++) {
+      this.lineStarts.push(index);
+      index += this.lines[i].length + 1; // +1 for the newline character
+    }
+  }
+
+  getPosition(offset: number = 0): Position {
+    const pos = this.idx + offset;
+    let line = 1;
+    let lastLineStart = 0;
+
+    let left = 0;
+    let right = this.lineStarts.length - 1;
+
+    while (left <= right) {
+      const mid = Math.floor((left + right) / 2);
+      if (this.lineStarts[mid] <= pos) {
+        lastLineStart = this.lineStarts[mid];
+        line = mid + 1;
+        left = mid + 1;
+      } else {
+        right = mid - 1;
+      }
+    }
+
+    return {
+      line,
+      column: pos - lastLineStart + 1,
+      idx: pos
+    };
+  }
+
+  getLines(startLine: number, endLine: number): string[] {
+    return this.lines.slice(startLine - 1, endLine);
+  }
 
   remaining(end?: number): string {
     return this.source.slice(this.idx, end)
@@ -131,6 +182,10 @@ export function isEnd(context: ParserContext, ancestors: ChildNode[]): boolean {
     return true
   }
 
+  if (parent && parent.type == NodeType.FRAGMENT && context.startsWith('</>')) {
+    return true;
+  }
+
   return false
 }
 
@@ -138,8 +193,8 @@ export function parseCDATA(context: ParserContext): CDATANode {
   context.advance(9)
   const endIdx = context.indexOf(']]>')
   if (endIdx == -1) {
-    console.error('[eich/parser debug] ', context)
-    throw new Error(`[eich/parser] unclosed CDATA tag at input:${context.idx}`)
+    context.idx = context.source.length
+    throw new ParserError('Unclosed CDATA section', context, 'UNCLOSED_CDATA')
   }
   const raw = context.remaining(endIdx)
   context.advance(raw.length + 3)
@@ -169,6 +224,11 @@ export function parseComment(context: ParserContext): CommentNode {
   }
 }
 
+const TAG_START_REG = /^<(\p{ID_Start}[\p{ID_Continue}:.$@\-]*)/u;
+const TAG_END_REG = /^<\/(\p{ID_Start}[\p{ID_Continue}:.$@\-]*)/u;
+const ATTR_NAME_REG = /^[\p{ID_Start}@:$][\p{ID_Continue}@:$\-]*/u;
+const WHITESPACE_REG = /^[\t\r\n\f ]+/;
+
 export function parseTag(context: ParserContext, start: boolean = true): ElementNode {
   const match = (
     start
@@ -177,8 +237,11 @@ export function parseTag(context: ParserContext, start: boolean = true): Element
   ).exec(context.remaining())
 
   if (!match) {
-    console.error('[eich/parser debug] ', context)
-    throw new Error(`[eich/parser] not found starting/ending tag at input:${context.idx}`)
+    throw new ParserError(
+      start ? 'Invalid opening tag' : 'Invalid closing tag',
+      context,
+      'INVALID_TAG_NAME'
+    )
   }
 
   const tag = match[1]
@@ -201,10 +264,9 @@ export function parseAttributes(context: ParserContext): AttributeNode[] {
   const attrs: AttributeNode[] = []
 
   while (!context.startsWith('>') && !context.startsWith('/>')) {
-    const match = /^[\p{ID_Start}@:$][\p{ID_Continue}@:$\-]*/u.exec(context.remaining())
+    const match = ATTR_NAME_REG.exec(context.remaining())
     if (!match) {
-      console.error('[eich/parser debug] ', context)
-      throw new Error(`[eich/parser] unexpected attribute name at input:${context.idx}`)
+      throw new ParserError('Invalid attribute name', context, 'INVALID_ATTRIBUTE_NAME')
     }
 
     const name = match[0]
@@ -232,8 +294,7 @@ export function parseAttributes(context: ParserContext): AttributeNode[] {
       context.advance(1)
       const valueIdx = context.indexOf(quote)
       if (valueIdx == -1) {
-        console.error('[eich/parser debug] ', context)
-        throw new Error(`[eich/parser] unclosed attribute value quote at input:${context.idx}`)
+        throw new ParserError('Unclosed attribute value quotation', context, 'UNCLOSED_ATTRIBUTE_VALUE')
       }
 
       value = context.remaining(valueIdx)
@@ -258,41 +319,43 @@ export function parseAttributes(context: ParserContext): AttributeNode[] {
 }
 
 export function parseElement(context: ParserContext, ancestors: ChildNode[]): ElementNode {
-  const element = parseTag(context)
+  const element = parseTag(context);
   if (element.selfClosing) {
-    return element
+    return element;
   }
 
-  const mode = context.resolver(element.tag)
+  const mode = context.resolver(element.tag);
+  const oldMode = context.mode;
 
-  let oldMode = context.mode
-  ancestors.push(element)
-  context.mode = mode
-  element.children = parseChildren(context, ancestors)
-  ancestors.pop()
-  context.mode = oldMode
+  try {
+    ancestors.push(element);
+    context.mode = mode;
+    element.children = parseChildren(context, ancestors);
+  } finally {
+    ancestors.pop();
+    context.mode = oldMode;
+  }
 
   if (!context.eof) {
-    const endTag = parseTag(context, false)
-    if (endTag.tag != element.tag) {
-      console.error('[eich/parser debug] ', context)
-      throw new Error(`[eich/parser] unclosed element tag <${element.tag}> (but found </${endTag.tag}>) at input:${context.idx}`)
+    const endTag = parseTag(context, false);
+    if (endTag.tag !== element.tag) {
+      throw new ParserError(
+        `Mismatched closing tag: expected </${element.tag}> but found </${endTag.tag}>`,
+        context,
+        'MISMATCHED_CLOSING_TAG'
+      );
     }
   }
-  else {
-    console.error('[eich/parser debug] ', context)
-    throw new Error(`[eich/parser] unclosed element tag <${element.tag}> (unexpected EOF) at input:${context.idx}`)
-  }
 
-  return element
+  return element;
 }
 
 export function parseValue(context: ParserContext): ValueNode {
   context.advance(2)
   const endIdx = context.indexOf('}}')
   if (endIdx == -1) {
-    console.error('[eich/parser debug] ', context)
-    throw new Error(`[eich/parser] unclosed interpolation block at input:${context.idx}`)
+    context.idx = context.source.length
+    throw new ParserError('Unclosed interpolation expression', context, 'UNCLOSED_INTERPOLATION')
   }
   const raw = context.remaining(endIdx)
   context.advance(raw.length + 2)
@@ -305,14 +368,13 @@ export function parseValue(context: ParserContext): ValueNode {
 export function parseText(context: ParserContext, ancestors: ChildNode[]): TextNode {
   let endIdx = context.source.length
 
-  const rawMode = context.mode != TextMode.DATA 
-    && ancestors.length > 0 
+  const rawMode = context.mode != TextMode.DATA
+    && ancestors.length > 0
     && ancestors[ancestors.length - 1].type == NodeType.ELEMENT
 
   if (rawMode) {
     if (context.mode == TextMode.CDATA) {
-      console.error('[eich/parser debug] ', context)
-      throw new Error(`[eich/parser] unexpected CDATA TextMode at input:${context.idx}`)
+      throw new ParserError('Direct text parsing not supported in CDATA mode', context, 'INVALID_CDATA_MODE')
     }
 
     let nextIdx = context.indexOf('</')
@@ -327,7 +389,8 @@ export function parseText(context: ParserContext, ancestors: ChildNode[]): TextN
     }
 
     if (nextIdx == -1) {
-      throw new Error()
+      context.idx = context.source.length
+      throw new ParserError('Unexpected end of file', context, 'UNEXPECTED_EOF')
     }
   }
   else {
@@ -340,10 +403,10 @@ export function parseText(context: ParserContext, ancestors: ChildNode[]): TextN
 
     if (valIdx != -1 && valIdx < endIdx) {
       endIdx = valIdx
-    }  
+    }
   }
 
-  
+
   const raw = context.remaining(endIdx)
   context.advance(raw.length)
 
@@ -369,16 +432,20 @@ export function parseChildren(context: ParserContext, ancestors: ChildNode[]) {
             node = parseComment(context)
           }
           else {
-            throw new Error('unexpected <!')
+            throw new ParserError('Invalid <!> markup', context, 'INVALID_MARKUP')
           }
         }
         else if (context.char(1) == '/') {
-          // Unclosed Tag
-          console.error('[eich/parser debug] ', context)
-          throw new Error(`[eich/parser] unexpected ending tag at input:${context.idx}`)
+          throw new ParserError('Unexpected closing tag', context, 'UNEXPECTED_CLOSING_TAG')
         }
         else if (/\p{ID_Start}/u.test(context.char(1))) {
           node = parseElement(context, ancestors)
+        }
+        else if (context.char(1) == '>') {
+          node = parseFragment(context, ancestors)
+        }
+        else {
+          throw new ParserError('Invalid opening tag name', context, 'INVALID_TAG_NAME')
         }
       }
       else if (context.startsWith('{{')) {
@@ -400,6 +467,8 @@ export function parseDocument(context: ParserContext): DocumentNode {
   return {
     type: NodeType.DOCUMENT,
     children: parseChildren(context, []),
+    filename: context.filename,
+    raw: context.source,
   }
 }
 
@@ -407,9 +476,74 @@ export interface ParseOptions {
   resolver?: ModeResolver
   startPos?: number
   initialMode?: TextMode
+  filename?: string
 }
 
-export function parse(source: string, { startPos, resolver, initialMode }: ParseOptions = {}): DocumentNode {
-  const context = new ParserContext(source, startPos, initialMode, resolver)
+export function parse(source: string, { startPos, resolver, initialMode, filename = 'unknown' }: ParseOptions = {}): DocumentNode {
+  const context = new ParserContext(source, filename, startPos, initialMode, resolver)
   return parseDocument(context)
+}
+
+export class ParserError extends Error {
+  constructor(
+    message: string,
+    public context: ParserContext,
+    public code: string = 'PARSER_ERROR'
+  ) {
+    const position = context.getPosition();
+    const preview = getSourcePreview(context);
+    super(
+      `[eich/parser] ${message}\n` +
+      `Location: ${context.filename}:${position.line}:${position.column} (${position.idx})\n` +
+      `Code: ${code}\n` +
+      `Preview:\n${preview}\n` +
+      `        ${'^'.padStart(position.column)}`
+    );
+  }
+}
+
+export interface Position {
+  line: number;
+  column: number;
+  idx: number;
+}
+
+export function getSourcePreview(context: ParserContext): string {
+  const pos = context.getPosition();
+
+  const startLine = Math.max(1, pos.line - 2);
+  const endLine = Math.min(context.lines.length, pos.line + 1);
+
+  return context.getLines(startLine, endLine)
+    .map((line, i) => {
+      const lineNum = startLine + i;
+      const isErrorLine = lineNum === pos.line;
+      const paddedLineNum = lineNum.toString().padStart(4, ' ');
+      return `${paddedLineNum} | ${line}${isErrorLine ? ' <--' : ''}`;
+    })
+    .join('\n');
+}
+
+export function parseFragment(context: ParserContext, ancestors: ChildNode[]): FragmentNode {
+  context.advance(2); // <>
+
+  const fragment: FragmentNode = {
+    type: NodeType.FRAGMENT,
+    children: [],
+  };
+
+  
+  ancestors.push(fragment);
+  fragment.children = parseChildren(context, ancestors);
+  ancestors.pop()
+  if (!context.startsWith('</>')) {
+    throw new ParserError(
+      'Fragment must be closed with </>',
+      context,
+      'INVALID_FRAGMENT_END'
+    );
+  }
+  context.advance(3);
+
+  return fragment;
 }

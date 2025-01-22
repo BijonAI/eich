@@ -1,58 +1,84 @@
 import type { EffectScope } from '@vue/reactivity'
 import type { EachIfNode } from '../resolver'
 import { effect, effectScope } from '@vue/reactivity'
-import { createAdhoc, defineComponent, getCurrentContext, intrinsics, patch, renderNode, runInContext } from '../renderer'
+import { 
+  createAdhoc, 
+  defineComponent, 
+  getCurrentContext, 
+  intrinsics, 
+  patch, 
+  renderNode, 
+  runInContext 
+} from '../renderer'
+
+interface BranchCondition {
+  condition: (context: any) => boolean
+  render: () => Node[]
+}
 
 const component = defineComponent(
   (_attr, _children, astNode) => {
     const node = astNode as EachIfNode
-    const container = document.createElement('span')
     const context = getCurrentContext()
-
-    if (!node.attrs.$condition) {
-      throw new Error('missing $condition attribute')
-    }
-    const cond = createAdhoc(node.attrs.$condition)
+    const container = document.createElement('span')
     let scope: EffectScope
 
-    const elifCond = node.elif && node.elif.map(({ attrs }) => {
-      if (!attrs.$condition) {
-        throw new Error('missing $condition attribute')
-      }
+    if (!node.attrs.$condition) {
+      throw new Error('[eich/if] Missing $condition attribute')
+    }
 
-      return createAdhoc(attrs.$condition)
-    })
+    const branches: BranchCondition[] = [
+      {
+        condition: createAdhoc(node.attrs.$condition),
+        render: () => node.children.flatMap(renderNode)
+      }
+    ]
+
+    if (node.elif?.length) {
+      for (const elifNode of node.elif) {
+        if (!elifNode.attrs.$condition) {
+          throw new Error('[eich/if] Missing $condition in elif branch')
+        }
+        branches.push({
+          condition: createAdhoc(elifNode.attrs.$condition),
+          render: () => elifNode.children.flatMap(renderNode)
+        })
+      }
+    }
+
+    if (node.else) {
+      branches.push({
+        condition: () => true,
+        render: () => node.else!.children.flatMap(renderNode)
+      })
+    }
 
     effect(() => {
       scope?.stop()
       scope = effectScope()
+      const root = document.createElement('span')
+      
       runInContext(context, () => {
-        const root = document.createElement('span')
-        if (cond(context)) {
-          scope.run(() => root.append(...node.children.flatMap(renderNode)))
-          patch(container, root)
-          return
-        }
-
-        if (node.elif && node.elif.length != 0) {
-          for (let i = 0; i < node.elif.length; i += 1) {
-            if (elifCond![i](context)) {
-              scope.run(() => root.append(...node.elif![i].children.flatMap(renderNode)))
-              patch(container, root)
-              return
-            }
+        try {
+          const matchedBranch = branches.find(branch => branch.condition(context))
+          if (matchedBranch) {
+            scope!.run(() => {
+              const fragment = document.createDocumentFragment()
+              fragment.append(...matchedBranch.render())
+              root.append(...fragment.childNodes)
+            })
           }
-        }
-
-        if (node.else) {
-          scope.run(() => root.append(...node.else!.children.flatMap(renderNode)))
-          patch(container, root)
+        } catch (error) {
+          console.error('[eich/if] Render error:', error)
+          scope?.stop()
         }
       })
+
+      patch(container, root, { childrenOnly: true })
     })
 
     return container
-  },
+  }
 )
 
 intrinsics.set('if', component)
