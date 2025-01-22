@@ -83,6 +83,7 @@ export interface FragmentNode {
 export class ParserContext {
   public readonly lines: string[];
   public readonly lineStarts: number[];
+  public ancestors: [ElementNode | FragmentNode, Position][] = [];
 
   constructor(
     public readonly source: string,
@@ -124,6 +125,14 @@ export class ParserContext {
       column: pos - lastLineStart + 1,
       idx: pos
     };
+  }
+
+  push(node: ElementNode | FragmentNode) {
+    this.ancestors.push([node, this.getPosition()])
+  }
+
+  pop() {
+    this.ancestors.pop()
   }
 
   getLines(startLine: number, endLine: number): string[] {
@@ -172,18 +181,20 @@ export class ParserContext {
 
 export type ModeResolver = (tag: string) => TextMode
 
-export function isEnd(context: ParserContext, ancestors: ChildNode[]): boolean {
+export function isEnd(context: ParserContext): boolean {
   if (context.eof) {
     return true
   }
 
-  const parent = ancestors[ancestors.length - 1]
-  if (parent && parent.type == NodeType.ELEMENT && context.startsWith(`</${parent.tag}`)) {
+  const parent = context.ancestors[context.ancestors.length - 1]?.[0]
+  if (
+    parent 
+    && (
+      parent.type == NodeType.ELEMENT && context.startsWith(`</${parent.tag}`)
+      || parent.type == NodeType.FRAGMENT && context.startsWith('</>')
+    )
+  ) {
     return true
-  }
-
-  if (parent && parent.type == NodeType.FRAGMENT && context.startsWith('</>')) {
-    return true;
   }
 
   return false
@@ -318,7 +329,7 @@ export function parseAttributes(context: ParserContext): AttributeNode[] {
   return attrs
 }
 
-export function parseElement(context: ParserContext, ancestors: ChildNode[]): ElementNode {
+export function parseElement(context: ParserContext): ElementNode {
   const element = parseTag(context);
   if (element.selfClosing) {
     return element;
@@ -328,23 +339,23 @@ export function parseElement(context: ParserContext, ancestors: ChildNode[]): El
   const oldMode = context.mode;
 
   try {
-    ancestors.push(element);
+    context.push(element);
     context.mode = mode;
-    element.children = parseChildren(context, ancestors);
-  } finally {
-    ancestors.pop();
-    context.mode = oldMode;
-  }
+    element.children = parseChildren(context);
 
-  if (!context.eof) {
-    const endTag = parseTag(context, false);
-    if (endTag.tag !== element.tag) {
-      throw new ParserError(
-        `Mismatched closing tag: expected </${element.tag}> but found </${endTag.tag}>`,
-        context,
-        'MISMATCHED_CLOSING_TAG'
-      );
+    if (!context.eof) {
+      const endTag = parseTag(context, false);
+      if (endTag.tag !== element.tag) {
+        throw new ParserError(
+          `Mismatched closing tag: expected </${element.tag}> but found </${endTag.tag}>`,
+          context,
+          'MISMATCHED_CLOSING_TAG'
+        );
+      }
     }
+  } finally {
+    context.pop();
+    context.mode = oldMode;
   }
 
   return element;
@@ -365,12 +376,12 @@ export function parseValue(context: ParserContext): ValueNode {
   }
 }
 
-export function parseText(context: ParserContext, ancestors: ChildNode[]): TextNode {
+export function parseText(context: ParserContext): TextNode {
   let endIdx = context.source.length
 
   const rawMode = context.mode != TextMode.DATA
-    && ancestors.length > 0
-    && ancestors[ancestors.length - 1].type == NodeType.ELEMENT
+    && context.ancestors.length > 0
+    && context.ancestors[context.ancestors.length - 1][0].type == NodeType.ELEMENT
 
   if (rawMode) {
     if (context.mode == TextMode.CDATA) {
@@ -381,7 +392,8 @@ export function parseText(context: ParserContext, ancestors: ChildNode[]): TextN
     while (nextIdx != -1) {
       const remaining = context.slice(nextIdx)
       const match = remaining.match(/^<\/(\p{ID_Start}[\p{ID_Continue}:.$@\-]*)/u)
-      if (match && match[1] == (ancestors[ancestors.length - 1] as ElementNode).tag) {
+      const ancestor = context.ancestors[context.ancestors.length - 1][0]
+      if (match && ancestor.type == NodeType.ELEMENT && match[1] == ancestor.tag) {
         endIdx = nextIdx
         break
       }
@@ -417,9 +429,9 @@ export function parseText(context: ParserContext, ancestors: ChildNode[]): TextN
   }
 }
 
-export function parseChildren(context: ParserContext, ancestors: ChildNode[]) {
+export function parseChildren(context: ParserContext) {
   const nodes: ChildNode[] = []
-  while (!isEnd(context, ancestors)) {
+  while (!isEnd(context)) {
     let node: ChildNode | null = null
 
     if (context.mode == TextMode.DATA || context.mode == TextMode.RCDATA) {
@@ -439,10 +451,10 @@ export function parseChildren(context: ParserContext, ancestors: ChildNode[]) {
           throw new ParserError('Unexpected closing tag', context, 'UNEXPECTED_CLOSING_TAG')
         }
         else if (/\p{ID_Start}/u.test(context.char(1))) {
-          node = parseElement(context, ancestors)
+          node = parseElement(context)
         }
         else if (context.char(1) == '>') {
-          node = parseFragment(context, ancestors)
+          node = parseFragment(context)
         }
         else {
           throw new ParserError('Invalid opening tag name', context, 'INVALID_TAG_NAME')
@@ -454,7 +466,7 @@ export function parseChildren(context: ParserContext, ancestors: ChildNode[]) {
     }
 
     if (node == null) {
-      node = parseText(context, ancestors)
+      node = parseText(context)
     }
 
     nodes.push(node)
@@ -466,7 +478,7 @@ export function parseChildren(context: ParserContext, ancestors: ChildNode[]) {
 export function parseDocument(context: ParserContext): DocumentNode {
   return {
     type: NodeType.DOCUMENT,
-    children: parseChildren(context, []),
+    children: parseChildren(context),
     filename: context.filename,
     raw: context.source,
   }
@@ -493,9 +505,10 @@ export class ParserError extends Error {
     const position = context.getPosition();
     const preview = getSourcePreview(context);
     super(
-      `[eich/parser] ${message}\n` +
+      `${message}\n` +
       `Location: ${context.filename}:${position.line}:${position.column} (${position.idx})\n` +
       `Code: ${code}\n` +
+      `Ancestors:\n${getAncestorsPreview(context)}` +
       `Preview:\n${preview}\n` +
       `        ${'^'.padStart(position.column)}`
     );
@@ -524,7 +537,14 @@ export function getSourcePreview(context: ParserContext): string {
     .join('\n');
 }
 
-export function parseFragment(context: ParserContext, ancestors: ChildNode[]): FragmentNode {
+export function getAncestorsPreview(context: ParserContext): string {
+  console.log(context.ancestors)
+  return context.ancestors.reduce((acc, [node, pos]) => {
+    return acc + `   - ${node.type == NodeType.ELEMENT ? `<${node.tag}>` : '(Fragment)'} at ${pos.line}:${pos.column} (${pos.idx})\n`
+  }, '')
+}
+
+export function parseFragment(context: ParserContext): FragmentNode {
   context.advance(2); // <>
 
   const fragment: FragmentNode = {
@@ -533,9 +553,8 @@ export function parseFragment(context: ParserContext, ancestors: ChildNode[]): F
   };
 
   
-  ancestors.push(fragment);
-  fragment.children = parseChildren(context, ancestors);
-  ancestors.pop()
+  context.push(fragment);
+  fragment.children = parseChildren(context);
   if (!context.startsWith('</>')) {
     throw new ParserError(
       'Fragment must be closed with </>',
@@ -543,6 +562,7 @@ export function parseFragment(context: ParserContext, ancestors: ChildNode[]): F
       'INVALID_FRAGMENT_END'
     );
   }
+  context.pop()
   context.advance(3);
 
   return fragment;

@@ -3,8 +3,9 @@ import './button'
 
 textMode.set('line-chart', TextMode.RAWTEXT)
 
-const source = `<line-chart>aa</line-chart>
-<></>`
+const source = `
+<a><b><c>Hello</b>
+`
 
 console.log(parse(source))
 console.log(parseRaw(source, { resolver: (tag) => ['line-chart'].includes(tag) ? TextMode.RCDATA : TextMode.DATA }))
