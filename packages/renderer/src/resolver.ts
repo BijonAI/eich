@@ -60,14 +60,11 @@ function toNode(root: ElementNode | FragmentNode): EachSourceNode {
   while (index < root.children.length) {
     const child = root.children[index]
     if (child.type == NodeType.TEXT) {
-      const text = child.content.trim()
-      if (text.length != 0) {
-        node.children.push({
-          tag: kTextNode,
-          value: child.content,
-          raw: child,
-        } satisfies EachTextNode)
-      }
+      node.children.push({
+        tag: kTextNode,
+        value: child.content,
+        raw: child,
+      } satisfies EachTextNode)
       index += 1
       continue
     }
@@ -161,10 +158,6 @@ function toRoots(doc: DocumentNode): EachSourceNode[] {
   const children: EachSourceNode[] = []
   for (const child of doc.children) {
     if (child.type == NodeType.TEXT) {
-      const text = child.content.trim()
-      if (text.length == 0) {
-        continue
-      }
       children.push({
         tag: kTextNode,
         value: child.content,
