@@ -535,7 +535,7 @@ export function getAncestorsPreview(context: ParserContext): string {
   console.log(context.ancestors)
   return context.ancestors.reduce((acc, [node, pos]) => {
     return acc + `   - ${node.type == NodeType.ELEMENT ? `<${node.tag}>` : '(Fragment)'} at ${pos.line}:${pos.column} (${pos.idx})\n`
-  }, '')
+  }, '   - (Root)\n') 
 }
 
 export function parseFragment(context: ParserContext): FragmentNode {
