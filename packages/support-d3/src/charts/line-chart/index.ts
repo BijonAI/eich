@@ -1,18 +1,27 @@
-import { defineComponent, intrinsics, toValue, useAttr, useAttrs } from '@eich/renderer'
+import { defineComponent, intrinsics, toValue, useAttrs } from '@eich/renderer'
 import * as d3 from 'd3'
 
+import LineChartTitle from './line-chart-title'
+import LineChartXLabel from './line-chart-x-label'
+import LineChartYLabel from './line-chart-y-label'
+
 export interface LineChartAttributes {
-  $width?: string
-  $height?: string
-  $data?: string
+  '$width'?: string
+  '$height'?: string
+  '$data'?: string
   '$x-key'?: string
   '$y-key'?: string
-  $curve?: string
+  '$curve'?: string
 }
 
 const component = defineComponent<LineChartAttributes>((attrs, children) => {
   const { width, height, data, 'x-key': xKey, 'y-key': yKey, curve } = useAttrs(attrs, [
-    'width', 'height', 'data', 'x-key', 'y-key', 'curve'
+    'width',
+    'height',
+    'data',
+    'x-key',
+    'y-key',
+    'curve',
   ])
 
   const margin = { top: 50, right: 50, bottom: 50, left: 50 }
@@ -22,13 +31,13 @@ const component = defineComponent<LineChartAttributes>((attrs, children) => {
   const svg = d3.create('svg')
     .attr('width', toValue(width!))
     .attr('height', toValue(height!))
-  
+
   const g = svg.append('g')
     .attr('transform', `translate(${margin.left},${margin.top})`)
   const x = d3.scaleLinear<number>()
     .domain(d3.extent(toValue(data)!, d => Number(d[toValue(xKey)! as keyof typeof d])) as [number, number])
     .range([0, innerWidth])
-  
+
   const y = d3.scaleLinear<number>()
     .domain(d3.extent(toValue(data)!, d => Number(d[toValue(yKey)! as keyof typeof d])) as [number, number])
     .range([innerHeight, 0])
@@ -97,10 +106,6 @@ const component = defineComponent<LineChartAttributes>((attrs, children) => {
 intrinsics.set('line-chart', component)
 
 export default component
-
-import { default as LineChartTitle } from './line-chart-title'
-import { default as LineChartXLabel } from './line-chart-x-label'
-import { default as LineChartYLabel } from './line-chart-y-label'
 intrinsics.set('line-chart-title', LineChartTitle)
 intrinsics.set('line-chart-x-label', LineChartXLabel)
 intrinsics.set('line-chart-y-label', LineChartYLabel)

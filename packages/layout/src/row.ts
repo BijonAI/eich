@@ -1,6 +1,5 @@
-import { defineComponent, intrinsics, ref, template, useAttrs } from "@eich/renderer";
-import { ContainerAttributes } from "./container";
-import { tmpl } from "./container";
+import type { ContainerAttributes, tmpl } from './container'
+import { defineComponent, intrinsics, ref, useAttrs } from '@eich/renderer'
 
 const component = defineComponent<ContainerAttributes>((attrs, children) => {
   return tmpl([
@@ -12,11 +11,23 @@ const component = defineComponent<ContainerAttributes>((attrs, children) => {
       'flex-direction': 'row',
       'display': 'flex',
     }, [
-      'padding', 'margin', 'width', 'height', 'flex-grow', 'flex-direction', 'display',
-      'padding-top', 'padding-right', 'padding-bottom', 'padding-left',
-      'margin-top', 'margin-right', 'margin-bottom', 'margin-left',
+      'padding',
+      'margin',
+      'width',
+      'height',
+      'flex-grow',
+      'flex-direction',
+      'display',
+      'padding-top',
+      'padding-right',
+      'padding-bottom',
+      'padding-left',
+      'margin-top',
+      'margin-right',
+      'margin-bottom',
+      'margin-left',
     ])),
-    children()
+    children(),
   ])
 })
 
