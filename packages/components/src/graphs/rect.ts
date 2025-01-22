@@ -1,4 +1,4 @@
-import { defineComponent, getCurrentContext, intrinsics } from "@eich/renderer"
+import { defineComponent, getCurrentContext, intrinsics } from '@eich/renderer'
 
 export interface RectAttributes {
   $width?: number

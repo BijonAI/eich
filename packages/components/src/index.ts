@@ -1,11 +1,11 @@
-import { default as Button } from './elements/button'
-import { default as Input } from './elements/input'
-import { default as Rect } from './graphs/rect'
-import { default as Line } from './graphs/line'
-import { default as Circle } from './graphs/circle'
-import { default as Ellipse } from './graphs/ellipse'
-import { default as Polygon } from './graphs/polygon'
-import { default as Polyline } from './graphs/polyline'
-import { default as Path } from './graphs/path'
+import Button from './elements/button'
+import Input from './elements/input'
+import Circle from './graphs/circle'
+import Ellipse from './graphs/ellipse'
+import Line from './graphs/line'
+import Path from './graphs/path'
+import Polygon from './graphs/polygon'
+import Polyline from './graphs/polyline'
+import Rect from './graphs/rect'
 
-export { Button, Input, Rect, Line, Circle, Ellipse, Polygon, Polyline, Path }
+export { Button, Circle, Ellipse, Input, Line, Path, Polygon, Polyline, Rect }

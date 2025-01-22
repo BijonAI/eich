@@ -1,4 +1,4 @@
-import { defineComponent, getCurrentContext, intrinsics } from "@eich/renderer"
+import { defineComponent, getCurrentContext, intrinsics } from '@eich/renderer'
 
 export interface CircleAttributes {
   $r?: number
@@ -6,7 +6,7 @@ export interface CircleAttributes {
   $cy?: number
 }
 
-export const component = defineComponent<CircleAttributes>((attrs, children) => {
+export const component = defineComponent<CircleAttributes>((_attrs, _children) => {
   const { _IS_IN_FIELD_TAG } = getCurrentContext()
 })
 

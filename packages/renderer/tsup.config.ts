@@ -1,1 +1,11 @@
-export default (await import('../../tsup.config')).default
+import { defineConfig } from 'tsup'
+
+export default defineConfig({
+  entry: ['src/index.ts'],
+  format: ['cjs', 'esm', 'iife'],
+  tsconfig: '../../tsconfig.json',
+  globalName: 'vuemotion',
+  splitting: true,
+  clean: true,
+  dts: true,
+})

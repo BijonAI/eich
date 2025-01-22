@@ -1,8 +1,8 @@
 import {
+  createDelegate,
   defineComponent,
   intrinsics,
 } from '@eich/renderer'
-import { createDelegate } from '@eich/renderer'
 
 export interface ButtonAttributes {
   '@click': string

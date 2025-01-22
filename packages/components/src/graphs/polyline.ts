@@ -1,4 +1,4 @@
-import { defineComponent, getCurrentContext, intrinsics } from "@eich/renderer"
+import { defineComponent, getCurrentContext, intrinsics } from '@eich/renderer'
 
 export interface PolylineAttributes {
   $points?: string
@@ -29,4 +29,4 @@ export const component = defineComponent<PolylineAttributes>((attrs, children) =
 
 intrinsics.set('polyline', component)
 
-export default component 
+export default component
