@@ -12,7 +12,9 @@ console.log(parseRaw(source, { resolver: (tag) => ['line-chart'].includes(tag) ?
 
 document.body.append(...eich`
 <>
-  <var key="count" $value="0" />
-  <button @click="count++">{{ count }}</button>
+  <let :count="0" memo:plus="count + 1" />
+  <button @click="count++">
+    This is {{ count }}&nbsp;{{ plus }}
+  </button>
 </>
 `)
