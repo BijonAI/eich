@@ -16,5 +16,6 @@ document.body.append(...eich`
   <button @click="count++">
     This is {{ count }}&nbsp;{{ plus }}
   </button>
+  <>
 </>
 `)

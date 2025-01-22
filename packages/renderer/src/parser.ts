@@ -86,7 +86,7 @@ export class ParserContext {
 
   constructor(
     public readonly source: string,
-    public readonly filename: string = 'unknown',
+    public readonly filename: string = '<anonymous>',
     public idx: number = 0,
     public mode: TextMode = TextMode.DATA,
     public resolver: ModeResolver = () => TextMode.DATA,
@@ -479,7 +479,7 @@ export interface ParseOptions {
   filename?: string
 }
 
-export function parse(source: string, { startPos, resolver, initialMode, filename = 'unknown' }: ParseOptions = {}): DocumentNode {
+export function parse(source: string, { startPos, resolver, initialMode, filename }: ParseOptions = {}): DocumentNode {
   const context = new ParserContext(source, filename, startPos, initialMode, resolver)
   return parseDocument(context)
 }
