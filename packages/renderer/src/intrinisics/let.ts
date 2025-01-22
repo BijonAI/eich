@@ -1,4 +1,4 @@
-import { computed, ref } from '@vue/reactivity'
+import { computed, ref, toRaw } from '@vue/reactivity'
 import {
   createAdhoc,
   defineComponent,
@@ -14,6 +14,7 @@ const isValidKey = (key: string) => key.length > 0 && ID_REGEX.test(key)
 const component = defineComponent(
   (_attrs, _children, { raw }) => {
     const context = getCurrentContext()
+    const refs = toRaw(context)
 
     if (raw.type != NodeType.ELEMENT) {
       throw new Error('[eich/let] Invalid element')
@@ -23,6 +24,10 @@ const component = defineComponent(
       const s = key.trim().split(':')
 
       if (s.length == 2) {
+        if (refs[s[1]] != null) {
+          throw new Error(`[eich/let] Key '${s[1]}' has already been declared`)
+        }
+
         value = value.trim()
         if (s[0] == 'memo') {
           const adhoc = createAdhoc(value, context)
@@ -39,7 +44,10 @@ const component = defineComponent(
         }
       }
       else if (s.length == 1 && isValidKey(s[0])) {
-        context[key] = value
+        if (refs[s[0]] != null) {
+          throw new Error(`[eich/let] Key '${s[0]}' has already been declared`)
+        }
+        context[s[0]] = value
       }
       else {
         throw new Error(`[eich/let] Invalid variable key: ${key} (${s.length})`)
