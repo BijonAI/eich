@@ -140,11 +140,16 @@ function matchesSelector(node: ChildNode, selector: Selector): boolean {
   if (!isValidNode(node) && selector.type !== 'universal')
     return false
   const element = node as ElementNode
-
   switch (selector.type) {
     case 'tag':
+      if (element.tag == null) {
+        return false
+      }
       return element.tag.toLowerCase() === selector.name.toLowerCase()
     case 'attribute': {
+      if (element.attributes == null) {
+        return false
+      }
       const elementAttr = element.attributes.find(a => a.name.toLowerCase() === selector.name.toLowerCase())
       if (!elementAttr || !selector.value)
         return !!elementAttr
