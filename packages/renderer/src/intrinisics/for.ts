@@ -1,4 +1,4 @@
-import { effect, type EffectScope, effectScope, readonly } from '@vue/reactivity'
+import { type EffectScope, effect, effectScope, readonly } from '@vue/reactivity'
 import {
   createAdhoc,
   defineComponent,
@@ -25,7 +25,7 @@ const component = defineComponent(
     effect(() => {
       scope?.stop()
       scope = effectScope()
-      const root = document.createElement(as ??'span')
+      const root = document.createElement(as ?? 'span')
       for (const item of iterable(context)) {
         scope.run(
           () => root.append(

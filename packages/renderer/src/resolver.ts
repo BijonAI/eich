@@ -1,4 +1,4 @@
-import { TextMode, type ChildNode, type DocumentNode, type ElementNode, NodeType, parse as parseSource, FragmentNode } from './parser'
+import type { type ChildNode, type DocumentNode, type ElementNode, FragmentNode, NodeType, TextMode, parse as parseSource } from './parser'
 
 export type EachSourceNode =
   | EachIfNode
@@ -48,10 +48,12 @@ export type EachContext = Record<string, any>
 function toNode(root: ElementNode | FragmentNode): EachSourceNode {
   const node: EachSourceNode = {
     tag: root.type == NodeType.ELEMENT ? root.tag : 'fragment',
-    attrs: root.type == NodeType.ELEMENT ? root.attributes.reduce((prev, v) => {
-      prev[v.name] = v.value == '' ? true : v.value
-      return prev
-    }, {} as Record<string, any>) : {},
+    attrs: root.type == NodeType.ELEMENT
+      ? root.attributes.reduce((prev, v) => {
+          prev[v.name] = v.value == '' ? true : v.value
+          return prev
+        }, {} as Record<string, any>)
+      : {},
     raw: root,
     children: [],
   }
@@ -73,10 +75,10 @@ function toNode(root: ElementNode | FragmentNode): EachSourceNode {
       node.children.push({
         tag: 'value',
         attrs: {
-          '$data': child.value.trim()
+          $data: child.value.trim(),
         },
         children: [],
-        raw: child
+        raw: child,
       })
       index += 1
       continue
@@ -168,12 +170,11 @@ function toRoots(doc: DocumentNode): EachSourceNode[] {
       children.push({
         tag: 'value',
         attrs: {
-          '$data': child.value.trim()
+          $data: child.value.trim(),
         },
         children: [],
-        raw: child
+        raw: child,
       })
-
     }
     else if (child.type == NodeType.ELEMENT || child.type == NodeType.FRAGMENT) {
       const ast = toNode(child)

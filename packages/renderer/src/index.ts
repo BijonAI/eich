@@ -5,7 +5,7 @@ export * from './renderer'
 export * from './utils'
 
 export { useAttr, useAttrValues, useAttrs } from './adhoc'
-
+export { querySelector, querySelectorAll } from './selector'
 // !TODO: remove
 export * from './intrinisics'
 

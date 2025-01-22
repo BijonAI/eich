@@ -1,14 +1,14 @@
 import type { EffectScope } from '@vue/reactivity'
-import type { EachIfNode } from '../resolver'
 import { effect, effectScope } from '@vue/reactivity'
-import { 
-  createAdhoc, 
-  defineComponent, 
-  getCurrentContext, 
-  intrinsics, 
-  patch, 
-  renderNode, 
-  runInContext 
+import type { EachIfNode } from '../resolver'
+import {
+  createAdhoc,
+  defineComponent,
+  getCurrentContext,
+  intrinsics,
+  patch,
+  renderNode,
+  runInContext,
 } from '../renderer'
 
 interface BranchCondition {
@@ -30,8 +30,8 @@ const component = defineComponent(
     const branches: BranchCondition[] = [
       {
         condition: createAdhoc(node.attrs.$condition),
-        render: () => node.children.flatMap(renderNode)
-      }
+        render: () => node.children.flatMap(renderNode),
+      },
     ]
 
     if (node.elif?.length) {
@@ -41,7 +41,7 @@ const component = defineComponent(
         }
         branches.push({
           condition: createAdhoc(elifNode.attrs.$condition),
-          render: () => elifNode.children.flatMap(renderNode)
+          render: () => elifNode.children.flatMap(renderNode),
         })
       }
     }
@@ -49,7 +49,7 @@ const component = defineComponent(
     if (node.else) {
       branches.push({
         condition: () => true,
-        render: () => node.else!.children.flatMap(renderNode)
+        render: () => node.else!.children.flatMap(renderNode),
       })
     }
 
@@ -57,7 +57,7 @@ const component = defineComponent(
       scope?.stop()
       scope = effectScope()
       const root = document.createElement('span')
-      
+
       runInContext(context, () => {
         try {
           const matchedBranch = branches.find(branch => branch.condition(context))
@@ -68,7 +68,8 @@ const component = defineComponent(
               root.append(...fragment.childNodes)
             })
           }
-        } catch (error) {
+        }
+        catch (error) {
           console.error('[eich/if] Render error:', error)
           scope?.stop()
         }
@@ -78,7 +79,7 @@ const component = defineComponent(
     })
 
     return container
-  }
+  },
 )
 
 intrinsics.set('if', component)

@@ -1,5 +1,4 @@
-import { computed, type ComputedRef, type MaybeRef, type Reactive, type ToRef } from '@vue/reactivity'
-import { toDisplayString } from '@vue/shared'
+import { type ComputedRef, computed } from '@vue/reactivity'
 import { type Attributes, type Context, getCurrentContext } from './renderer'
 
 export type Adhoc<T> = (context?: Context) => T

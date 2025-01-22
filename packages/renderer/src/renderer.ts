@@ -93,7 +93,9 @@ export function renderNode(node: EachSourceNode): Node | Node[] {
 export function renderRoots(roots: EachSourceNode[], target?: Node, initialContext: Reactive<Context> = {}): [Node[], Reactive<Context>] {
   const context = reactive(initialContext)
   const children = runInContext(context, () => roots.flatMap(renderNode))
-  target && children.forEach(child => target.appendChild(child))
+  if (target) {
+    children.forEach(child => target.appendChild(child))
+  }
   return [children, context]
 }
 

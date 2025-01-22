@@ -4,7 +4,6 @@ import {
   defineComponent,
   getCurrentContext,
   intrinsics,
-  patch,
 } from '../renderer'
 
 export interface ValueAttributes {

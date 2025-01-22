@@ -143,6 +143,9 @@ importers:
 
   packages/renderer:
     dependencies:
+      '@antfu/eslint-config':
+        specifier: ^2.27.3
+        version: 2.27.3(@typescript-eslint/utils@8.20.0(eslint@9.9.0(jiti@2.4.2))(typescript@5.7.3))(@vue/compiler-sfc@3.5.13)(eslint@9.9.0(jiti@2.4.2))(typescript@5.7.3)
       '@vue/reactivity':
         specifier: ^3.5.13
         version: 3.5.13
@@ -152,6 +155,12 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      css-what:
+        specifier: ^6.1.0
+        version: 6.1.0
+      eslint:
+        specifier: 9.9.0
+        version: 9.9.0(jiti@2.4.2)
       morphdom:
         specifier: ^2.7.4
         version: 2.7.4
@@ -1386,6 +1395,10 @@ packages:
   cross-spawn@7.0.6:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
     engines: {node: '>= 8'}
+
+  css-what@6.1.0:
+    resolution: {integrity: sha512-HTUrgRJ7r4dsZKU6GjmpfRK1O76h97Z8MfS1G0FozR+oF2kG6Vfe8JE6zwrkbxigziPHinCJ+gCPjA9EaBDtRw==}
+    engines: {node: '>= 6'}
 
   cssesc@3.0.0:
     resolution: {integrity: sha512-/Tb/JcjK111nNScGob5MNtsntNM1aCNUDipB/TkwZFhyDrrE47SOx/18wF2bbjgc3ZzCSKW1T5nt5EbFoAz/Vg==}
@@ -4067,6 +4080,8 @@ snapshots:
       path-key: 3.1.1
       shebang-command: 2.0.0
       which: 2.0.2
+
+  css-what@6.1.0: {}
 
   cssesc@3.0.0: {}
 

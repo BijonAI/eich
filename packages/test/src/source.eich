@@ -1,23 +1,11 @@
+<button @click="count++">
+  <value $data="count1" />
+  <aaa>
+    <value $data="count2" />
+    <value $data="count3" />
+  </aaa>
+  <value $data="count4" />
+</button>
 
-<!-- Old Syntax -->
-<scope>
-  <var key="count" $value="0" />
-  <button @click="count++">
-    Count: <value $data="count" />
-  </button>
-</scope>
-
-<!-- New Syntax -->
-<scope>
-  <let :count="0" />
-  <button @click="count++">
-    Count: {{ count }}
-  </button>
-</scope>
-
-<component name="counter">
-  <let :count="$props.count ?? 0" />
-  <button @click="count++">
-    Count: {{ count }}
-  </button>
-</component>
+<bbb a></bbb>
+<bbb b></bbb>
