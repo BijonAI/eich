@@ -171,7 +171,7 @@ export class ParserContext {
   }
 
   trim(): void {
-    const match = /^[\t\r\n\f ]+/.exec(this.source.slice(this.idx))
+    const match = WHITESPACE_REG.exec(this.source.slice(this.idx))
 
     if (match) {
       this.idx += match[0].length
@@ -243,8 +243,8 @@ const WHITESPACE_REG = /^[\t\r\n\f ]+/;
 export function parseTag(context: ParserContext, start: boolean = true): ElementNode {
   const match = (
     start
-      ? /^<(\p{ID_Start}[\p{ID_Continue}:.$@\-]*)/u
-      : /^<\/(\p{ID_Start}[\p{ID_Continue}:.$@\-]*)/u
+      ? TAG_START_REG
+      : TAG_END_REG
   ).exec(context.remaining())
 
   if (!match) {
@@ -312,7 +312,7 @@ export function parseAttributes(context: ParserContext): AttributeNode[] {
       context.advance(value.length + 1)
     }
     else {
-      [value] = /^\p{ID_Start}[\p{ID_Continue}\-:]*/u.exec(context.remaining())!
+      [value] = ATTR_NAME_REG.exec(context.remaining())!
       context.advance(value.length)
     }
 

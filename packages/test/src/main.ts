@@ -4,7 +4,7 @@ import './button'
 textMode.set('line-chart', TextMode.RAWTEXT)
 
 const source = `
-<a><b><c>Hello</b>
+<a>AA</b>
 `
 
 console.log(parse(source))
