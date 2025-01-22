@@ -1,5 +1,10 @@
 import { parseEntities } from 'parse-entities'
 
+export const TAG_START_REG = /^<(\p{ID_Start}[\p{ID_Continue}:.$@\-]*)/u
+export const TAG_END_REG = /^<\/(\p{ID_Start}[\p{ID_Continue}:.$@\-]*)/u
+export const ATTR_NAME_REG = /^[\p{ID_Start}@:$][\p{ID_Continue}@:$\-]*/u
+export const WHITESPACE_REG = /^[\t\r\n\f ]+/
+
 export enum TextMode {
   DATA,
   RCDATA,
@@ -197,8 +202,8 @@ export function isEnd(context: ParserContext): boolean {
   if (
     parent
     && (
-      parent.type == NodeType.ELEMENT && context.startsWith(`</${parent.tag}`)
-      || parent.type == NodeType.FRAGMENT && context.startsWith('</>')
+      (parent.type == NodeType.ELEMENT && context.startsWith(`</${parent.tag}>`))
+      || (parent.type == NodeType.FRAGMENT && context.startsWith('</>'))
     )
   ) {
     return true
@@ -241,11 +246,6 @@ export function parseComment(context: ParserContext): CommentNode {
     content: raw,
   }
 }
-
-export const TAG_START_REG = /^<(\p{ID_Start}[\p{ID_Continue}:.$@\-]*)/u
-export const TAG_END_REG = /^<\/(\p{ID_Start}[\p{ID_Continue}:.$@\-]*)/u
-export const ATTR_NAME_REG = /^[\p{ID_Start}@:$][\p{ID_Continue}@:$\-]*/u
-export const WHITESPACE_REG = /^[\t\r\n\f ]+/
 
 export function parseTag(context: ParserContext, start: boolean = true): ElementNode {
   const match = (
@@ -559,7 +559,6 @@ export function getSourcePreview(context: ParserContext): string {
 }
 
 export function getAncestorsPreview(context: ParserContext): string {
-  console.log(context.ancestors)
   return context.ancestors.reduce((acc, [node, pos]) => {
     return `${acc}   - ${node.type == NodeType.ELEMENT ? `<${node.tag}>` : '(Fragment)'} at ${pos.line}:${pos.column} (${pos.idx})\n`
   }, '   - (Root)\n')

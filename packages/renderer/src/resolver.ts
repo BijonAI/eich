@@ -1,4 +1,4 @@
-import type { type ChildNode, type DocumentNode, type ElementNode, FragmentNode, NodeType, TextMode, parse as parseSource } from './parser'
+import type { type ChildNode, type DocumentNode, type ElementNode, FragmentNode, NodeType, parse as parseSource, TextMode } from './parser'
 
 export type EachSourceNode =
   | EachIfNode

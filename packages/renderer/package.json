@@ -24,7 +24,8 @@
     "publish": "npm publish",
     "build": "tsup",
     "dev": "tsup --watch",
-    "pub": "pnpm publish"
+    "pub": "pnpm publish",
+    "lint": "eslint ."
   },
   "publishConfig": {
     "access": "public"

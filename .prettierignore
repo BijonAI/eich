@@ -1,9 +1,0 @@
-# Ignore artifacts:
-build
-coverage
-node_modules
-dist
-*timestamp*
-pnpm-lock.yaml
-pnpm-workspace.yaml
-output.css

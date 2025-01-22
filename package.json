@@ -2,6 +2,7 @@
   "name": "@eich/monorepo",
   "private": true,
   "description": "🧩 A front-end-based interactive content format, focus on composing the front-end ecosystem.",
+  "license": "MIT",
   "scripts": {
     "dev": "pnpm run --parallel --filter=./packages/* dev",
     "build": "pnpm run --parallel --filter=./packages/* build",
@@ -9,24 +10,19 @@
     "format": "pnpm run --parallel --filter=./packages/* format",
     "test": "pnpm run --parallel --filter=./packages/* test"
   },
-  "license": "MIT",
   "devDependencies": {
-    "@antfu/eslint-config": "^2.27.3",
+    "@antfu/eslint-config": "^3.16.0",
     "@eslint/js": "^9.18.0",
     "@types/node": "22.5.0",
-    "bumpp": "^9.10.0",
-    "eslint": "9.9.0",
+    "bumpp": "^9.10.2",
+    "eslint": "9.18.0",
     "eslint-config-prettier": "^9.1.0",
-    "globals": "^15.14.0",
-    "husky": "^9.1.7",
-    "lint-staged": "^15.3.0",
-    "prettier": "3.4.1",
+    "lint-staged": "^15.4.1",
     "rimraf": "^4.4.1",
     "simple-git-hooks": "^2.11.1",
-    "taze": "^0.13.9",
     "tsup": "^8.3.5",
     "typedoc": "^0.26.11",
     "typescript": "^5.7.3",
-    "typescript-eslint": "^8.20.0"
+    "typescript-eslint": "^8.21.0"
   }
 }

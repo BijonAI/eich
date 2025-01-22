@@ -1,4 +1,4 @@
-import { type EffectScope, effect, effectScope, readonly } from '@vue/reactivity'
+import { effect, type EffectScope, effectScope, readonly } from '@vue/reactivity'
 import {
   createAdhoc,
   defineComponent,

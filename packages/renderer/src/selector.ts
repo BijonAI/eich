@@ -1,5 +1,5 @@
-import { type PseudoSelector, type Selector, parse } from 'css-what'
 import type { ChildNode, DocumentNode, ElementNode, FragmentNode } from './parser'
+import { parse, type PseudoSelector, type Selector } from 'css-what'
 import { NodeType, queryNode } from './parser'
 
 type ValidNode = ElementNode | FragmentNode | DocumentNode
