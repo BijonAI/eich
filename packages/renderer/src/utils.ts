@@ -1,9 +1,9 @@
 import type { Context } from './renderer'
-import { effect, type MaybeRefOrGetter, shallowReactive, stop, toRefs, toValue, unref } from '@vue/reactivity'
+import { effect, type MaybeRefOrGetter, reactive, shallowReactive, stop, toRefs, toValue, unref } from '@vue/reactivity'
 import { toDisplayString } from '@vue/shared'
 import { createAdhoc } from './adhoc'
 import { parse } from './resolver'
-import { getCurrentContext, hasContext, renderRoots } from './renderer'
+import { getCurrentContext, hasContext, renderRoots, runInContext } from './renderer'
 
 export function style(source: TemplateStringsArray, ...values: MaybeRefOrGetter<unknown>[]): () => void {
   const style = document.createElement('style')
@@ -17,6 +17,10 @@ export function style(source: TemplateStringsArray, ...values: MaybeRefOrGetter<
     stop(e)
     style.remove()
   }
+}
+
+export function useBlockScope<T>(fn: () => T, detached: boolean = false): T {
+  return runInContext(reactive(detached ? {} : { ...toRefs(getCurrentContext()) }), fn)
 }
 
 export function eich(literal: TemplateStringsArray, ...values: MaybeRefOrGetter<unknown>[]): Node[] {
