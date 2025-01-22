@@ -391,7 +391,7 @@ export function parseText(context: ParserContext): TextNode {
     let nextIdx = context.indexOf('</')
     while (nextIdx != -1) {
       const remaining = context.slice(nextIdx)
-      const match = remaining.match(/^<\/(\p{ID_Start}[\p{ID_Continue}:.$@\-]*)/u)
+      const match = remaining.match(TAG_END_REG)
       const ancestor = context.ancestors[context.ancestors.length - 1][0]
       if (match && ancestor.type == NodeType.ELEMENT && match[1] == ancestor.tag) {
         endIdx = nextIdx
