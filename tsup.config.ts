@@ -2,10 +2,9 @@ import { defineConfig } from 'tsup'
 
 export default defineConfig({
   entry: ['src/index.ts'],
-  format: ['cjs', 'esm', 'iife'],
+  format: ['esm', 'cjs'],
   tsconfig: '../../tsconfig.json',
-  globalName: 'vuemotion',
-  splitting: true,
+  globalName: 'Eich',
   clean: true,
   dts: true,
 })
