@@ -129,3 +129,6 @@ dist
 .pnp.*
 /.idea/
 /.vscode/
+
+# VSCode Counter
+.VSCodeCounter

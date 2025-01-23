@@ -22,7 +22,7 @@ import {
   Parametric,
   Vector,
 } from '@eich/support-math'
-import '@eich/renderer/intrinisics'
+import '@eich/renderer/intrinsics'
 
 intrinsics.set('container', Container)
 intrinsics.set('row', Row)

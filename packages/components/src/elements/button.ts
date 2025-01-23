@@ -1,3 +1,4 @@
+import { animateWithAttrs, animation } from '@eich/animation'
 import {
   createDelegate,
   defineComponent,
@@ -15,6 +16,7 @@ const component = defineComponent(
     const button = document.createElement('button')
     button.append(...children())
 
+    animateWithAttrs(attrs, animation, button)()
     delegate(button)
     return button
   },

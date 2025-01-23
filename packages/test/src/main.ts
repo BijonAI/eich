@@ -1,10 +1,6 @@
-import { parseRaw, querySelectorAll } from '@eich/renderer'
-import '@eich/renderer/intrinisics'
-
+import { parseRaw, querySelectorAll, render } from '@eich/renderer'
+import '@eich/renderer/intrinsics'
+import 'eichjs'
 import source from './source.eich?raw'
-import './button'
 
-// render(source, document.getElementById('app')!)
-const root = parseRaw(source)
-console.log(querySelectorAll(root, 'eich > *'))
-console.log(root)
+render(source, document.getElementById('app')!)
