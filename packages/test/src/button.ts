@@ -1,4 +1,4 @@
-import { defineComponent, intrinsics, createDelegate } from "@eich/renderer"
+import { defineComponent, builtins, createDelegate } from "@eich/renderer"
 
 const Button = defineComponent((attrs, children) => {
   const button = document.createElement('button')
@@ -8,6 +8,6 @@ const Button = defineComponent((attrs, children) => {
   return button
 })
 
-intrinsics.set('button', Button)
+builtins.set('button', Button)
 
 export default Button

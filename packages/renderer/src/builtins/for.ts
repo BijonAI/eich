@@ -3,7 +3,7 @@ import {
   createAdhoc,
   defineComponent,
   getCurrentContext,
-  intrinsics,
+  builtins,
   mergeContext,
   patch,
   runInContext,
@@ -44,6 +44,6 @@ const component = defineComponent(
   },
 )
 
-intrinsics.set('for', component)
+builtins.set('for', component)
 
 export default component

@@ -3,7 +3,7 @@ import {
   createAdhoc,
   defineComponent,
   getCurrentContext,
-  intrinsics,
+  builtins,
 } from '../renderer'
 
 export interface ValueAttributes {
@@ -25,6 +25,6 @@ const component = defineComponent(
   },
 )
 
-intrinsics.set('value', component)
+builtins.set('value', component)
 
 export default component

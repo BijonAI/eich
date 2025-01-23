@@ -1,6 +1,6 @@
 import {
   defineComponent,
-  intrinsics,
+  builtins,
 } from '../renderer'
 import { useBlockScope } from '../utils'
 
@@ -14,6 +14,6 @@ const component = defineComponent(
   },
 )
 
-intrinsics.set('scope', component)
+builtins.set('scope', component)
 
 export default component

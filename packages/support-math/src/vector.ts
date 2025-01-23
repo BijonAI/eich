@@ -1,5 +1,5 @@
 import type { coordinate } from 'idea-math'
-import { defineComponent, getCurrentContext, intrinsics, toValue, useAttrs } from '@eich/renderer'
+import { defineComponent, getCurrentContext, builtins, toValue, useAttrs } from '@eich/renderer'
 import { vector } from 'idea-math'
 
 export interface VectorAttributes {
@@ -15,5 +15,5 @@ const component = defineComponent<VectorAttributes>((props, children) => {
   system.add(vec)
 })
 
-intrinsics.set('vector', component)
+builtins.set('vector', component)
 export default component

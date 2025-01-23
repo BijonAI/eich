@@ -4,7 +4,7 @@ import {
   createAdhoc,
   defineComponent,
   getCurrentContext,
-  intrinsics,
+  builtins,
 } from '../renderer'
 
 const ID_REGEX = /^\p{ID_Start}[$\p{ID_Continue}]*$/u
@@ -56,6 +56,6 @@ const component = defineComponent(
   },
 )
 
-intrinsics.set('let', component)
+builtins.set('let', component)
 
 export default component

@@ -1,4 +1,4 @@
-import { defineComponent, effect, getCurrentContext, intrinsics, mergeContext, patch, setCurrentContext, toValue, useAttrs } from '@eich/renderer'
+import { defineComponent, effect, getCurrentContext, builtins, mergeContext, patch, setCurrentContext, toValue, useAttrs } from '@eich/renderer'
 import { field } from 'idea-math'
 
 export interface FieldAttributes {
@@ -23,5 +23,5 @@ const component = defineComponent<FieldAttributes>((props, children) => {
   return node
 })
 
-intrinsics.set('field', component)
+builtins.set('field', component)
 export default component

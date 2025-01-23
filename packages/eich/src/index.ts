@@ -14,7 +14,7 @@ import {
   Container,
   Row,
 } from '@eich/layout'
-import { intrinsics } from '@eich/renderer'
+import { builtins } from '@eich/renderer'
 import {
   Coordinate,
   Field,
@@ -22,30 +22,30 @@ import {
   Parametric,
   Vector,
 } from '@eich/support-math'
-import '@eich/renderer/intrinsics'
+import '@eich/renderer/builtins'
 
-intrinsics.set('container', Container)
-intrinsics.set('row', Row)
-intrinsics.set('col', Col)
+builtins.set('container', Container)
+builtins.set('row', Row)
+builtins.set('col', Col)
 
-intrinsics.set('button', Button)
-intrinsics.set('input', Input)
-intrinsics.set('rect', Rect)
-intrinsics.set('line', Line)
-intrinsics.set('circle', Circle)
-intrinsics.set('ellipse', Ellipse)
-intrinsics.set('polygon', Polygon)
-intrinsics.set('polyline', Polyline)
-intrinsics.set('path', Path)
+builtins.set('button', Button)
+builtins.set('input', Input)
+builtins.set('rect', Rect)
+builtins.set('line', Line)
+builtins.set('circle', Circle)
+builtins.set('ellipse', Ellipse)
+builtins.set('polygon', Polygon)
+builtins.set('polyline', Polyline)
+builtins.set('path', Path)
 
-intrinsics.set('coordinate', Coordinate)
-intrinsics.set('field', Field)
-intrinsics.set('function', Function)
-intrinsics.set('parametric', Parametric)
-intrinsics.set('vector', Vector)
+builtins.set('coordinate', Coordinate)
+builtins.set('field', Field)
+builtins.set('function', Function)
+builtins.set('parametric', Parametric)
+builtins.set('vector', Vector)
 
 export * from '@eich/components'
 export * from '@eich/layout'
 export * from '@eich/renderer'
-export * from '@eich/renderer/intrinsics'
+export * from '@eich/renderer/builtins'
 export * from '@eich/support-math'

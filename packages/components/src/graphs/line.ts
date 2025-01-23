@@ -1,4 +1,4 @@
-import { defineComponent, getCurrentContext, intrinsics } from '@eich/renderer'
+import { defineComponent, getCurrentContext, builtins } from '@eich/renderer'
 
 export interface LineAttributes {
   $x1?: number
@@ -28,6 +28,6 @@ export const component = defineComponent<LineAttributes>((attrs, children) => {
   return line
 })
 
-intrinsics.set('line', component)
+builtins.set('line', component)
 
 export default component

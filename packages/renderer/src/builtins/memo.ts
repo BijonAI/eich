@@ -4,7 +4,7 @@ import {
   createAdhoc,
   defineComponent,
   getCurrentContext,
-  intrinsics,
+  builtins,
 } from '../renderer'
 
 export interface MemoAttributes {
@@ -20,6 +20,6 @@ const component = defineComponent(
   },
 )
 
-intrinsics.set('memo', component)
+builtins.set('memo', component)
 
 export default component

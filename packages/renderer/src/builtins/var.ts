@@ -2,7 +2,7 @@ import {
   createAdhoc,
   defineComponent,
   getCurrentContext,
-  intrinsics,
+  builtins,
 } from '../renderer'
 
 export interface VarAttributes {
@@ -17,6 +17,6 @@ const component = defineComponent(
   },
 )
 
-intrinsics.set('var', component)
+builtins.set('var', component)
 
 export default component

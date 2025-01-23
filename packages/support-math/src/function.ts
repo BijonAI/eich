@@ -1,5 +1,5 @@
 import type { coordinate } from 'idea-math'
-import { defineComponent, effect, getCurrentContext, intrinsics, toValue, useAttrs } from '@eich/renderer'
+import { defineComponent, effect, getCurrentContext, builtins, toValue, useAttrs } from '@eich/renderer'
 import { func } from 'idea-math'
 
 export interface FuncAttributes {
@@ -25,5 +25,5 @@ const component = defineComponent((props, children) => {
   system.add(fn)
 })
 
-intrinsics.set('function', component)
+builtins.set('function', component)
 export default component

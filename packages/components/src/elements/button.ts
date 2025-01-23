@@ -2,7 +2,7 @@ import { animateWithAttrs, animation } from '@eich/animation'
 import {
   createDelegate,
   defineComponent,
-  intrinsics,
+  builtins,
 } from '@eich/renderer'
 
 export interface ButtonAttributes {
@@ -22,6 +22,6 @@ const component = defineComponent(
   },
 )
 
-intrinsics.set('button', component)
+builtins.set('button', component)
 
 export default component

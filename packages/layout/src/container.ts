@@ -1,4 +1,4 @@
-import { defineComponent, intrinsics, ref, template, useAttrs } from '@eich/renderer'
+import { defineComponent, builtins, ref, template, useAttrs } from '@eich/renderer'
 
 export interface ContainerAttributes {
   '$padding': string
@@ -46,5 +46,5 @@ const component = defineComponent<ContainerAttributes>((attrs, children) => {
   ])
 })
 
-intrinsics.set('container', component)
+builtins.set('container', component)
 export default component

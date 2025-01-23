@@ -1,5 +1,5 @@
 import type { ContainerAttributes } from './container'
-import { defineComponent, intrinsics, ref, useAttrs } from '@eich/renderer'
+import { defineComponent, builtins, ref, useAttrs } from '@eich/renderer'
 import { tmpl } from './container'
 
 const component = defineComponent<ContainerAttributes>((attrs, children) => {
@@ -32,5 +32,5 @@ const component = defineComponent<ContainerAttributes>((attrs, children) => {
   ])
 })
 
-intrinsics.set('row', component)
+builtins.set('row', component)
 export default component

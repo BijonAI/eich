@@ -1,4 +1,4 @@
-import { createDelegate, defineComponent, getCurrentContext, intrinsics } from '@eich/renderer'
+import { createDelegate, defineComponent, getCurrentContext, builtins } from '@eich/renderer'
 
 export interface InputAttributes {
   'type'?: string
@@ -28,6 +28,6 @@ export const component = defineComponent<InputAttributes>((attrs, children) => {
   return element
 })
 
-intrinsics.set('input', component)
+builtins.set('input', component)
 
 export default component

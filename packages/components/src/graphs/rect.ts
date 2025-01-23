@@ -1,4 +1,4 @@
-import { defineComponent, getCurrentContext, intrinsics } from '@eich/renderer'
+import { defineComponent, getCurrentContext, builtins } from '@eich/renderer'
 
 export interface RectAttributes {
   $width?: number
@@ -21,6 +21,6 @@ export const component = defineComponent<RectAttributes>((attrs, children) => {
   return rect
 })
 
-intrinsics.set('rect', component)
+builtins.set('rect', component)
 
 export default component

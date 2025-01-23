@@ -1,5 +1,5 @@
 import type { field } from 'idea-math'
-import { defineComponent, effect, getCurrentContext, intrinsics, mergeContext, patch, setCurrentContext, toValue, useAttrs } from '@eich/renderer'
+import { defineComponent, effect, getCurrentContext, builtins, mergeContext, patch, setCurrentContext, toValue, useAttrs } from '@eich/renderer'
 import { coordinate } from 'idea-math'
 
 export interface CoordinateAttributes {
@@ -50,5 +50,5 @@ const component = defineComponent<CoordinateAttributes>((props, children) => {
   })
 })
 
-intrinsics.set('coordinate', component)
+builtins.set('coordinate', component)
 export default component

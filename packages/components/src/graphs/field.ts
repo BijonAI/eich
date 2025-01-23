@@ -1,4 +1,4 @@
-import { defineComponent, intrinsics } from '@eich/renderer'
+import { defineComponent, builtins } from '@eich/renderer'
 
 export interface FieldAttributes {
   width?: number
@@ -11,6 +11,6 @@ export const component = defineComponent<FieldAttributes>((attrs, children) => {
   return field
 })
 
-intrinsics.set('field', component)
+builtins.set('field', component)
 
 export default component

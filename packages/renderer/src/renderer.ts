@@ -7,7 +7,7 @@ export type Context = Reactive<Record<string, any>>
 export type Component<T extends Attributes = Attributes> =
   (props: T, children: () => Node[], node: EichSourceNode) => Node | Node[] | void
 
-export const intrinsics = new Map<string, Component<any>>()
+export const builtins = new Map<string, Component<any>>()
 
 let activeContext: Context | null = null
 
@@ -71,8 +71,8 @@ const noopComp = defineComponent(
   },
 )
 
-intrinsics.set('fragment', noopComp)
-intrinsics.set('noop', noopComp)
+builtins.set('fragment', noopComp)
+builtins.set('noop', noopComp)
 
 export function renderComp(comp: Component<any>, node: EichBasicNode): Node | Node[] {
   return comp(node.attrs, () => node.children.flatMap(renderNode), node) ?? []
@@ -83,8 +83,8 @@ export function renderNode(node: EichSourceNode): Node | Node[] {
     return document.createTextNode(node.value)
   }
 
-  if (intrinsics.has(node.tag)) {
-    return renderComp(intrinsics.get(node.tag)!, node)
+  if (builtins.has(node.tag)) {
+    return renderComp(builtins.get(node.tag)!, node)
   }
 
   return renderComp(noopComp, node)

@@ -5,7 +5,7 @@ import {
   createAdhoc,
   defineComponent,
   getCurrentContext,
-  intrinsics,
+  builtins,
   patch,
   renderNode,
   runInContext,
@@ -82,6 +82,6 @@ const component = defineComponent(
   },
 )
 
-intrinsics.set('if', component)
+builtins.set('if', component)
 
 export default component
