@@ -4,8 +4,7 @@ export default defineConfig({
   entry: ['src/index.ts', 'src/intrinsics/*.ts'],
   format: 'esm',
   tsconfig: './tsconfig.json',
-  globalName: 'eich',
-  splitting: true,
+  globalName: 'Eich',
   clean: true,
   dts: true,
 })
