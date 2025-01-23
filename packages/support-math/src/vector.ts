@@ -1,5 +1,6 @@
-import { defineComponent, getCurrentContext, intrinsics, toValue, useAttrs } from "@eich/renderer"
-import { coordinate, vector } from "idea-math"
+import type { coordinate } from 'idea-math'
+import { defineComponent, getCurrentContext, intrinsics, toValue, useAttrs } from '@eich/renderer'
+import { vector } from 'idea-math'
 
 export interface VectorAttributes {
   $from: [number, number]
@@ -10,7 +11,7 @@ const component = defineComponent<VectorAttributes>((props, children) => {
   const { from, to } = useAttrs(props, ['from', 'to'])
   const vec = vector(...toValue(from) as unknown as [number, number], ...toValue(to) as unknown as [number, number])
   children()
-  const { system } : { system: ReturnType<typeof coordinate> } = getCurrentContext() as any
+  const { system }: { system: ReturnType<typeof coordinate> } = getCurrentContext() as any
   system.add(vec)
 })
 

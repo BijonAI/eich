@@ -1,6 +1,6 @@
-import type { Context } from './renderer'
-import { effect, type MaybeRefOrGetter, reactive, shallowReactive, stop, toRefs, toValue, unref } from '@vue/reactivity'
+import { type MaybeRefOrGetter, effect, reactive, shallowReactive, stop, toRefs, toValue, unref } from '@vue/reactivity'
 import { toDisplayString } from '@vue/shared'
+import type { Context } from './renderer'
 import { createAdhoc } from './adhoc'
 import { getCurrentContext, hasContext, renderRoots, runInContext } from './renderer'
 import { parse } from './resolver'

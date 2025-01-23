@@ -1,5 +1,7 @@
-import { defineComponent, effect, getCurrentContext, intrinsics, MaybeRef, toValue, useAttrs } from "@eich/renderer"
-import { coordinate, parametric } from "idea-math"
+import type { MaybeRef } from '@eich/renderer'
+import type { coordinate } from 'idea-math'
+import { defineComponent, effect, getCurrentContext, intrinsics, toValue, useAttrs } from '@eich/renderer'
+import { parametric } from 'idea-math'
 
 export interface ParametricAttributes {
   $expr: (t: number) => [number, number]

@@ -1,5 +1,5 @@
-import { defineComponent, effect, getCurrentContext, intrinsics, MaybeRef, mergeContext, patch, setCurrentContext, toValue, useAttrs } from "@eich/renderer";
-import { field } from "idea-math";
+import { defineComponent, effect, getCurrentContext, intrinsics, mergeContext, patch, setCurrentContext, toValue, useAttrs } from '@eich/renderer'
+import { field } from 'idea-math'
 
 export interface FieldAttributes {
   $width: number

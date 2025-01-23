@@ -1,5 +1,6 @@
-import { defineComponent, effect, getCurrentContext, intrinsics, toValue, useAttrs } from "@eich/renderer"
-import { coordinate, func } from "idea-math"
+import type { coordinate } from 'idea-math'
+import { defineComponent, effect, getCurrentContext, intrinsics, toValue, useAttrs } from '@eich/renderer'
+import { func } from 'idea-math'
 
 export interface FuncAttributes {
   $expr: (x: number) => number
@@ -18,7 +19,7 @@ const component = defineComponent((props, children) => {
     if (toValue(domain))
       fn.domain(...toValue(domain) as unknown as [number, number])
   })
-  const { system, unit } : { system: ReturnType<typeof coordinate>, unit: number } = getCurrentContext() as any
+  const { system, unit }: { system: ReturnType<typeof coordinate>, unit: number } = getCurrentContext() as any
   children()
   fn.scale(unit)
   system.add(fn)
