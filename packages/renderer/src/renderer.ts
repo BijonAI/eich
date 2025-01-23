@@ -9,6 +9,13 @@ export type Component<T extends Attributes = Attributes> =
 
 export const builtins = new Map<string, Component<any>>()
 
+export type PreMiddleware = (node: EichSourceNode, context: Context) => void
+export type PostMiddleware = (node: EichSourceNode, context: Context, domNode: Node | Node[]) => void
+export const middlewares = {
+  pre: new Map<string, PreMiddleware>(),
+  post: new Map<string, PostMiddleware>(),
+} as const
+
 let activeContext: Context | null = null
 
 export { patch }
@@ -79,15 +86,33 @@ export function renderComp(comp: Component<any>, node: EichBasicNode): Node | No
 }
 
 export function renderNode(node: EichSourceNode): Node | Node[] {
+  const context = getCurrentContext()
+
+  if (middlewares.pre.size > 0) {
+    middlewares.pre.forEach((middleware) => {
+      middleware(node, context)
+    })
+  }
+
+  let domNode: Node | Node[]
+
   if (isEichTextNode(node)) {
-    return document.createTextNode(node.value)
+    domNode = document.createTextNode(node.value)
+  }
+  else if (builtins.has(node.tag)) {
+    domNode = renderComp(builtins.get(node.tag)!, node)
+  }
+  else {
+    domNode = renderComp(noopComp, node)
   }
 
-  if (builtins.has(node.tag)) {
-    return renderComp(builtins.get(node.tag)!, node)
+  if (middlewares.post.size > 0) {
+    middlewares.post.forEach((middleware) => {
+      middleware(node, context, domNode)
+    })
   }
 
-  return renderComp(noopComp, node)
+  return domNode
 }
 
 export function renderRoots(roots: EichSourceNode[], target?: Node, initialContext: Reactive<Context> = {}): [Node[], Reactive<Context>] {
