@@ -21,6 +21,7 @@ import {
   LineChartXLabel,
   LineChartYLabel,
 } from '@eich/support-d3'
+import { Field, Coordinate, Function, Vector, Parametric } from '@eich/support-math'
 
 intrinsics.set('container', Container)
 intrinsics.set('row', Row)
@@ -41,7 +42,14 @@ intrinsics.set('line-chart-title', LineChartTitle)
 intrinsics.set('line-chart-x-label', LineChartXLabel)
 intrinsics.set('line-chart-y-label', LineChartYLabel)
 
+intrinsics.set('field', Field)
+intrinsics.set('coordinate', Coordinate)
+intrinsics.set('function', Function)
+intrinsics.set('vector', Vector)
+intrinsics.set('parametric', Parametric)
+
 export * from '@eich/renderer'
 export * from '@eich/support-d3'
 export * from '@eich/layout'
 export * from '@eich/components'
+export * from '@eich/support-math'

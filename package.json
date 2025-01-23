@@ -7,7 +7,8 @@
     "build": "pnpm run --parallel --filter=./packages/* build",
     "lint": "pnpm run --parallel --filter=./packages/* lint",
     "format": "pnpm run --parallel --filter=./packages/* format",
-    "test": "pnpm run --parallel --filter=./packages/* test"
+    "test": "pnpm run --parallel --filter=./packages/* test",
+    "demo": "pnpm vite test"
   },
   "license": "MIT",
   "devDependencies": {
