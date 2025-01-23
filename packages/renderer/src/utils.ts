@@ -26,12 +26,12 @@ export function useBlockScope<T>(fn: () => T, detached: boolean = false): T {
 export function eich(literal: TemplateStringsArray, ...values: MaybeRefOrGetter<unknown>[]): Node[] {
   const uid = Math.round(performance.now() * 100)
   const src = literal.reduce((acc, v, i) => {
-    return `${acc}${v}${i == literal.length - 1 ? '' : `($$_EachEnv_${uid}_${i}_)`}`
+    return `${acc}${v}${i == literal.length - 1 ? '' : `($$_EichEnv_${uid}_${i}_)`}`
   }, '').trim()
   const ast = parse(src)
 
   const o = values.reduce<Context>((acc, v, i) => {
-    acc[`$$_EachEnv_${uid}_${i}_`] = v
+    acc[`$$_EichEnv_${uid}_${i}_`] = v
     return acc
   }, {})
 

@@ -1,11 +1,11 @@
 import { type Reactive, reactive, toRefs } from '@vue/reactivity'
 import patch from 'morphdom'
-import { type EachBasicNode, type EachSourceNode, isEachTextNode, parse } from './resolver'
+import { type EichBasicNode, type EichSourceNode, isEichTextNode, parse } from './resolver'
 
 export type Attributes = Record<string, any>
 export type Context = Reactive<Record<string, any>>
 export type Component<T extends Attributes = Attributes> =
-  (props: T, children: () => Node[], node: EachSourceNode) => Node | Node[] | void
+  (props: T, children: () => Node[], node: EichSourceNode) => Node | Node[] | void
 
 export const intrinsics = new Map<string, Component<any>>()
 
@@ -74,12 +74,12 @@ const noopComp = defineComponent(
 intrinsics.set('fragment', noopComp)
 intrinsics.set('noop', noopComp)
 
-export function renderComp(comp: Component<any>, node: EachBasicNode): Node | Node[] {
+export function renderComp(comp: Component<any>, node: EichBasicNode): Node | Node[] {
   return comp(node.attrs, () => node.children.flatMap(renderNode), node) ?? []
 }
 
-export function renderNode(node: EachSourceNode): Node | Node[] {
-  if (isEachTextNode(node)) {
+export function renderNode(node: EichSourceNode): Node | Node[] {
+  if (isEichTextNode(node)) {
     return document.createTextNode(node.value)
   }
 
@@ -90,7 +90,7 @@ export function renderNode(node: EachSourceNode): Node | Node[] {
   return renderComp(noopComp, node)
 }
 
-export function renderRoots(roots: EachSourceNode[], target?: Node, initialContext: Reactive<Context> = {}): [Node[], Reactive<Context>] {
+export function renderRoots(roots: EichSourceNode[], target?: Node, initialContext: Reactive<Context> = {}): [Node[], Reactive<Context>] {
   const context = reactive(initialContext)
   const children = runInContext(context, () => roots.flatMap(renderNode))
   if (target) {

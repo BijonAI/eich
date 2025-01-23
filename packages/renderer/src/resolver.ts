@@ -1,52 +1,52 @@
 import { type ChildNode, type DocumentNode, type ElementNode, type FragmentNode, NodeType, parse as parseSource, TextMode } from './parser'
 
-export type EachSourceNode =
-  | EachIfNode
-  | EachTextNode
-  | EachBasicNode
+export type EichSourceNode =
+  | EichIfNode
+  | EichTextNode
+  | EichBasicNode
 
 export const kTextNode = Symbol('Eich/Text')
 
-export interface EachTextNode {
+export interface EichTextNode {
   tag: typeof kTextNode
   value: string
   raw: ChildNode
 }
 
-export interface EachIfNode {
+export interface EichIfNode {
   tag: 'if'
   attrs: Record<string, any>
-  children: EachSourceNode[]
-  else?: EachElseNode
-  elif?: EachElifNode[]
+  children: EichSourceNode[]
+  else?: EichElseNode
+  elif?: EichElifNode[]
   raw: ChildNode
 }
 
-export interface EachElifNode {
+export interface EichElifNode {
   tag: 'elif'
   attrs: Record<string, any>
-  children: EachSourceNode[]
+  children: EichSourceNode[]
   raw: ChildNode
 }
 
-export interface EachElseNode {
+export interface EichElseNode {
   tag: 'else'
   attrs: Record<string, any>
-  children: EachSourceNode[]
+  children: EichSourceNode[]
   raw: ChildNode
 }
 
-export interface EachBasicNode {
+export interface EichBasicNode {
   tag: string
   attrs: Record<string, any>
-  children: EachSourceNode[]
+  children: EichSourceNode[]
   raw: ChildNode
 }
 
-export type EachContext = Record<string, any>
+export type EichContext = Record<string, any>
 
-function toNode(root: ElementNode | FragmentNode): EachSourceNode {
-  const node: EachSourceNode = {
+function toNode(root: ElementNode | FragmentNode): EichSourceNode {
+  const node: EichSourceNode = {
     tag: root.type == NodeType.ELEMENT ? root.tag : 'fragment',
     attrs: root.type == NodeType.ELEMENT
       ? root.attributes.reduce((prev, v) => {
@@ -66,7 +66,7 @@ function toNode(root: ElementNode | FragmentNode): EachSourceNode {
         tag: kTextNode,
         value: child.content,
         raw: child,
-      } satisfies EachTextNode)
+      } satisfies EichTextNode)
       index += 1
       continue
     }
@@ -96,7 +96,7 @@ function toNode(root: ElementNode | FragmentNode): EachSourceNode {
       }
 
       if (child.tag == 'if') {
-        const ifNode = toNode(child) as EachIfNode
+        const ifNode = toNode(child) as EichIfNode
 
         index += 1
         while (index < root.children.length) {
@@ -113,7 +113,7 @@ function toNode(root: ElementNode | FragmentNode): EachSourceNode {
           if (child.type == NodeType.ELEMENT) {
             if (child.tag == 'elif') {
               ifNode.elif ??= []
-              ifNode.elif.push(toNode(child) as EachElifNode)
+              ifNode.elif.push(toNode(child) as EichElifNode)
               index += 1
               continue
             }
@@ -138,7 +138,7 @@ function toNode(root: ElementNode | FragmentNode): EachSourceNode {
         if (index < root.children.length) {
           const child = root.children[index]
           if (child.type == NodeType.ELEMENT && child.tag == 'else') {
-            ifNode.else = toNode(child) as EachElseNode
+            ifNode.else = toNode(child) as EichElseNode
             index += 1
           }
         }
@@ -156,15 +156,15 @@ function toNode(root: ElementNode | FragmentNode): EachSourceNode {
   return node
 }
 
-function toRoots(doc: DocumentNode): EachSourceNode[] {
-  const children: EachSourceNode[] = []
+function toRoots(doc: DocumentNode): EichSourceNode[] {
+  const children: EichSourceNode[] = []
   for (const child of doc.children) {
     if (child.type == NodeType.TEXT) {
       children.push({
         tag: kTextNode,
         value: child.content,
         raw: child,
-      } satisfies EachTextNode)
+      } satisfies EichTextNode)
     }
     else if (child.type == NodeType.VALUE) {
       children.push({
@@ -189,15 +189,15 @@ function toRoots(doc: DocumentNode): EachSourceNode[] {
 
 export { toRoots as parseFromRaw }
 
-export function parse(input: string): EachSourceNode[] {
+export function parse(input: string): EichSourceNode[] {
   return toRoots(parseSource(input, { resolver: modeResolver }))
 }
 
-export function isEachTextNode(node: EachSourceNode): node is EachTextNode {
+export function isEichTextNode(node: EichSourceNode): node is EichTextNode {
   return node.tag == kTextNode
 }
 
-export function isEachIfNode(node: EachSourceNode): node is EachIfNode {
+export function isEichIfNode(node: EichSourceNode): node is EichIfNode {
   return node.tag == 'if'
 }
 

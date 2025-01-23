@@ -1,5 +1,5 @@
 import type { EffectScope } from '@vue/reactivity'
-import type { EachIfNode } from '../resolver'
+import type { EichIfNode } from '../resolver'
 import { effect, effectScope } from '@vue/reactivity'
 import {
   createAdhoc,
@@ -18,7 +18,7 @@ interface BranchCondition {
 
 const component = defineComponent(
   (_attr, _children, astNode) => {
-    const node = astNode as EachIfNode
+    const node = astNode as EichIfNode
     const context = getCurrentContext()
     const container = document.createElement('span')
     let scope: EffectScope
