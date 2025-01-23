@@ -140,6 +140,10 @@ function matchesSelector(node: ChildNode, selector: Selector): boolean {
   if (!isValidNode(node) && selector.type !== 'universal')
     return false
   const element = node as ElementNode
+
+  if (node.type === NodeType.FRAGMENT)
+    return true
+
   switch (selector.type) {
     case 'tag':
       if (element.tag == null) {
@@ -166,6 +170,14 @@ function matchesSelector(node: ChildNode, selector: Selector): boolean {
   }
 }
 
+function getParentNode(node: ChildNode): ChildNode | undefined {
+  let parent = node.parent
+  while (parent && parent.type === NodeType.FRAGMENT) {
+    parent = parent.parent
+  }
+  return parent
+}
+
 function matchesCompound(child: ChildNode, selectors: Selector[]): boolean {
   let index = 0
   const len = selectors.length
@@ -178,14 +190,14 @@ function matchesCompound(child: ChildNode, selectors: Selector[]): boolean {
 
       switch (nextSelector.type) {
         case 'descendant': {
-          let ancestor: ChildNode | undefined = node.parent
+          let ancestor: ChildNode | undefined = getParentNode(node)
           let valid = false
           while (ancestor) {
             if (matchesSelector(ancestor, currentSelector)) {
               valid = true
               break
             }
-            ancestor = ancestor.parent
+            ancestor = getParentNode(ancestor)
           }
           if (!valid)
             return false
@@ -193,17 +205,19 @@ function matchesCompound(child: ChildNode, selectors: Selector[]): boolean {
           break
         }
         case 'child': {
-          if (!node.parent || !matchesSelector(node.parent, currentSelector)) {
+          const parent = getParentNode(node)
+          if (!parent || !matchesSelector(parent, currentSelector)) {
             return false
           }
           index += 2
           break
         }
         case 'adjacent': {
-          if (!node.parent)
+          const parent = getParentNode(node)
+          if (!parent)
             return false
-          const siblings = getElementSiblings(node)
-          const idx = getElementIndex(node, siblings)
+          const siblings = getElementSiblings(parent as ValidNode)
+          const idx = getElementIndex(node as ValidNode, siblings)
           if (idx <= 0 || !matchesSelector(siblings[idx - 1], currentSelector)) {
             return false
           }
@@ -211,10 +225,11 @@ function matchesCompound(child: ChildNode, selectors: Selector[]): boolean {
           break
         }
         case 'sibling': {
-          if (!node.parent)
+          const parent = getParentNode(node)
+          if (!parent)
             return false
-          const siblings = getElementSiblings(node)
-          const idx = getElementIndex(node, siblings)
+          const siblings = getElementSiblings(parent as ValidNode)
+          const idx = getElementIndex(node as ValidNode, siblings)
           if (idx > 0) {
             const prevSiblings = siblings.slice(0, idx)
             if (!prevSiblings.some(sibling => matchesSelector(sibling, currentSelector))) {
