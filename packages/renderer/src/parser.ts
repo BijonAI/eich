@@ -461,7 +461,7 @@ export function parseChildren(context: ParserContext) {
               throw new ParserError('Invalid <! markup', context, 'INVALID_MARKUP')
             }
             const content = context.remaining(endIdx)
-            if (!/^[\p{ID_Start}@:$!][\p{ID_Continue}@:$\-!\s]*/u.test(content)) {
+            if (!/^[\p{ID_Start}@:$!][\p{ID_Continue}@:$#\-!\s]*$/u.test(content)) {
               throw new ParserError('Invalid <! markup', context, 'INVALID_MARKUP')
             }
             context.advance(content.length + 1)
