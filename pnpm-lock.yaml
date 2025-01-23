@@ -72,6 +72,39 @@ importers:
         specifier: ^2.7.4
         version: 2.7.4
 
+  packages/eich:
+    dependencies:
+      '@eich/components':
+        specifier: workspace:^
+        version: link:../components
+      '@eich/layout':
+        specifier: workspace:^
+        version: link:../layout
+      '@eich/renderer':
+        specifier: workspace:^
+        version: link:../renderer
+      '@eich/support-math':
+        specifier: workspace:^
+        version: link:../support-math
+      '@rbardini/html':
+        specifier: ^1.0.1
+        version: 1.0.1
+      '@vue/reactivity':
+        specifier: ^3.5.13
+        version: 3.5.13
+      '@vue/shared':
+        specifier: ^3.5.13
+        version: 3.5.13
+      es-html-parser:
+        specifier: ^0.0.10
+        version: 0.0.10
+      htmlparser2:
+        specifier: ^10.0.0
+        version: 10.0.0
+      morphdom:
+        specifier: ^2.7.4
+        version: 2.7.4
+
   packages/layout:
     dependencies:
       '@eich/renderer':
@@ -123,19 +156,6 @@ importers:
         specifier: ^4.0.2
         version: 4.0.2
 
-  packages/support-d3:
-    dependencies:
-      '@eich/renderer':
-        specifier: workspace:^
-        version: link:../renderer
-      d3:
-        specifier: ^7.8.5
-        version: 7.9.0
-    devDependencies:
-      '@types/d3':
-        specifier: ^7.4.3
-        version: 7.4.3
-
   packages/support-math:
     dependencies:
       '@eich/renderer':
@@ -163,9 +183,6 @@ importers:
       '@eich/renderer':
         specifier: workspace:^
         version: link:../renderer
-      '@eich/support-d3':
-        specifier: workspace:^
-        version: link:../support-d3
     devDependencies:
       typescript:
         specifier: ~5.6.3

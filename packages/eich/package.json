@@ -1,0 +1,42 @@
+{
+  "name": "eichjs",
+  "type": "module",
+  "version": "0.0.1",
+  "description": "🧩 A front-end-based interactive content format, focus on composing the front-end ecosystem.",
+  "author": "BugDuck Team",
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "dev": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "publish": "npm publish",
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "pub": "pnpm publish",
+    "lint": "eslint ."
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@eich/components": "workspace:^",
+    "@eich/layout": "workspace:^",
+    "@eich/renderer": "workspace:^",
+    "@eich/support-math": "workspace:^",
+    "@rbardini/html": "^1.0.1",
+    "@vue/reactivity": "^3.5.13",
+    "@vue/shared": "^3.5.13",
+    "es-html-parser": "^0.0.10",
+    "htmlparser2": "^10.0.0",
+    "morphdom": "^2.7.4"
+  }
+}
