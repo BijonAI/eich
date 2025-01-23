@@ -485,11 +485,8 @@ export function parseChildren(context: ParserContext) {
           else if (context.startsWith('<!--')) {
             node = parseComment(context)
           }
-          else if (context.char(2) != null && WHITESPACE_REG.test(context.char(2))) {
-            node = parseDirective(context)
-          }
           else {
-            throw new ParserError('Invalid <! markup', context, 'INVALID_MARKUP')
+            node = parseDirective(context)
           }
         }
         else if (context.char(1) == '/') {
