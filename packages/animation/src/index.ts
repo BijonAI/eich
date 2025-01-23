@@ -1,5 +1,6 @@
 import type { Attributes } from '@eich/renderer'
-import { createDelegate } from '@eich/renderer'
+import { createDelegate, getCurrentContext } from '@eich/renderer'
+import { animate } from './animate'
 import { move } from './move'
 import { rotate } from './rotate'
 import { scale } from './scale'
@@ -12,7 +13,19 @@ export function animateWithAttrs(
   animations: any,
   node?: Node,
 ) {
-  const animates: Record<string, Animation> = animations as Record<string, Animation>
+  const context = getCurrentContext()
+  const animates: Record<string, Animation> = {
+    ...animations,
+    ...Object.fromEntries(Object.entries(getCurrentContext()).map(([key, value]) => {
+      return [key, (params: [number], _: Node) => {
+        return (dur: number, ease: (t: number) => number) => {
+          return animate((progress) => {
+            context[key] = value + progress * params[0]
+          }, dur, ease)
+        }
+      }]
+    })),
+  }
   const events: Record<string, () => Promise<void>> = {}
   Object.entries(attrs).forEach(([key, value]: [string, string]) => {
     if (key.startsWith('animate')) {
