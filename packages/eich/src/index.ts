@@ -47,5 +47,5 @@ intrinsics.set('vector', Vector)
 export * from '@eich/components'
 export * from '@eich/layout'
 export * from '@eich/renderer'
-export * from '@eich/renderer/intrinisics'
+export * from '@eich/renderer/intrinsics'
 export * from '@eich/support-math'
