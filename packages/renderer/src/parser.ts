@@ -1,5 +1,10 @@
 import { parseEntities } from 'parse-entities'
 
+export const TAG_START_REG = /^<(\p{ID_Start}[\p{ID_Continue}:.$@\-]*)/u
+export const TAG_END_REG = /^<\/(\p{ID_Start}[\p{ID_Continue}:.$@\-]*)/u
+export const ATTR_NAME_REG = /^[\p{ID_Start}@:$][\p{ID_Continue}@:$\-]*/u
+export const WHITESPACE_REG = /^[\t\r\n\f ]+/
+
 export enum TextMode {
   DATA,
   RCDATA,
@@ -34,7 +39,7 @@ export type Node =
 
 export interface BaseNode {
   type: NodeType
-  parent?: Node
+  parent?: FragmentNode | DocumentNode | ElementNode
 }
 
 export interface ValueNode extends BaseNode {
@@ -79,6 +84,7 @@ export interface CDATANode extends BaseNode {
 export interface CommentNode extends BaseNode {
   type: NodeType.COMMENT
   content: string
+  directive: boolean
 }
 
 export interface FragmentNode extends BaseNode {
@@ -87,9 +93,9 @@ export interface FragmentNode extends BaseNode {
 }
 
 export class ParserContext {
-  public readonly lines: string[];
-  public readonly lineStarts: number[];
-  public ancestors: [ElementNode | FragmentNode, Position][] = [];
+  public readonly lines: string[]
+  public readonly lineStarts: number[]
+  public ancestors: [ElementNode | FragmentNode, Position][] = []
 
   constructor(
     public readonly source: string,
@@ -98,39 +104,40 @@ export class ParserContext {
     public mode: TextMode = TextMode.DATA,
     public resolver: ModeResolver = () => TextMode.DATA,
   ) {
-    this.lines = source.split('\n');
-    this.lineStarts = [];
-    let index = 0;
+    this.lines = source.split('\n')
+    this.lineStarts = []
+    let index = 0
     for (let i = 0; i < this.lines.length; i++) {
-      this.lineStarts.push(index);
-      index += this.lines[i].length + 1; // +1 for the newline character
+      this.lineStarts.push(index)
+      index += this.lines[i].length + 1 // +1 for the newline character
     }
   }
 
   getPosition(offset: number = 0): Position {
-    const pos = this.idx + offset;
-    let line = 1;
-    let lastLineStart = 0;
+    const pos = this.idx + offset
+    let line = 1
+    let lastLineStart = 0
 
-    let left = 0;
-    let right = this.lineStarts.length - 1;
+    let left = 0
+    let right = this.lineStarts.length - 1
 
     while (left <= right) {
-      const mid = Math.floor((left + right) / 2);
+      const mid = Math.floor((left + right) / 2)
       if (this.lineStarts[mid] <= pos) {
-        lastLineStart = this.lineStarts[mid];
-        line = mid + 1;
-        left = mid + 1;
-      } else {
-        right = mid - 1;
+        lastLineStart = this.lineStarts[mid]
+        line = mid + 1
+        left = mid + 1
+      }
+      else {
+        right = mid - 1
       }
     }
 
     return {
       line,
       column: pos - lastLineStart + 1,
-      idx: pos
-    };
+      idx: pos,
+    }
   }
 
   push(node: ElementNode | FragmentNode) {
@@ -142,7 +149,7 @@ export class ParserContext {
   }
 
   getLines(startLine: number, endLine: number): string[] {
-    return this.lines.slice(startLine - 1, endLine);
+    return this.lines.slice(startLine - 1, endLine)
   }
 
   remaining(end?: number): string {
@@ -194,10 +201,10 @@ export function isEnd(context: ParserContext): boolean {
 
   const parent = context.ancestors[context.ancestors.length - 1]?.[0]
   if (
-    parent 
+    parent
     && (
-      parent.type == NodeType.ELEMENT && context.startsWith(`</${parent.tag}`)
-      || parent.type == NodeType.FRAGMENT && context.startsWith('</>')
+      (parent.type == NodeType.ELEMENT && context.startsWith(`</${parent.tag}>`))
+      || (parent.type == NodeType.FRAGMENT && context.startsWith('</>'))
     )
   ) {
     return true
@@ -238,13 +245,9 @@ export function parseComment(context: ParserContext): CommentNode {
   return {
     type: NodeType.COMMENT,
     content: raw,
+    directive: false,
   }
 }
-
-export const TAG_START_REG = /^<(\p{ID_Start}[\p{ID_Continue}:.$@\-]*)/u;
-export const TAG_END_REG = /^<\/(\p{ID_Start}[\p{ID_Continue}:.$@\-]*)/u;
-export const ATTR_NAME_REG = /^[\p{ID_Start}@:$][\p{ID_Continue}@:$\-]*/u;
-export const WHITESPACE_REG = /^[\t\r\n\f ]+/;
 
 export function parseTag(context: ParserContext, start: boolean = true): ElementNode {
   const match = (
@@ -257,7 +260,7 @@ export function parseTag(context: ParserContext, start: boolean = true): Element
     throw new ParserError(
       start ? 'Invalid opening tag' : 'Invalid closing tag',
       context,
-      'INVALID_TAG_NAME'
+      'INVALID_TAG_NAME',
     )
   }
 
@@ -336,40 +339,41 @@ export function parseAttributes(context: ParserContext): AttributeNode[] {
 }
 
 export function parseElement(context: ParserContext): ElementNode {
-  const element = parseTag(context);
-  
-  element.attributes.forEach(attr => {
+  const element = parseTag(context)
+
+  element.attributes.forEach((attr) => {
     attr.parent = element
   })
-  
+
   if (element.selfClosing) {
-    return element;
+    return element
   }
 
-  const mode = context.resolver(element.tag);
-  const oldMode = context.mode;
+  const mode = context.resolver(element.tag)
+  const oldMode = context.mode
 
   try {
-    context.push(element);
-    context.mode = mode;
-    element.children = parseChildren(context);
+    context.push(element)
+    context.mode = mode
+    element.children = parseChildren(context)
 
     if (!context.eof) {
-      const endTag = parseTag(context, false);
+      const endTag = parseTag(context, false)
       if (endTag.tag !== element.tag) {
         throw new ParserError(
           `Mismatched closing tag: expected </${element.tag}> but found </${endTag.tag}>`,
           context,
-          'MISMATCHED_CLOSING_TAG'
-        );
+          'MISMATCHED_CLOSING_TAG',
+        )
       }
     }
-  } finally {
-    context.pop();
-    context.mode = oldMode;
+  }
+  finally {
+    context.pop()
+    context.mode = oldMode
   }
 
-  return element;
+  return element
 }
 
 export function parseValue(context: ParserContext): ValueNode {
@@ -424,7 +428,6 @@ export function parseText(context: ParserContext): TextNode {
     }
   }
 
-
   const raw = context.remaining(endIdx)
   context.advance(raw.length)
 
@@ -438,7 +441,7 @@ export function parseText(context: ParserContext): TextNode {
 export function parseChildren(context: ParserContext) {
   const nodes: ChildNode[] = []
   const parent = context.ancestors[context.ancestors.length - 1]?.[0]
-  
+
   while (!isEnd(context)) {
     let node: ChildNode | null = null
 
@@ -452,7 +455,21 @@ export function parseChildren(context: ParserContext) {
             node = parseComment(context)
           }
           else {
-            throw new ParserError('Invalid <!> markup', context, 'INVALID_MARKUP')
+            context.advance(2) // <!
+            const endIdx = context.indexOf('>')
+            if (endIdx == -1) {
+              throw new ParserError('Invalid <! markup', context, 'INVALID_MARKUP')
+            }
+            const content = context.remaining(endIdx)
+            if (!/^[\p{ID_Start}@:$!][\p{ID_Continue}@:$\-!\s]*/u.test(content)) {
+              throw new ParserError('Invalid <! markup', context, 'INVALID_MARKUP')
+            }
+            context.advance(content.length + 1)
+            node = {
+              type: NodeType.COMMENT,
+              content,
+              directive: true,
+            }
           }
         }
         else if (context.char(1) == '/') {
@@ -480,7 +497,7 @@ export function parseChildren(context: ParserContext) {
     if (node) {
       node.parent = parent
       if (node.type === NodeType.ELEMENT) {
-        node.attributes.forEach(attr => {
+        node.attributes.forEach((attr) => {
           attr.parent = node as ElementNode
         })
       }
@@ -499,7 +516,7 @@ export function parseDocument(context: ParserContext): DocumentNode {
     filename: context.filename,
     raw: context.source,
   }
-  children.forEach(child => {
+  children.forEach((child) => {
     child.parent = document
   })
   return document
@@ -521,75 +538,74 @@ export class ParserError extends Error {
   constructor(
     message: string,
     public context: ParserContext,
-    public code: string = 'PARSER_ERROR'
+    public code: string = 'PARSER_ERROR',
   ) {
-    const position = context.getPosition();
-    const preview = getSourcePreview(context);
+    const position = context.getPosition()
+    const preview = getSourcePreview(context)
     super(
-      `${message}\n` +
-      `Location: ${context.filename}:${position.line}:${position.column} (${position.idx})\n` +
-      `Code: ${code}\n` +
-      `Ancestors:\n${getAncestorsPreview(context)}` +
-      `Preview:\n${preview}\n`
-    );
+      `${message}\n`
+      + `Location: ${context.filename}:${position.line}:${position.column} (${position.idx})\n`
+      + `Code: ${code}\n`
+      + `Ancestors:\n${getAncestorsPreview(context)}`
+      + `Preview:\n${preview}\n`,
+    )
   }
 }
 
 export interface Position {
-  line: number;
-  column: number;
-  idx: number;
+  line: number
+  column: number
+  idx: number
 }
 
 export function getSourcePreview(context: ParserContext): string {
-  const pos = context.getPosition();
+  const pos = context.getPosition()
 
-  const startLine = Math.max(1, pos.line - 2);
-  const endLine = Math.min(context.lines.length, pos.line + 1);
+  const startLine = Math.max(1, pos.line - 2)
+  const endLine = Math.min(context.lines.length, pos.line + 1)
 
   return context.getLines(startLine, endLine)
     .map((line, i) => {
-      const lineNum = startLine + i;
-      const isErrorLine = lineNum === pos.line;
-      const paddedLineNum = lineNum.toString().padStart(4, ' ');
-      return `${paddedLineNum} | ${line}${isErrorLine ?       `\n     | ${'^'.padStart(pos.column)}` : ''}`;
+      const lineNum = startLine + i
+      const isErrorLine = lineNum === pos.line
+      const paddedLineNum = lineNum.toString().padStart(4, ' ')
+      return `${paddedLineNum} | ${line}${isErrorLine ? `\n     | ${'^'.padStart(pos.column)}` : ''}`
     })
-    .join('\n');
+    .join('\n')
 }
 
 export function getAncestorsPreview(context: ParserContext): string {
-  console.log(context.ancestors)
   return context.ancestors.reduce((acc, [node, pos]) => {
-    return acc + `   - ${node.type == NodeType.ELEMENT ? `<${node.tag}>` : '(Fragment)'} at ${pos.line}:${pos.column} (${pos.idx})\n`
-  }, '   - (Root)\n') 
+    return `${acc}   - ${node.type == NodeType.ELEMENT ? `<${node.tag}>` : '(Fragment)'} at ${pos.line}:${pos.column} (${pos.idx})\n`
+  }, '   - (Root)\n')
 }
 
 export function parseFragment(context: ParserContext): FragmentNode {
-  context.advance(2); // <>
+  context.advance(2) // <>
 
   const fragment: FragmentNode = {
     type: NodeType.FRAGMENT,
     children: [],
-  };
+  }
 
-  context.push(fragment);
-  fragment.children = parseChildren(context);
+  context.push(fragment)
+  fragment.children = parseChildren(context)
   if (!context.startsWith('</>')) {
     throw new ParserError(
       'Fragment must be closed with </>',
       context,
-      'INVALID_FRAGMENT_END'
-    );
+      'INVALID_FRAGMENT_END',
+    )
   }
-  context.pop();
-  context.advance(3);
+  context.pop()
+  context.advance(3)
 
-  return fragment;
+  return fragment
 }
 
 export function traverse<T>(traverser: (node: ChildNode, context: T) => false | void, node: ChildNode[] | ChildNode, context: T, maxDepth: false | number = false): T {
   const nodes = Array.isArray(node) ? node : [node]
-  
+
   function visit(nodes: ChildNode[], depth: number): boolean {
     for (const node of nodes) {
       if (traverser(node, context) === false) {
@@ -612,11 +628,10 @@ export function traverse<T>(traverser: (node: ChildNode, context: T) => false | 
   return context
 }
 
-
 export function queryNode(filter: (node: ChildNode) => boolean, node: ChildNode[] | ChildNode, maxNum: false | number = false, maxDepth: false | number = false): Set<ChildNode> {
   const results = new Set<ChildNode>()
   const nodes = Array.isArray(node) ? node : [node]
-  
+
   function visit(nodes: ChildNode[], depth: number): boolean {
     for (const node of nodes) {
       if (filter(node)) {
@@ -641,4 +656,3 @@ export function queryNode(filter: (node: ChildNode) => boolean, node: ChildNode[
   visit(nodes, 1)
   return results
 }
-

@@ -19,7 +19,8 @@
   ],
   "scripts": {
     "build": "tsup",
-    "dev": "tsup --watch"
+    "dev": "tsup --watch",
+    "lint": "eslint ."
   },
   "dependencies": {
     "@eich/renderer": "workspace:^",

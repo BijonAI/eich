@@ -67,4 +67,3 @@ Front-end-focused interactive content framework that allows you to create dynami
 💖 Maintained with LOVE by:
 
 - [@BugDuck](https://github.com/Bug-Duck)
-

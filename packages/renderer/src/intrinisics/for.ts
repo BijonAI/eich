@@ -25,7 +25,7 @@ const component = defineComponent(
     effect(() => {
       scope?.stop()
       scope = effectScope()
-      const root = document.createElement(as ??'span')
+      const root = document.createElement(as ?? 'span')
       for (const item of iterable(context)) {
         scope.run(
           () => root.append(

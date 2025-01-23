@@ -1,12 +1,11 @@
+export { useAttr, useAttrs, useAttrValues } from './adhoc'
 export * from './html'
-export * from './resolver'
-export { parse as parseRaw, TextMode, NodeType, traverse, queryNode } from './parser'
+
+export { NodeType, parse as parseRaw, queryNode, TextMode, traverse } from './parser'
 export * from './renderer'
+
+export * from './resolver'
+export { querySelector, querySelectorAll } from './selector'
 export * from './utils'
-
-export { useAttr, useAttrValues, useAttrs } from './adhoc'
-
-// !TODO: remove
-export * from './intrinisics'
 
 export * from '@vue/reactivity'

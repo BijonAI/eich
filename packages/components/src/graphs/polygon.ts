@@ -1,4 +1,4 @@
-import { defineComponent, getCurrentContext, intrinsics } from "@eich/renderer"
+import { defineComponent, getCurrentContext, intrinsics } from '@eich/renderer'
 
 export interface PolygonAttributes {
   $points?: string
@@ -27,4 +27,4 @@ export const component = defineComponent<PolygonAttributes>((attrs, children) =>
 
 intrinsics.set('polygon', component)
 
-export default component 
+export default component

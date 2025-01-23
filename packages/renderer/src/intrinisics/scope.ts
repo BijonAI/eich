@@ -1,8 +1,5 @@
-import { reactive, toRefs } from '@vue/reactivity'
 import {
-  runInContext,
   defineComponent,
-  getCurrentContext,
   intrinsics,
 } from '../renderer'
 import { useBlockScope } from '../utils'

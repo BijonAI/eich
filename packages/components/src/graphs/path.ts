@@ -1,4 +1,4 @@
-import { defineComponent, getCurrentContext, intrinsics } from "@eich/renderer"
+import { defineComponent, getCurrentContext, intrinsics } from '@eich/renderer'
 
 export interface PathAttributes {
   $d?: string
@@ -23,4 +23,4 @@ export const component = defineComponent<PathAttributes>((attrs, children) => {
 
 intrinsics.set('path', component)
 
-export default component 
+export default component

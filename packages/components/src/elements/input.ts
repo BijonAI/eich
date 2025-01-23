@@ -1,10 +1,10 @@
-import { createDelegate, defineComponent, getCurrentContext, intrinsics } from "@eich/renderer"
+import { createDelegate, defineComponent, getCurrentContext, intrinsics } from '@eich/renderer'
 
 export interface InputAttributes {
-  type?: string
-  value?: string
-  placeholder?: string
-  model?: string
+  'type'?: string
+  'value'?: string
+  'placeholder'?: string
+  'model'?: string
   '@input'?: string
   '@change'?: string
 }
@@ -20,7 +20,7 @@ export const component = defineComponent<InputAttributes>((attrs, children) => {
 
   if (attrs.model) {
     const context = getCurrentContext()
-    element.addEventListener('input', (e) => {
+    element.addEventListener('input', () => {
       context[attrs.model!] = element.value
     })
   }

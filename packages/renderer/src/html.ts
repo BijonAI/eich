@@ -75,11 +75,14 @@ function _renderTmpl(root: Node, values: Record<string | number, InterpolatePara
         const index = isArray ? Number.parseInt(el.getAttribute(attr)!) : el.getAttribute(attr)! as any
         el.removeAttribute(attr)
         if (values[index] != null) {
-          rawAttrs
-            ? effect(() => {
-                el.setAttribute(name, toDisplayString(toValue((values as any)[index])))
-              })
-            : _setRxAttr(el, name, values[index])
+          if (rawAttrs) {
+            effect(() => {
+              el.setAttribute(name, toDisplayString(toValue((values as any)[index])))
+            })
+          }
+          else {
+            _setRxAttr(el, name, values[index])
+          }
         }
       }
     }
@@ -109,9 +112,12 @@ function _setRxAttr(el: Element, name: string, value: unknown): void {
   else if (attr == 'style') {
     effect(() => {
       const style = toValue(value) as any
-      typeof style == 'object'
-        ? Object.assign((el as HTMLElement).style, style)
-        : el.setAttribute('style', toDisplayString(style))
+      if (typeof style == 'object') {
+        Object.assign((el as HTMLElement).style, style)
+      }
+      else {
+        el.setAttribute('style', toDisplayString(style))
+      }
     })
   }
   else if (attr == 'ref') {
@@ -122,9 +128,17 @@ function _setRxAttr(el: Element, name: string, value: unknown): void {
   else {
     effect(() => {
       const val = toValue(value)
-      typeof val == 'boolean'
-        ? (val ? el.setAttribute(name, '') : el.removeAttribute(name))
-        : el.setAttribute(name, toDisplayString(val))
+      if (typeof val == 'boolean') {
+        if (val) {
+          el.setAttribute(name, '')
+        }
+        else {
+          el.removeAttribute(name)
+        }
+      }
+      else {
+        el.setAttribute(name, toDisplayString(val))
+      }
     })
   }
 }

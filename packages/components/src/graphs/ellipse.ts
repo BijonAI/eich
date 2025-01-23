@@ -1,4 +1,4 @@
-import { defineComponent, getCurrentContext, intrinsics } from "@eich/renderer"
+import { defineComponent, getCurrentContext, intrinsics } from '@eich/renderer'
 
 export interface EllipseAttributes {
   $rx?: number
@@ -26,4 +26,4 @@ export const component = defineComponent<EllipseAttributes>((attrs, children) =>
 
 intrinsics.set('ellipse', component)
 
-export default component 
+export default component

@@ -1,7 +1,7 @@
-import { defineComponent, getCurrentContext, intrinsics } from "@eich/renderer"
+import { defineComponent, intrinsics } from '@eich/renderer'
 
 export interface FieldAttributes {
-  width?: number 
+  width?: number
   height?: number
 }
 
