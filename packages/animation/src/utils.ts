@@ -1,4 +1,4 @@
-import { createAdhoc, getCurrentContext } from "@eich/renderer"
+import { createAdhoc, getCurrentContext } from '@eich/renderer'
 
 interface AnimationInfo {
   name: string | string[] // requried
@@ -29,19 +29,21 @@ export function splitAnimations(value: string): AnimationInfo[] {
     }
 
     let part = group
-    
+
     if (part.startsWith('(') && part.includes(')')) {
       const closingIndex = part.indexOf(')')
       info.name = part.slice(1, closingIndex).split(',')
       part = part.slice(closingIndex + 1)
-    } else if (part.includes('(') && part.includes(')')) {
+    }
+    else if (part.includes('(') && part.includes(')')) {
       const openIndex = part.indexOf('(')
       const closeIndex = part.indexOf(')')
       info.name = [part.slice(0, openIndex)]
       const params = part.slice(openIndex + 1, closeIndex).split(',').map(p => p.trim())
       info.params = params.map(p => createAdhoc(p, getCurrentContext())())
       part = part.slice(closeIndex + 1)
-    } else {
+    }
+    else {
       const nameEnd = part.indexOf(',')
       info.name = [nameEnd > -1 ? part.slice(0, nameEnd) : part]
       part = nameEnd > -1 ? part.slice(nameEnd) : ''
@@ -52,7 +54,8 @@ export function splitAnimations(value: string): AnimationInfo[] {
       params.forEach((param, index) => {
         if (index === 0 && !Number.isNaN(Number(param))) {
           info.dur = Number(param)
-        } else if (param) {
+        }
+        else if (param) {
           info.ease = param
         }
       })

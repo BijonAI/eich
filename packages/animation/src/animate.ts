@@ -4,7 +4,8 @@ export async function animate(fn: (progress: number) => void, dur: number, ease:
   function updater() {
     elapsed = performance.now() - startTime
     fn(ease(elapsed / dur))
-    if (elapsed >= dur) return
+    if (elapsed >= dur)
+      return
     requestAnimationFrame(updater)
   }
   requestAnimationFrame(updater)
