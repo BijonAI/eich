@@ -1,9 +1,10 @@
 import { parseEntities } from 'parse-entities'
 
 export const TAG_START_REG = /^<(\p{ID_Start}[\p{ID_Continue}:.$@\-]*)/u
+export const DIRECTIVE_REG = /^<!(\p{ID_Start}[\p{ID_Continue}:.$@\-]*)/u
 export const TAG_END_REG = /^<\/(\p{ID_Start}[\p{ID_Continue}:.$@\-]*)/u
 export const ATTR_NAME_REG = /^[\p{ID_Start}@:$][\p{ID_Continue}@:$\-]*/u
-export const WHITESPACE_REG = /^[\t\r\n\f ]+/
+export const WHITESPACE_REG = /^\s+/u
 
 export enum TextMode {
   DATA,
@@ -22,6 +23,7 @@ export enum NodeType {
   ATTRIBUTE,
   VALUE,
   FRAGMENT,
+  DIRECTIVE,
 }
 
 export type ChildNode =
@@ -32,6 +34,7 @@ export type ChildNode =
   | ValueNode
   | DocumentNode
   | FragmentNode
+  | DirectiveNode
 
 export type Node =
   | ChildNode
@@ -70,6 +73,12 @@ export interface ElementNode extends BaseNode {
   raw?: string
 }
 
+export interface DirectiveNode extends BaseNode {
+  type: NodeType.DIRECTIVE
+  directive: string
+  attributes: AttributeNode[]
+}
+
 export interface TextNode extends BaseNode {
   type: NodeType.TEXT
   raw: string
@@ -84,7 +93,6 @@ export interface CDATANode extends BaseNode {
 export interface CommentNode extends BaseNode {
   type: NodeType.COMMENT
   content: string
-  directive: boolean
 }
 
 export interface FragmentNode extends BaseNode {
@@ -245,7 +253,6 @@ export function parseComment(context: ParserContext): CommentNode {
   return {
     type: NodeType.COMMENT,
     content: raw,
-    directive: false,
   }
 }
 
@@ -277,6 +284,30 @@ export function parseTag(context: ParserContext, start: boolean = true): Element
     selfClosing,
     attributes,
     children: [],
+  }
+}
+
+export function parseDirective(context: ParserContext): DirectiveNode {
+  const match = DIRECTIVE_REG.exec(context.remaining())
+
+  if (!match) {
+    throw new ParserError(
+      'Invalid directive',
+      context,
+      'INVALID_DIRECTIVE',
+    )
+  }
+
+  const tag = match[1]
+  context.advance(match[0].length)
+  context.trim()
+  const attributes = parseAttributes(context)
+  context.advance(1)
+
+  return {
+    type: NodeType.DIRECTIVE,
+    directive: tag,
+    attributes,
   }
 }
 
@@ -454,22 +485,11 @@ export function parseChildren(context: ParserContext) {
           else if (context.startsWith('<!--')) {
             node = parseComment(context)
           }
+          else if (context.char(2) != null && WHITESPACE_REG.test(context.char(2))) {
+            node = parseDirective(context)
+          }
           else {
-            context.advance(2) // <!
-            const endIdx = context.indexOf('>')
-            if (endIdx == -1) {
-              throw new ParserError('Invalid <! markup', context, 'INVALID_MARKUP')
-            }
-            const content = context.remaining(endIdx)
-            if (!/^[\p{ID_Start}@:$!][\p{ID_Continue}@:$#\-!\s]*$/u.test(content)) {
-              throw new ParserError('Invalid <! markup', context, 'INVALID_MARKUP')
-            }
-            context.advance(content.length + 1)
-            node = {
-              type: NodeType.COMMENT,
-              content,
-              directive: true,
-            }
+            throw new ParserError('Invalid <! markup', context, 'INVALID_MARKUP')
           }
         }
         else if (context.char(1) == '/') {
