@@ -14,15 +14,15 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
-    "./intrinisics": {
-      "types": "./dist/intrinisics/index.d.ts",
-      "import": "./dist/intrinisics/index.js",
-      "dev": "./src/intrinisics/index.ts"
+    "./intrinsics": {
+      "types": "./dist/intrinsics/index.d.ts",
+      "import": "./dist/intrinsics/index.js",
+      "dev": "./src/intrinsics/index.ts"
     },
-    "./intrinisics/*": {
-      "types": "./dist/intrinisics/*.d.ts",
-      "import": "./dist/intrinisics/*.js",
-      "dev": "./src/intrinisics/*.ts"
+    "./intrinsics/*": {
+      "types": "./dist/intrinsics/*.d.ts",
+      "import": "./dist/intrinsics/*.js",
+      "dev": "./src/intrinsics/*.ts"
     }
   },
   "types": "./dist/index.d.ts",
