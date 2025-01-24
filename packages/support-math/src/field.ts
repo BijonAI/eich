@@ -1,4 +1,4 @@
-import { defineComponent, effect, getCurrentContext, builtins, mergeContext, patch, setCurrentContext, toValue, useAttrs } from '@eich/renderer'
+import { builtins, defineComponent, effect, getCurrentContext, mergeContext, patch, setCurrentContext, toValue, useAttrs } from '@eich/renderer'
 import { field } from 'idea-math'
 
 export interface FieldAttributes {

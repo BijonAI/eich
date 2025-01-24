@@ -1,5 +1,5 @@
 import type { ContainerAttributes } from './container'
-import { defineComponent, builtins, ref, useAttrs } from '@eich/renderer'
+import { builtins, defineComponent, ref, useAttrs } from '@eich/renderer'
 import { tmpl } from './container'
 
 const component = defineComponent<ContainerAttributes>((attrs, children) => {

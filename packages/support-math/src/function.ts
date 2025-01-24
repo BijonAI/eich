@@ -1,5 +1,5 @@
 import type { coordinate } from 'idea-math'
-import { defineComponent, effect, getCurrentContext, builtins, toValue, useAttrs } from '@eich/renderer'
+import { builtins, defineComponent, effect, getCurrentContext, toValue, useAttrs } from '@eich/renderer'
 import { func } from 'idea-math'
 
 export interface FuncAttributes {

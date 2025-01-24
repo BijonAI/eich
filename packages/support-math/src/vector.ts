@@ -1,5 +1,5 @@
 import type { coordinate } from 'idea-math'
-import { defineComponent, getCurrentContext, builtins, toValue, useAttrs } from '@eich/renderer'
+import { builtins, defineComponent, getCurrentContext, toValue, useAttrs } from '@eich/renderer'
 import { vector } from 'idea-math'
 
 export interface VectorAttributes {

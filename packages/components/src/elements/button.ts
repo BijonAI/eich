@@ -1,8 +1,8 @@
 import { animateWithAttrs, animation } from '@eich/animation'
 import {
+  builtins,
   createDelegate,
   defineComponent,
-  builtins,
 } from '@eich/renderer'
 
 export interface ButtonAttributes {

@@ -1,4 +1,4 @@
-import { createDelegate, defineComponent, getCurrentContext, builtins } from '@eich/renderer'
+import { builtins, createDelegate, defineComponent, getCurrentContext } from '@eich/renderer'
 
 export interface InputAttributes {
   'type'?: string

@@ -1,9 +1,7 @@
-<!DOCTYPE html>
-<eich>
-  <let :x="1" />
-  <button
-    animate:click="move(300,100),1010 rotate(3000),1000 scale(2,2),1000 x(1000),1000"
-  >
-    {{ x }}
-  </button>
-</eich>
+
+<let :x="1" />
+<button
+  animate:click="move(300,100),1010 rotate(3000),1000 scale(2,2),1000 x(1000),1000"
+>
+  {{ x }}
+</button>

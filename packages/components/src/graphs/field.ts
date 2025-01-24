@@ -1,4 +1,4 @@
-import { defineComponent, builtins } from '@eich/renderer'
+import { builtins, defineComponent } from '@eich/renderer'
 
 export interface FieldAttributes {
   width?: number

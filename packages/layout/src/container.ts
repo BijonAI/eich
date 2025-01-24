@@ -1,4 +1,4 @@
-import { defineComponent, builtins, ref, template, useAttrs } from '@eich/renderer'
+import { builtins, defineComponent, ref, template, useAttrs } from '@eich/renderer'
 
 export interface ContainerAttributes {
   '$padding': string

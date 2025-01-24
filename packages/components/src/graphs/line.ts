@@ -1,4 +1,4 @@
-import { defineComponent, getCurrentContext, builtins } from '@eich/renderer'
+import { builtins, defineComponent, getCurrentContext } from '@eich/renderer'
 
 export interface LineAttributes {
   $x1?: number
