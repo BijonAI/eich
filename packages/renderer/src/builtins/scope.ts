@@ -1,6 +1,6 @@
 import {
-  defineComponent,
   builtins,
+  defineComponent,
 } from '../renderer'
 import { useBlockScope } from '../utils'
 

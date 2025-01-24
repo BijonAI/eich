@@ -2,10 +2,10 @@ import type { EffectScope } from '@vue/reactivity'
 import type { EichIfNode } from '../resolver'
 import { effect, effectScope } from '@vue/reactivity'
 import {
+  builtins,
   createAdhoc,
   defineComponent,
   getCurrentContext,
-  builtins,
   patch,
   renderNode,
   runInContext,

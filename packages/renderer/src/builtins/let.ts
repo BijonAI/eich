@@ -1,10 +1,10 @@
 import { computed, ref, toRaw } from '@vue/reactivity'
 import { NodeType } from '../parser'
 import {
+  builtins,
   createAdhoc,
   defineComponent,
   getCurrentContext,
-  builtins,
 } from '../renderer'
 
 const ID_REGEX = /^\p{ID_Start}[$\p{ID_Continue}]*$/u

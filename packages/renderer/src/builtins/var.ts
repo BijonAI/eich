@@ -1,8 +1,8 @@
 import {
+  builtins,
   createAdhoc,
   defineComponent,
   getCurrentContext,
-  builtins,
 } from '../renderer'
 
 export interface VarAttributes {
