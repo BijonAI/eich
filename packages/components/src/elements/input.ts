@@ -1,4 +1,5 @@
-import { builtins, createDelegate, defineComponent, getCurrentContext } from '@eich/renderer'
+import { animateWithAttrs, animation } from '@eich/animation'
+import { builtins, createDelegate, defineComponent, effect, getCurrentContext, toValue, useAttrs } from '@eich/renderer'
 
 export interface InputAttributes {
   'type'?: string
@@ -10,14 +11,18 @@ export interface InputAttributes {
 }
 
 export const component = defineComponent<InputAttributes>((attrs, children) => {
+  const props = useAttrs(attrs, ['type', 'value', 'placeholder', 'model'])
   const delegate = createDelegate(attrs)
   const element = document.createElement('input')
-  element.type = attrs.type ?? 'text'
-  element.value = attrs.value ?? ''
-  element.placeholder = attrs.placeholder ?? ''
-  element.append(...children())
-  delegate(element)
+  effect(() => {
+    element.type = toValue(props.type) ?? 'text'
+    element.value = toValue(props.value) ?? ''
+    element.placeholder = toValue(props.placeholder) ?? ''
+    element.append(...children())
+    delegate(element)
+  })
 
+  animateWithAttrs(attrs, animation, element)()
   if (attrs.model) {
     const context = getCurrentContext()
     element.addEventListener('input', () => {

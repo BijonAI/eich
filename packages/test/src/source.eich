@@ -1,9 +1,9 @@
 <eich height="500px">
   <row>
-    Hello my name is Your Name
+    <span size="15" family="monospace" color="skyblue">Hello my name is Your Name</span>
   </row>
   <row>
-    What is your name?
+    <span size="15" family="monospace" color="skyblue">What is your name?</span>
   </row>
 </eich>
 

@@ -8,6 +8,7 @@ import {
   Polygon,
   Polyline,
   Rect,
+  Span,
 } from '@eich/components'
 import {
   Col,
@@ -30,6 +31,7 @@ builtins.set('col', Col)
 
 builtins.set('button', Button)
 builtins.set('input', Input)
+builtins.set('span', Span)
 builtins.set('rect', Rect)
 builtins.set('line', Line)
 builtins.set('circle', Circle)
