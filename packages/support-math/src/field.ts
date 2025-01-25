@@ -7,7 +7,6 @@ export interface FieldAttributes {
 }
 
 const component = defineComponent<FieldAttributes>((props, children) => {
-  console.log(props)
   const { width, height } = useAttrs(props, ['width', 'height'])
   const canvas = field(Number(toValue(width)), Number(toValue(height)))
   const node = canvas.node()

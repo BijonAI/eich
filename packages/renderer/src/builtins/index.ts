@@ -1,3 +1,4 @@
+export { default as Eich, type EichAttributes } from './eich'
 export { default as For, type ForAttributes } from './for'
 export { default as If } from './if'
 export { default as Let } from './let'
