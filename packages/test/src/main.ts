@@ -5,6 +5,8 @@ import '@eich/renderer/middlewares/ref'
 import '@eich/renderer/builtins'
 import '@eich/renderer/builtins/script'
 
+import 'eichjs'
+
 
 import './button'
 
