@@ -91,7 +91,7 @@ function _renderTmpl(root: Node, values: Record<string | number, InterpolatePara
   return el.firstChild!
 }
 
-function _setRxAttr(el: Element, name: string, value: unknown): void {
+export function _setRxAttr(el: Element, name: string, value: unknown): void {
   if (name.startsWith('@') && typeof value == 'function') {
     const eventName = name.slice(1)
     el.addEventListener(eventName, value as any)

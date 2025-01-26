@@ -1,5 +1,5 @@
 <pages>
-  <button>1</button>
+  <button @click="alert(1)">1</button>
   <page-break />
   <button>2</button>
   <page-break />

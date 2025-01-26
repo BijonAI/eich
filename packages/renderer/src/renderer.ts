@@ -2,15 +2,19 @@ import { type Reactive, reactive, toRefs } from '@vue/reactivity'
 import patch from 'morphdom'
 import { type EichBasicNode, type EichSourceNode, isEichTextNode, parse } from './resolver'
 
+const kCompOptions = Symbol('Component Options')
+
 export type Attributes = Record<string, any>
 export type Context = Reactive<Record<string, any>>
-export type Component<T extends Attributes = Attributes> =
+export type ComponentOptions = Record<string, any>
+export type Component<T extends Attributes = Attributes, O extends ComponentOptions = ComponentOptions> = ComponentFn<T> & { [kCompOptions]: Partial<O> }
+export type ComponentFn<T extends Attributes = Attributes> =
   (props: T, children: () => Node[], node: EichSourceNode) => Node | Node[] | void
 
 export const builtins = new Map<string, Component<any>>()
 
 export type PreMiddleware = (node: EichSourceNode, context: Context) => void
-export type PostMiddleware = (node: EichSourceNode, context: Context, domNode: Node | Node[]) => void
+export type PostMiddleware = (node: EichSourceNode, context: Context, domNode: Node | Node[], comp: Component<any, any>) => void
 export const middlewares = {
   pre: new Map<string, PreMiddleware>(),
   post: new Map<string, PostMiddleware>(),
@@ -95,20 +99,23 @@ export function renderNode(node: EichSourceNode): Node | Node[] {
   }
 
   let domNode: Node | Node[]
+  let comp: Component<any, any>
 
   if (isEichTextNode(node)) {
     domNode = document.createTextNode(node.value)
   }
   else if (builtins.has(node.tag)) {
-    domNode = renderComp(builtins.get(node.tag)!, node)
+    comp = builtins.get(node.tag)!
+    domNode = renderComp(comp, node)
   }
   else {
-    domNode = renderComp(noopComp, node)
+    comp = noopComp
+    domNode = renderComp(comp, node)
   }
 
   if (middlewares.post.size > 0) {
     middlewares.post.forEach((middleware) => {
-      middleware(node, context, domNode)
+      middleware(node, context, domNode, comp)
     })
   }
 
@@ -129,8 +136,19 @@ export function render(source: string, target?: Node, initialContext: Reactive<C
   return renderRoots(ast, target, initialContext)
 }
 
-export function defineComponent<T extends Attributes = Attributes>(comp: Component<T>): Component<T> {
-  return comp
+export function getComponentOptions<T extends ComponentOptions>(o: Component<any, any>): Partial<T> | undefined {
+  return o[kCompOptions]
+}
+
+// eslint-disable-next-line ts/no-empty-object-type
+export function defineComponent<T extends Attributes = Attributes, O extends ComponentOptions = {}>(comp: ComponentFn<T>, options: Partial<O> = {} as O): Component<T, O> {
+  return Object.assign(comp, { [kCompOptions]: options })
 }
 
 export { textMode } from './resolver'
+
+export function defineMiddleware({ type, fn }: { type: 'pre', fn: PreMiddleware }): PreMiddleware
+export function defineMiddleware({ type, fn }: { type: 'post', fn: PostMiddleware }): PostMiddleware
+export function defineMiddleware({ fn }: { type: 'pre' | 'post', fn: PreMiddleware | PostMiddleware }): PreMiddleware | PostMiddleware {
+  return fn
+}

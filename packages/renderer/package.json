@@ -23,6 +23,11 @@
       "types": "./dist/builtins/*.d.ts",
       "import": "./dist/builtins/*.js",
       "dev": "./src/builtins/*.ts"
+    },
+    "./middlewares/*": {
+      "types": "./dist/middlewares/*.d.ts",
+      "import": "./dist/middlewares/*.js",
+      "dev": "./src/middlewares/*.ts"
     }
   },
   "types": "./dist/index.d.ts",

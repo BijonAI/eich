@@ -5,6 +5,9 @@ import { createAdhoc } from './adhoc'
 import { getCurrentContext, hasContext, renderRoots, runInContext } from './renderer'
 import { parse } from './resolver'
 
+// eslint-disable-next-line antfu/top-level-function
+export const noop = () => {}
+
 export function style(source: TemplateStringsArray, ...values: MaybeRefOrGetter<unknown>[]): () => void {
   const style = document.createElement('style')
   const e = effect(() => {
@@ -41,6 +44,10 @@ export function eich(literal: TemplateStringsArray, ...values: MaybeRefOrGetter<
 export function createDelegate(map: Record<string, any>, eventNames?: string[], adhoc: boolean = true): (node: Node) => void {
   if (eventNames == null) {
     eventNames = Object.keys(map).filter(v => v.startsWith('@') && v.length > 1)
+  }
+
+  if (eventNames.length == 0) {
+    return noop
   }
 
   const delegates: [string, EventListener][] = []

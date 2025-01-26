@@ -1,11 +1,12 @@
-import { defineComponent, builtins, createDelegate } from "@eich/renderer"
+import { defineComponent, builtins } from "@eich/renderer"
 
-const Button = defineComponent((attrs, children) => {
+const Button = defineComponent((_, children) => {
   const button = document.createElement('button')
-  const delegate = createDelegate(attrs)
   button.append(...children())
-  delegate(button)
+
   return button
+}, {
+  fallthrough: true
 })
 
 builtins.set('button', Button)
