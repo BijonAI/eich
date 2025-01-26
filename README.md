@@ -1,4 +1,4 @@
-<div style="text-align: center">
+<div align="center">
   <img src="./assets/logo.png" alt="Eich" style="width: 30%">
   <h1>Eich</h1>
   <span>A method to innovate your image/slides/ebook/blog with interaction.</span>
