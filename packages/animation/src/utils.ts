@@ -66,3 +66,7 @@ export function splitAnimations(value: string): AnimationInfo[] {
 
   return result
 }
+
+export function convertSnakeCaseToCamelCase(str: string): string {
+  return str.replace(/-([a-z])/g, (_, c) => c.toUpperCase())
+}

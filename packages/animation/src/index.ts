@@ -1,10 +1,11 @@
 import type { Attributes } from '@eich/renderer'
 import { createDelegate, getCurrentContext } from '@eich/renderer'
 import { animate } from './animate'
+import * as eases from './eases'
 import { move } from './move'
 import { rotate } from './rotate'
 import { scale } from './scale'
-import { splitAnimations } from './utils'
+import { convertSnakeCaseToCamelCase, splitAnimations } from './utils'
 
 export type Animation = (params: any[], node?: Node) => (dur: number, ease: string | ((t: number) => number)) => Promise<void>
 
@@ -36,7 +37,23 @@ export function animateWithAttrs(
       }
       const process = async () => {
         for (const anim of anims) {
-          await animates[anim.name as string](anim.params, node)(anim.dur ?? 1000, anim.ease ?? (t => t))
+          console.log(
+            typeof anim.ease !== 'undefined'
+              ? typeof anim.ease === 'string'
+                ? Object.assign(eases, context)[convertSnakeCaseToCamelCase(anim.ease)]
+                : anim.ease
+              : (t: number) => t,
+            anim.ease,
+            convertSnakeCaseToCamelCase(anim.ease!),
+          )
+          await animates[anim.name as string](anim.params, node)(
+            anim.dur ?? 1000,
+            typeof anim.ease !== 'undefined'
+              ? typeof anim.ease === 'string'
+                ? Object.assign(eases, context)[convertSnakeCaseToCamelCase(anim.ease)]
+                : anim.ease
+              : t => t,
+          )
         }
       }
       if (commandName.length > 0)
@@ -52,6 +69,7 @@ export const animation = {
   scale,
   rotate,
 }
+
 export * from './animate'
 export * from './move'
 export * from './utils'

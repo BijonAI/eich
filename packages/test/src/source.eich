@@ -1,9 +1,3 @@
 <eich height="500px">
-  <row>
-    <span size="15" family="monospace" color="skyblue">Hello my name is Your Name</span>
-  </row>
-  <row>
-    <span size="15" family="monospace" color="skyblue">What is your name?</span>
-  </row>
+  <button animate:click="move(300,200),1000,ease-bounce"></button>
 </eich>
-
