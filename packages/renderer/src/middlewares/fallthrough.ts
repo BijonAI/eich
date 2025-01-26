@@ -1,13 +1,14 @@
-import { _setRxAttr } from "../html";
-import { defineMiddleware, getComponentOptions, Context, createAdhoc, middlewares } from "../renderer";
-import { kTextNode } from "../resolver";
+import type { Context } from '../renderer'
+import { _setRxAttr } from '../html'
+import { createAdhoc, defineMiddleware, getComponentOptions, middlewares } from '../renderer'
+import { kTextNode } from '../resolver'
 
 export interface FallthroughOptions {
   fallthrough: boolean
 }
 
 function isBindableAttr(name: string): boolean {
-  return /^([^$#]|[:@])?\p{ID_Start}[\p{ID_Continue}_\-]*$/u.test(name) || /^@\p{ID_Start}[\p{ID_Continue}_\-:]*$/u.test(name)
+  return /^[^$#]?(?:^@\p{ID_Start}[\p{ID_Continue}\-:]*|^:?\p{ID_Start}[\p{ID_Continue}\-:]*)$/u.test(name)
 }
 
 function bindAttrs(ctx: Context, attrs: Record<string, any>, node: any) {
@@ -18,7 +19,22 @@ function bindAttrs(ctx: Context, attrs: Record<string, any>, node: any) {
       continue
     }
 
-    _setRxAttr(node, key, /^[:@]/.test(key) && typeof attrs[key] == 'string' ? createAdhoc(attrs[key], ctx) : attrs[key])
+    let val: any = attrs[key]
+    if (typeof val == 'string') {
+      if (key.startsWith(':')) {
+        val = () => createAdhoc(val, ctx)()
+      }
+      else if (key.startsWith('@')) {
+        const adhoc = createAdhoc(`function($event){return (${val});}`, ctx)() as any
+        val = (ev: any) => {
+          const r = adhoc(ev)
+          if (typeof r == 'function') {
+            r(ev)
+          }
+        }
+      }
+    }
+    _setRxAttr(node, key, val)
   }
 }
 
@@ -39,6 +55,5 @@ export const fallthrough = defineMiddleware({
     }
   },
 })
-
 
 middlewares.post.set('fallthrough', fallthrough)

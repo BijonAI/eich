@@ -1,5 +1,5 @@
 import type { MaybeRef } from '@eich/renderer'
-import { builtins, defineComponent, effect, patch, toValue, useAttrs } from '@eich/renderer'
+import { builtins, defineComponent, effect, toValue, useAttrs } from '@eich/renderer'
 
 export type AlignType =
   'left' | 'center' | 'right'

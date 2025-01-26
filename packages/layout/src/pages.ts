@@ -1,4 +1,4 @@
-import { builtins, defineComponent, effect, toValue, useAttrs } from "@eich/renderer"
+import { builtins, defineComponent, effect, toValue, useAttrs } from '@eich/renderer'
 
 export interface PagesAttributes {
   $width: string
@@ -19,11 +19,16 @@ const components = defineComponent<PagesAttributes>((attrs, children) => {
       container.append(...page)
       pages.push(container)
       page.length = 0
-    } else page.push(kid)
+    }
+    else {
+      page.push(kid)
+    }
   })
   effect(() => {
-    if (toValue(width)) pages.forEach(page => page.style.width = toValue(width)!)
-    if (toValue(height)) pages.forEach(page => page.style.height = toValue(height)!)
+    if (toValue(width))
+      pages.forEach(page => page.style.width = toValue(width)!)
+    if (toValue(height))
+      pages.forEach(page => page.style.height = toValue(height)!)
   })
   return pages
 })

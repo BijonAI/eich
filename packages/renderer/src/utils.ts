@@ -22,8 +22,8 @@ export function style(source: TemplateStringsArray, ...values: MaybeRefOrGetter<
   }
 }
 
-export function useBlockScope<T>(fn: () => T, detached: boolean = false): T {
-  return runInContext(reactive(detached ? {} : { ...toRefs(getCurrentContext()) }), fn)
+export function useBlockScope<T>(fn: () => T, detached: boolean = false, base: object = {}): T {
+  return runInContext(reactive(detached ? { ...base } : { ...base, ...toRefs(getCurrentContext()) }), fn)
 }
 
 export function eich(literal: TemplateStringsArray, ...values: MaybeRefOrGetter<unknown>[]): Node[] {
@@ -64,4 +64,16 @@ export function createDelegate(map: Record<string, any>, eventNames?: string[], 
   }
 
   return node => delegates.forEach(([event, handler]) => node.addEventListener(event, handler))
+}
+
+export default function isPlainObject(obj: any) {
+  if (typeof obj !== 'object' || obj === null)
+    return false
+
+  let proto = obj
+  while (Object.getPrototypeOf(proto) !== null) {
+    proto = Object.getPrototypeOf(proto)
+  }
+
+  return Object.getPrototypeOf(obj) === proto
 }

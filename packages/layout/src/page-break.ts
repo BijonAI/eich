@@ -1,8 +1,6 @@
-import { builtins, useAttrs } from "@eich/renderer"
+import { builtins, defineComponent } from '@eich/renderer'
 
-import { defineComponent } from "@eich/renderer"
-
-const component = defineComponent((attrs, children) => {
+const component = defineComponent((_attrs, _children) => {
   const slot = document.createElement('slot')
   slot.name = 'page-break'
   return slot

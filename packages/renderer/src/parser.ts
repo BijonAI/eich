@@ -70,7 +70,6 @@ export interface ElementNode extends BaseNode {
   selfClosing: boolean
   attributes: AttributeNode[]
   children: ChildNode[]
-  raw?: string
 }
 
 export interface DirectiveNode extends BaseNode {

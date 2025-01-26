@@ -1,7 +1,9 @@
-<pages>
-  <button @click="alert(1)">1</button>
-  <page-break />
-  <button>2</button>
-  <page-break />
-  <button>3</button>
-</pages>
+<script>
+const count = ref(0)
+const handleClick = () => count.value += 1
+
+return { handleClick, count }
+</script>
+
+<button @click="handleClick">{{ count }}</button>
+

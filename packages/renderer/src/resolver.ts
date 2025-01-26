@@ -1,4 +1,5 @@
-import { type ChildNode, type DocumentNode, type ElementNode, type FragmentNode, NodeType, parse as parseSource, TextMode } from './parser'
+import type { ParseOptions } from 'node:querystring'
+import { type ChildNode, type DocumentNode, type ElementNode, type FragmentNode, NodeType, parse as parseRaw, TextMode } from './parser'
 
 export type EichSourceNode =
   | EichIfNode
@@ -189,8 +190,12 @@ function toRoots(doc: DocumentNode): EichSourceNode[] {
 
 export { toRoots as parseFromRaw }
 
+export function parseSource(input: string, options: Omit<ParseOptions, 'resolver'> = {}): DocumentNode {
+  return parseRaw(input, { resolver: modeResolver, ...options })
+}
+
 export function parse(input: string): EichSourceNode[] {
-  return toRoots(parseSource(input, { resolver: modeResolver }))
+  return toRoots(parseSource(input))
 }
 
 export function isEichTextNode(node: EichSourceNode): node is EichTextNode {
