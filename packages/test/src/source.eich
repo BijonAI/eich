@@ -1,5 +1,4 @@
-<let #strict :count=1 />
-<let #strict :count=0 />
+<let :count=0 />
 
 <button @click="count += 1">{{ count }}</button>
 
