@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./assets/logo.png" alt="Eich" style="width: 30%">
+  <img src="./assets/logo.png" alt="Eich" style="width: 15%">
   <h1>Eich</h1>
   <span>A method to innovate your image/slides/ebook/blog with interaction.</span>
 </div>
