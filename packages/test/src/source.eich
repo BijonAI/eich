@@ -1,9 +1,5 @@
-<script>
-const count = ref(0)
-const handleClick = () => count.value += 1
+<let #strict :count=1 />
+<let #strict :count=0 />
 
-return { handleClick, count }
-</script>
-
-<button @click="handleClick">{{ count }}</button>
+<button @click="count += 1">{{ count }}</button>
 

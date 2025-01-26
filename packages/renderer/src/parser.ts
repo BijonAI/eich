@@ -3,7 +3,8 @@ import { parseEntities } from 'parse-entities'
 export const TAG_START_REG = /^<(\p{ID_Start}[\p{ID_Continue}:.$@\-]*)/u
 export const DIRECTIVE_REG = /^<!(\p{ID_Start}[\p{ID_Continue}:.$@\-]*)/u
 export const TAG_END_REG = /^<\/(\p{ID_Start}[\p{ID_Continue}:.$@\-]*)/u
-export const ATTR_NAME_REG = /^[\p{ID_Start}@:$][\p{ID_Continue}@:$\-]*/u
+export const ATTR_NAME_REG = /^[\p{ID_Start}@:$#][\p{ID_Continue}@:$#\-]*/u
+export const ATTR_UNQUOTED_VALUE_REG = /^[\p{ID_Continue}@:$#\-]*/u
 export const WHITESPACE_REG = /^\s+/u
 
 export enum TextMode {
@@ -344,14 +345,18 @@ export function parseAttributes(context: ParserContext): AttributeNode[] {
       context.advance(1)
       const valueIdx = context.indexOf(quote)
       if (valueIdx == -1) {
-        throw new ParserError('Unclosed attribute value quotation', context, 'UNCLOSED_ATTRIBUTE_VALUE')
+        throw new ParserError('Unclosed attribute value quotation', context, 'UNEXPECTED_ATTRIBUTE_VALUE')
       }
 
       value = context.remaining(valueIdx)
       context.advance(value.length + 1)
     }
     else {
-      [value] = ATTR_NAME_REG.exec(context.remaining())!
+      const match = ATTR_UNQUOTED_VALUE_REG.exec(context.remaining())
+      if (match == null) {
+        throw new ParserError('Unexpected attribute value', context, 'UNEXPECTED_ATTRIBUTE_VALUE')
+      }
+      [value] = match
       context.advance(value.length)
     }
 
