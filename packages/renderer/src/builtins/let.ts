@@ -12,7 +12,7 @@ const ID_REGEX = /^\p{ID_Start}[$\p{ID_Continue}]*$/u
 const isValidKey = (key: string) => key.length > 0 && ID_REGEX.test(key)
 
 const component = defineComponent(
-  (_attrs, _children, { raw }) => {
+  (attrs, _children, { raw }) => {
     const context = getCurrentContext()
     const refs = toRaw(context)
 
@@ -24,7 +24,7 @@ const component = defineComponent(
       const s = key.trim().split(':')
 
       if (s.length == 2) {
-        if (refs[s[1]] != null) {
+        if (attrs['#strict'] != null && refs[s[1]] != null) {
           throw new Error(`[eich/let] Key '${s[1]}' has already been declared`)
         }
 
@@ -50,7 +50,7 @@ const component = defineComponent(
         context[s[0]] = value
       }
       else {
-        throw new Error(`[eich/let] Invalid variable key: ${key} (${s.length})`)
+        continue
       }
     }
   },
