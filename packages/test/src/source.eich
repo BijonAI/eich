@@ -1,3 +1,7 @@
-<eich height="500px">
-  <button animate:click="move(300,200),1000,ease-bounce"></button>
-</eich>
+<pages>
+  <button>1</button>
+  <page-break />
+  <button>2</button>
+  <page-break />
+  <button>3</button>
+</pages>

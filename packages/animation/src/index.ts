@@ -37,15 +37,6 @@ export function animateWithAttrs(
       }
       const process = async () => {
         for (const anim of anims) {
-          console.log(
-            typeof anim.ease !== 'undefined'
-              ? typeof anim.ease === 'string'
-                ? Object.assign(eases, context)[convertSnakeCaseToCamelCase(anim.ease)]
-                : anim.ease
-              : (t: number) => t,
-            anim.ease,
-            convertSnakeCaseToCamelCase(anim.ease!),
-          )
           await animates[anim.name as string](anim.params, node)(
             anim.dur ?? 1000,
             typeof anim.ease !== 'undefined'

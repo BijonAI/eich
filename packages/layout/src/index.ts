@@ -1,3 +1,4 @@
-export { default as Col } from './column'
-export { default as Container } from './container'
-export { default as Row } from './row'
+export { default as Align } from './align'
+export { default as Transform } from './transform'
+export { default as Pages } from './pages'
+export { default as PageBreak } from './page-break'

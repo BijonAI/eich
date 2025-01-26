@@ -11,9 +11,10 @@ import {
   Span,
 } from '@eich/components'
 import {
-  Col,
-  Container,
-  Row,
+  Align,
+  Transform,
+  Pages,
+  PageBreak,
 } from '@eich/layout'
 import { builtins } from '@eich/renderer'
 import {
@@ -25,9 +26,10 @@ import {
 } from '@eich/support-math'
 import '@eich/renderer/builtins'
 
-builtins.set('container', Container)
-builtins.set('row', Row)
-builtins.set('col', Col)
+builtins.set('align', Align)
+builtins.set('transform', Transform)
+builtins.set('pages', Pages)
+builtins.set('page-break', PageBreak)
 
 builtins.set('button', Button)
 builtins.set('input', Input)
