@@ -1,16 +1,8 @@
-<block height="40px" width="300px">
-  <columns $count="2" $height="100" widths="1 3">
-    wwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-    wwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-    wwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-    wwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-    wwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-    wwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-    wwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-    wwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-    wwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-    wwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-    wwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-  </columns>
-</block>
+
+<let :count="0" />
+<button @click="count++">{{ count }}</button>
+
+
+<let :count="1" />
+<button @click="count++">{{ count }}</button>
 
