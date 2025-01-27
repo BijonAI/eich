@@ -21,7 +21,7 @@ const component = defineComponent<AlignAttributes>((attrs, children) => {
   }
   const div = document.createElement('div')
   effect(() => {
-    div.style.textAlign = types
+    div.style.textAlign = toValue(types)
   })
   div.append(...children())
   return div

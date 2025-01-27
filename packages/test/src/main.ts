@@ -8,7 +8,7 @@ import '@eich/renderer/builtins/script'
 import 'eichjs'
 
 
-import './button'
+// import './button'
 
 import source from './source.eich?raw'
 
