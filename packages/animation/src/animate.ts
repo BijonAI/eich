@@ -1,11 +1,15 @@
 /* eslint-disable no-sequences */
+/* eslint-disable ts/ban-ts-comment */
+// @ts-nocheck
 
 const n = performance.now.bind(performance) ?? Date.now
 const r = requestAnimationFrame ?? (x => setTimeout(x, 16.67))
-export function animate(f: (x: number) => void, d: number, t?: (x: number) => number): Promise<void> {
-  return new Promise((c) => {
-    let e: number, x: number
-    const g = () => (x = e + n() / d, x = x > 1 ? 1 : (r(g), x < 0 ? 0 : x), f(t ? t(x) : x), x < 1 || c())
-    r(() => (e = n() / -d, g()))
-  })
+function __animate(a, d, t, o) {
+  let e, x
+  const g = () => (x = e + n() / d, a(x >= 1 ? (o && o(), 1) : (r(g), t ? t(x) : x)))
+  r(() => (e = n() / -d, g()))
+}
+
+export function animate(executor: (x: number) => void, duration: number, timing?: (x: number) => number): Promise<void> {
+  return new Promise(resolve => __animate(executor, duration, timing, resolve))
 }
