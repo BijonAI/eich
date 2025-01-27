@@ -8,7 +8,7 @@ export interface ColumnsAttributes {
 }
 
 const component = defineComponent<ColumnsAttributes>((attrs, children) => {
-  const { columns = 2, reverse = false, gap = 0, align = 'stretch', height, widths } = useAttrs(attrs, ['columns', 'reverse', 'gap', 'align', 'height', 'widths'])
+  const { columns = 2, reverse = false, gap = 0, align: _align = 'stretch', height, widths } = useAttrs(attrs, ['columns', 'reverse', 'gap', 'align', 'height', 'widths'])
   const wrapper = document.createElement('div')
   const div = document.createElement('div')
 

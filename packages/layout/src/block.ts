@@ -1,10 +1,10 @@
 import { builtins, defineComponent, effect, toValue, useAttrs } from '@eich/renderer'
 
 export interface BlockAttributes {
-  $width: string
-  $height: string
-  $fill: string
-  $stroke: string
+  '$width': string
+  '$height': string
+  '$fill': string
+  '$stroke': string
   '$stroke-width': number
 }
 
