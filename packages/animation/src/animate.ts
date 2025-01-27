@@ -5,6 +5,7 @@
 const n = performance.now.bind(performance)
 const r = requestAnimationFrame
 
+//! DO NOT EDIT THIS FUNCTION
 function __animate(a, d, t, o) {
   let e, x
   const g = () => (x = (e + n()) / d, a(x >= 1 ? (o && o(), 1) : (r(g), t ? t(x) : x)))
