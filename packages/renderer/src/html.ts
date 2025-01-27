@@ -99,6 +99,7 @@ export function _setRxAttr(el: Element, name: string, value: unknown): void {
   }
 
   if (name[0] != ':') {
+    el.setAttribute(name, toDisplayString(value))
     return
   }
 
