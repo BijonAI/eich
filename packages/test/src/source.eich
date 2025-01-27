@@ -1,8 +1,4 @@
-
-<let :count="0" />
-<button @click="count++">{{ count }}</button>
-
-
-<let :count="1" />
-<button @click="count++">{{ count }}</button>
-
+<eich>
+  <let :count="0" />
+  <button animate:click="move(200,300),1000,ease-bounce count(1999),1000">{{ count }}</button>
+</eich>

@@ -12,6 +12,8 @@ import {
 } from '@eich/components'
 import {
   Align,
+  Block,
+  Columns,
   PageBreak,
   Pages,
   Transform,
@@ -27,6 +29,8 @@ import {
 import '@eich/renderer/builtins'
 
 builtins.set('align', Align)
+builtins.set('block', Block)
+builtins.set('columns', Columns)
 builtins.set('transform', Transform)
 builtins.set('pages', Pages)
 builtins.set('page-break', PageBreak)
