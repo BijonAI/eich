@@ -107,6 +107,9 @@ importers:
       '@eich/layout':
         specifier: workspace:^
         version: link:../layout
+      '@eich/model':
+        specifier: workspace:^
+        version: link:../model
       '@eich/renderer':
         specifier: workspace:^
         version: link:../renderer

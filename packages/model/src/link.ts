@@ -1,4 +1,4 @@
-import { defineComponent, effect, toValue, useAttrs } from '@eich/renderer'
+import { builtins, defineComponent, effect, toValue, useAttrs } from '@eich/renderer'
 
 export interface LinkAttributes {
   $target?: string
@@ -13,3 +13,6 @@ export const component = defineComponent<LinkAttributes>((props, children) => {
   a.append(...children())
   return a
 })
+
+builtins.set('link', component)
+export default component

@@ -30,6 +30,7 @@
   "dependencies": {
     "@eich/components": "workspace:^",
     "@eich/layout": "workspace:^",
+    "@eich/model": "workspace:^",
     "@eich/renderer": "workspace:^",
     "@eich/support-math": "workspace:^",
     "@eich/text": "workspace:^",

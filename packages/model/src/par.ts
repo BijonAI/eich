@@ -1,4 +1,4 @@
-import { defineComponent, effect, toValue, useAttrs } from '@eich/renderer'
+import { builtins, defineComponent, effect, toValue, useAttrs } from '@eich/renderer'
 
 export interface ParagraphAtrributes {
   $leading?: number
@@ -18,4 +18,5 @@ const component = defineComponent<ParagraphAtrributes>((attrs, children) => {
   return paragraph
 })
 
+builtins.set('par', component)
 export default component

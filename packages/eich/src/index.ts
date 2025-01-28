@@ -13,10 +13,12 @@ import {
 import {
   Align,
   Block,
-  Columns,
   PageBreak,
   Pages,
   Transform,
+  Row,
+  Column,
+  Flexbox,
 } from '@eich/layout'
 import { builtins } from '@eich/renderer'
 import {
@@ -39,14 +41,17 @@ import {
   Underline,
   Upper,
 } from '@eich/text'
+import { Link, Par } from '@eich/model'
 import '@eich/renderer/builtins'
 
 builtins.set('align', Align)
 builtins.set('block', Block)
-builtins.set('columns', Columns)
 builtins.set('transform', Transform)
 builtins.set('pages', Pages)
 builtins.set('page-break', PageBreak)
+builtins.set('flexbox', Flexbox)
+builtins.set('row', Row)
+builtins.set('column', Column)
 
 builtins.set('button', Button)
 builtins.set('input', Input)
@@ -77,8 +82,12 @@ builtins.set('underline', Underline)
 builtins.set('upper', Upper)
 builtins.set('text', Text)
 
+builtins.set('link', Link)
+builtins.set('par', Par)
+
 export * from '@eich/components'
 export * from '@eich/layout'
+export * from '@eich/model'
 export * from '@eich/renderer'
 export * from '@eich/renderer/builtins'
 export * from '@eich/support-math'
