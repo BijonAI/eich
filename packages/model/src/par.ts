@@ -1,4 +1,4 @@
-import { defineComponent, effect, toValue, useAttrs } from "@eich/renderer"
+import { defineComponent, effect, toValue, useAttrs } from '@eich/renderer'
 
 export interface ParagraphAtrributes {
   $leading?: number

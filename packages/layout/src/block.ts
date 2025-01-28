@@ -6,17 +6,17 @@ export interface BlockAttributes {
   '$fill': string
   '$stroke': string
   '$stroke-width': number
-  $margin?: string | number
+  '$margin'?: string | number
   '$margin-top'?: string | number
   '$margin-right'?: string | number
   '$margin-bottom'?: string | number
   '$margin-left'?: string | number
-  $padding?: string | number
+  '$padding'?: string | number
   '$padding-top'?: string | number
   '$padding-right'?: string | number
   '$padding-bottom'?: string | number
   '$padding-left'?: string | number
-  $border?: string | number
+  '$border'?: string | number
   '$border-radius'?: string | number
   '$border-width'?: string | number
   '$border-color'?: string
