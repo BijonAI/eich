@@ -26,6 +26,18 @@ import {
   Parametric,
   Vector,
 } from '@eich/support-math'
+import {
+  Highlight,
+  Lower,
+  Lr,
+  Overline,
+  Smallcaps,
+  Strike,
+  Sub,
+  Super,
+  Underline,
+  Upper,
+} from '@eich/text'
 import '@eich/renderer/builtins'
 
 builtins.set('align', Align)
@@ -51,6 +63,17 @@ builtins.set('field', Field)
 builtins.set('function', Function)
 builtins.set('parametric', Parametric)
 builtins.set('vector', Vector)
+
+builtins.set('highlight', Highlight)
+builtins.set('lower', Lower)
+builtins.set('lr', Lr)
+builtins.set('overline', Overline)
+builtins.set('smallcaps', Smallcaps)
+builtins.set('strike', Strike)
+builtins.set('sub', Sub)
+builtins.set('super', Super)
+builtins.set('underline', Underline)
+builtins.set('upper', Upper)
 
 export * from '@eich/components'
 export * from '@eich/layout'

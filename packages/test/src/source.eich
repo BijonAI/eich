@@ -1,4 +1,1 @@
-<eich>
-  <let :count="0" />
-  <button animate:click="move(200,300),1000,ease-bounce count(1999),1000">{{ count }}</button>
-</eich>
+<highlight $radius="100">Hello world!<sub>sub</sub><super>super</super></highlight>

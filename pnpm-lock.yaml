@@ -113,6 +113,9 @@ importers:
       '@eich/support-math':
         specifier: workspace:^
         version: link:../support-math
+      '@eich/text':
+        specifier: workspace:^
+        version: link:../text
       '@rbardini/html':
         specifier: ^1.0.1
         version: 1.0.1
@@ -220,6 +223,30 @@ importers:
       vite:
         specifier: ^6.0.7
         version: 6.0.7(@types/node@22.5.0)(jiti@2.4.2)(tsx@4.19.2)(yaml@2.7.0)
+
+  packages/text:
+    dependencies:
+      '@eich/renderer':
+        specifier: workspace:^
+        version: link:../renderer
+      '@rbardini/html':
+        specifier: ^1.0.1
+        version: 1.0.1
+      '@vue/reactivity':
+        specifier: ^3.5.13
+        version: 3.5.13
+      '@vue/shared':
+        specifier: ^3.5.13
+        version: 3.5.13
+      es-html-parser:
+        specifier: ^0.0.10
+        version: 0.0.10
+      htmlparser2:
+        specifier: ^10.0.0
+        version: 10.0.0
+      morphdom:
+        specifier: ^2.7.4
+        version: 2.7.4
 
 packages:
 
