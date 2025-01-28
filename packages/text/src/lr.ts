@@ -1,4 +1,4 @@
-import { builtins, defineComponent } from "@eich/renderer";
+import { builtins, defineComponent } from '@eich/renderer'
 
 export const component = defineComponent(() => {
   return document.createElement('br')

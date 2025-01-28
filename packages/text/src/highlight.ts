@@ -1,10 +1,10 @@
-import { builtins, defineComponent, effect, toValue, useAttrs } from "@eich/renderer"
+import { builtins, defineComponent, effect, toValue, useAttrs } from '@eich/renderer'
 
 export interface HighlightAttributes {
-  $fill?: string
-  $stroke?: string
+  '$fill'?: string
+  '$stroke'?: string
   '$stroke-width'?: number
-  radius?: number
+  'radius'?: number
 }
 
 export const component = defineComponent<HighlightAttributes>((props, children) => {
