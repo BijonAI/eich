@@ -35,6 +35,7 @@ import {
   Strike,
   Sub,
   Super,
+  Text,
   Underline,
   Upper,
 } from '@eich/text'
@@ -74,6 +75,7 @@ builtins.set('sub', Sub)
 builtins.set('super', Super)
 builtins.set('underline', Underline)
 builtins.set('upper', Upper)
+builtins.set('text', Text)
 
 export * from '@eich/components'
 export * from '@eich/layout'
