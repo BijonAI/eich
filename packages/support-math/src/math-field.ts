@@ -1,10 +1,10 @@
-import { defineComponent, effect, toValue, useAttrs, builtins } from "@eich/renderer"
-import { field } from "idea-math"
-import { wrap } from "./utils"
+import { builtins, defineComponent, effect, toValue, useAttrs } from '@eich/renderer'
+import { field } from 'idea-math'
+import { wrap } from './utils'
 
 export interface MathFieldAttributes {
-  $width: number
-  $height: number
+  '$width': number
+  '$height': number
   '$origin-x': number
   '$origin-y': number
 }
@@ -15,9 +15,9 @@ const component = defineComponent<MathFieldAttributes>((props, children) => {
   effect(() => {
     mathField.origin(toValue(originX) as unknown as number, toValue(originY) as unknown as number)
   })
-  children().forEach(child => {
+  children().forEach((child) => {
     mathField.add(
-      wrap(child)
+      wrap(child),
     )
   })
   return mathField.node()

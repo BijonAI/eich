@@ -1,10 +1,10 @@
-import { defineComponent, effect, toValue, useAttrs } from "@eich/renderer"
+import { builtins, defineComponent, effect, toValue, useAttrs } from '@eich/renderer'
 
 export interface TableAttributes {
-  $columns?: Array<number>
-  $rows?: Array<number>
-  $gutter?: number | string
-  $align?: 'row' | 'column'
+  '$columns'?: Array<number>
+  '$rows'?: Array<number>
+  '$gutter'?: number | string
+  '$align'?: 'row' | 'column'
   '$column-gutter': number | string
   '$row-gutter': number | string
 }
@@ -37,6 +37,8 @@ const component = defineComponent<TableAttributes>((props, children) => {
     })
   })
 
-
   return table
 })
+
+builtins.set('table', component)
+export default component

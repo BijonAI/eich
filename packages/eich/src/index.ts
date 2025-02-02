@@ -9,21 +9,25 @@ import {
   Polyline,
   Rect,
   Span,
+  Table,
 } from '@eich/components'
 import {
   Align,
   Block,
-  PageBreak,
-  Pages,
-  Transform,
-  Row,
   Column,
   Flexbox,
+  PageBreak,
+  Pages,
+  Row,
+  Transform,
 } from '@eich/layout'
+import { Link, Par } from '@eich/model'
 import { builtins } from '@eich/renderer'
 import {
-  MathField,
   LineSegment,
+  MathField,
+  Plane,
+  Vector,
 } from '@eich/support-math'
 import {
   Highlight,
@@ -38,7 +42,6 @@ import {
   Underline,
   Upper,
 } from '@eich/text'
-import { Link, Par } from '@eich/model'
 import '@eich/renderer/builtins'
 
 builtins.set('align', Align)
@@ -60,9 +63,12 @@ builtins.set('ellipse', Ellipse)
 builtins.set('polygon', Polygon)
 builtins.set('polyline', Polyline)
 builtins.set('path', Path)
+builtins.set('table', Table)
 
 builtins.set('math-field', MathField)
 builtins.set('line-segment', LineSegment)
+builtins.set('vector', Vector)
+builtins.set('plane', Plane)
 
 builtins.set('highlight', Highlight)
 builtins.set('lower', Lower)

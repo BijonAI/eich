@@ -8,5 +8,6 @@ import Polygon from './graphs/polygon'
 import Polyline from './graphs/polyline'
 import Rect from './graphs/rect'
 import Span from './span'
+import Table from './table/table'
 
-export { Button, Circle, Ellipse, Input, Line, Path, Polygon, Polyline, Rect, Span }
+export { Button, Circle, Ellipse, Input, Line, Path, Polygon, Polyline, Rect, Span, Table }

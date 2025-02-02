@@ -1,14 +1,14 @@
-import { defineComponent, effect, toValue, useAttrs, builtins } from "@eich/renderer";
-import { line } from "idea-math";
+import { builtins, defineComponent, effect, toValue, useAttrs } from '@eich/renderer'
+import { line } from 'idea-math'
 
 export interface LineAtrributes {
-  $from: [number, number]
-  $to: [number, number]
-  $stroke: string
+  '$from': [number, number]
+  '$to': [number, number]
+  '$stroke': string
   '$stroke-width': number
 }
 
-const component = defineComponent<LineAtrributes>((props, children) => {
+const component = defineComponent<LineAtrributes>((props) => {
   const { from, to, stroke, 'stroke-width': strokeWidth } = useAttrs(props, ['from', 'to', 'stroke', 'stroke-width'])
   const l = line(...toValue(from) as unknown as [number, number], ...toValue(to) as unknown as [number, number])
   effect(() => {
