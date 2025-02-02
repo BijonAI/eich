@@ -22,11 +22,8 @@ import {
 } from '@eich/layout'
 import { builtins } from '@eich/renderer'
 import {
-  Coordinate,
-  Field,
-  Function,
-  Parametric,
-  Vector,
+  MathField,
+  LineSegment,
 } from '@eich/support-math'
 import {
   Highlight,
@@ -64,11 +61,8 @@ builtins.set('polygon', Polygon)
 builtins.set('polyline', Polyline)
 builtins.set('path', Path)
 
-builtins.set('coordinate', Coordinate)
-builtins.set('field', Field)
-builtins.set('function', Function)
-builtins.set('parametric', Parametric)
-builtins.set('vector', Vector)
+builtins.set('math-field', MathField)
+builtins.set('line-segment', LineSegment)
 
 builtins.set('highlight', Highlight)
 builtins.set('lower', Lower)

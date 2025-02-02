@@ -1,5 +1,4 @@
-export { default as Coordinate } from './coordinate'
-export { default as Field } from './field'
-export { default as Function } from './function'
-export { default as Parametric } from './parametric'
-export { default as Vector } from './vector'
+export { default as MathField } from './math-field'
+export { default as LineSegment } from './line'
+
+export * from './utils'

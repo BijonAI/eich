@@ -222,8 +222,8 @@ importers:
         specifier: ^7.8.5
         version: 7.9.0
       idea-math:
-        specifier: ^0.1.1
-        version: 0.1.1
+        specifier: latest
+        version: 0.2.0
     devDependencies:
       '@types/d3':
         specifier: ^7.4.3
@@ -2230,8 +2230,8 @@ packages:
     resolution: {integrity: sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw==}
     engines: {node: '>=0.10.0'}
 
-  idea-math@0.1.1:
-    resolution: {integrity: sha512-FkVSniDOBj1nV67XSmhEDqpEU3am9Rto1Rc/iumJJv4Dx7sTZvz2mlCxwAjDTc5mmMAMEbQ0bFP9f+veZ4BIfQ==}
+  idea-math@0.2.0:
+    resolution: {integrity: sha512-abKBlF9gYv65Pv5Sh2B1VW4ZNBH0L9rn1w5CbWqC8s25gfJCx1gIRAZmgZbmiqCParMpy0SPI7NaVRdzFTLZRw==}
 
   ignore@5.3.2:
     resolution: {integrity: sha512-hsBTNUqQTDwkWtcdYI2i06Y/nUBEsNEDJKjWdigLvegy8kDuJAS8uRlpkkcQpyEXL0Z/pjDy5HBmMjRCJ2gq+g==}
@@ -5590,7 +5590,7 @@ snapshots:
     dependencies:
       safer-buffer: 2.1.2
 
-  idea-math@0.1.1:
+  idea-math@0.2.0:
     dependencies:
       gsap: 3.12.7
 
