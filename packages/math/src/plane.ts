@@ -1,9 +1,9 @@
-import { builtins, defineComponent, effect } from "@eich/renderer";
-import { plane } from "idea-math";
-import { wrap } from "./utils";
+import { builtins, defineComponent, effect } from '@eich/renderer'
+import { plane } from 'idea-math'
+import { wrap } from './utils'
 
 export interface PlaneAttributes {
-  
+
 }
 
 const component = defineComponent<PlaneAttributes>((props, children) => {
@@ -12,7 +12,7 @@ const component = defineComponent<PlaneAttributes>((props, children) => {
   effect(() => {
     coord.axes('black')
   })
-  kids.forEach(kid => {
+  kids.forEach((kid) => {
     coord.add(wrap(kid))
   })
   return coord.node()

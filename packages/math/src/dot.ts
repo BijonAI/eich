@@ -1,4 +1,10 @@
-import { builtins, defineComponent, effect, toValue, useAttrs } from '@eich/renderer'
+import {
+  builtins,
+  defineComponent,
+  effect,
+  toValue,
+  useAttrs,
+} from '@eich/renderer'
 import { dot } from 'idea-math'
 
 export interface DotAttributes {
@@ -8,7 +14,10 @@ export interface DotAttributes {
 
 const component = defineComponent<DotAttributes>((props) => {
   const { x, y } = useAttrs(props, ['x', 'y'])
-  const d = dot(toValue(x) as unknown as number, toValue(y) as unknown as number)
+  const d = dot(
+    toValue(x) as unknown as number,
+    toValue(y) as unknown as number,
+  )
   effect(() => {
     d.move(toValue(x) as unknown as number, toValue(y) as unknown as number)
   })

@@ -1,5 +1,5 @@
-import { builtins, defineComponent, effect, toValue, useAttrs } from "@eich/renderer"
-import { vector } from "idea-math"
+import { builtins, defineComponent, effect, toValue, useAttrs } from '@eich/renderer'
+import { vector } from 'idea-math'
 
 export interface VectorAttributes {
   $from: [number, number]
