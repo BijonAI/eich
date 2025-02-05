@@ -3,7 +3,7 @@ import { builtins, defineComponent, effect, toValue, useAttrs } from '@eich/rend
 export interface OverlineAttributes {
   '$stroke'?: string
   '$stroke-width'?: string
-  'offset'?: number
+  '$offset'?: number
 }
 
 export const component = defineComponent<OverlineAttributes>((props, children) => {
