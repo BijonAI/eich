@@ -164,6 +164,9 @@ importers:
 
   packages/math:
     dependencies:
+      '@eich/animation':
+        specifier: workspace:^
+        version: link:../animation
       '@eich/renderer':
         specifier: workspace:^
         version: link:../renderer

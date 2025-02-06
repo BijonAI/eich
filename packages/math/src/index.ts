@@ -1,3 +1,5 @@
+export { default as Arc } from './arc'
+export { default as Dot } from './dot'
 export { default as LineSegment } from './line'
 export { default as MathField } from './math-field'
 export { default as Plane } from './plane'

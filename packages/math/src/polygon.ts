@@ -1,25 +1,38 @@
-import { builtins, defineComponent, effect, toValue, useAttrs } from '@eich/renderer'
-import { polygon } from 'idea-math'
+// import { animateWithAttrs, animation } from "@eich/animation";
+// import {
+//   builtins,
+//   defineComponent,
+//   effect,
+//   toValue,
+//   useAttrs,
+// } from '@eich/renderer'
+// import { polygon } from 'idea-math'
 
-interface polygonAtrributes{
-  x:number,
-  y:number
-}
+// interface PolygonAtrributes {
+//   '$points': [number, number][]
+//   '$setPoints': [number, number][]
+//   '$stroke': string
+//   '$stroke-width': number
+//   '$fill': string
+//   '$opacity': number
+// }
 
-interface setPointsAtrributes{
-  x:number,
-  y:number
-}
+// const component = defineComponent<PolygonAtrributes>((props) => {
+//   const {
+//     points,
+//     setPoints,
+//     stroke,
+//     "stroke-width": strokeWidth,
+//     fill,
+//     opacity,
+//   } = useAttrs(props, [
+//     'points',
+//     'setPoints',
+//     'stroke',
+//     'stroke-width',
+//     'fill',
+//     'opacity',
+//   ])
+// })
 
-export interface PolygonAtrributes{
-  $polygon: polygonAtrributes[],
-  $setPoints: setPointsAtrributes[]
-}
-
-const component = defineComponent<PolygonAtrributes>((test) => {
-  const {polygon} = useAttrs(test, ["polygon"]) as unknown as {
-    polygon:polygonAtrributes[],
-  }
-
-  const p = setPointsAtrributes(...toValue(polygon))
-}
+// TODO

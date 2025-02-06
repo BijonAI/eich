@@ -1,3 +1,4 @@
+import { animateWithAttrs, animation } from '@eich/animation'
 import {
   builtins,
   defineComponent,
@@ -19,11 +20,6 @@ export interface LineAtrributes {
   '$point-stroke': string
   '$point-stroke-width': number
 }
-
-/*
-  TODO
-  这里的 '$from' 和 '$to' 就是 <line-segment $from="[0, 0]" $to="[100, 100]"/> 里的
-*/
 
 const component = defineComponent<LineAtrributes>((props) => {
   const {
@@ -64,6 +60,7 @@ const component = defineComponent<LineAtrributes>((props) => {
       pointOpacity: Number(toValue(pointOpacity)),
     })
   })
+  animateWithAttrs(props, animation)
   return l.node()
 })
 

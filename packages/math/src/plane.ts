@@ -1,5 +1,6 @@
 import { builtins, defineComponent, effect } from '@eich/renderer'
 import { plane } from 'idea-math'
+import { wrap } from './utils'
 
 export interface PlaneAttributes {
 

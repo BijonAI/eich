@@ -13,7 +13,7 @@ export interface DotAttributes {
 }
 
 const component = defineComponent<DotAttributes>((props) => {
-  const { x, y } = useAttrs(props, ['x', 'y'])
+  const { x, y } = useAttrs(props, ['x', 'y', 'draggable'])
   const d = dot(
     toValue(x) as unknown as number,
     toValue(y) as unknown as number,

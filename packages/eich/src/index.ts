@@ -25,6 +25,8 @@ import { Link, Par } from '@eich/model'
 import { builtins } from '@eich/renderer'
 import {
   // TODO
+  Arc,
+  Dot,
   LineSegment,
   MathField,
   Plane,
@@ -66,6 +68,8 @@ builtins.set('polyline', Polyline)
 builtins.set('path', Path)
 builtins.set('table', Table)
 
+builtins.set('arc', Arc)
+builtins.set('dot', Dot)
 builtins.set('math-field', MathField)
 builtins.set('line-segment', LineSegment)
 builtins.set('vector', Vector)
