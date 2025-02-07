@@ -1,8 +1,20 @@
-<math-field width="1000" height="1000" origin-x="500" origin-y="500">
-  <line-segment $from="[0, 0]" $to="[200, 200]" $stroke-width="1"/>
-  <line-segment $from="[0, 0]" $to="[0, 200]" $stroke-width="1"/>
+<math-field width="1200" height="600" origin-x="200" origin-y="400">
+  <line-segment $from="[0, 0]" $to="[0, 200]" $stroke-width="2"/>
+  <line-segment $from="[0, 200]" $to="[100, 100]" $stroke-width="2"/>
+  <line-segment $from="[100, 100]" $to="[200, 200]" $stroke-width="2"/>
+  <line-segment $from="[200, 200]" $to="[200, 0]" $stroke-width="2"/>
+
+  <line-segment $from="[300, 0]" $to="[300, 200]" $stroke-width="2"/>
+  <line-segment $from="[300, 200]" $to="[500, 200]" $stroke-width="2"/>
+  <line-segment $from="[500, 200]" $to="[500, 0]" $stroke-width="2"/>
+  <line-segment $from="[300, 0]" $to="[500, 0]" $stroke-width="2"/>
+</math-field>
+
+<math-field width="1200" height="600" origin-x="200" origin-y="400">
+  <dot $x="0" $y="0" $draggable="true"/>
+  <dot $x="100" $y="100" $draggable="true"/>
   <dot $x="200" $y="0" $draggable="true"/>
-  <vector $from="[0, 0]" $to="[200, 200]" $stroke-width="1" $draggable="true"/>
+  <vector $from="[100, 100]" $to="[200, 200]" $stroke-width="2"/>
 </math-field>
 
 <flexbox direction="row" justify="center" align="center" $grow="1" $shrink="1" basis="auto" wrap="nowrap" $gap="10">
