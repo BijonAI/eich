@@ -1,4 +1,3 @@
-import { animateWithAttrs, animation } from '@eich/animation'
 import {
   builtins,
   defineComponent,
@@ -19,6 +18,13 @@ export interface LineAtrributes {
   '$point-fill': string
   '$point-stroke': string
   '$point-stroke-width': number
+  '$origin': [number, number]
+  '$skew': [number, number]
+  '$scale': number
+  '$rotate': number
+  '$translate': [number, number]
+  '$annotate': string
+  '$draggable': boolean
 }
 
 const component = defineComponent<LineAtrributes>((props) => {
@@ -33,6 +39,13 @@ const component = defineComponent<LineAtrributes>((props) => {
     'point-fill': pointFill,
     'point-stroke': pointStroke,
     'point-stroke-width': pointStrokeWidth,
+    origin,
+    skew,
+    scale,
+    rotate,
+    translate,
+    annotate,
+    draggable,
   } = useAttrs(props, [
     'from',
     'to',
@@ -44,6 +57,13 @@ const component = defineComponent<LineAtrributes>((props) => {
     'point-fill',
     'point-stroke',
     'point-stroke-width',
+    'origin',
+    'skew',
+    'scale',
+    'rotate',
+    'translate',
+    'annotate',
+    'draggable',
   ])
 
   const l = line(...toValue(from as unknown as [number, number]), ...toValue(to as unknown as [number, number]))
@@ -59,8 +79,25 @@ const component = defineComponent<LineAtrributes>((props) => {
       pointStrokeWidth: Number(toValue(pointStrokeWidth)),
       pointOpacity: Number(toValue(pointOpacity)),
     })
+    l.transform({
+      origin: toValue(origin) as unknown as [number, number],
+    })
+      .transform({
+        skew: toValue(skew) as unknown as [number, number],
+      })
+      .transform({
+        scale: toValue(scale) as unknown as number,
+      })
+      .transform({
+        rotate: toValue(rotate) as unknown as number,
+      })
+      .transform({
+        translate: toValue(translate) as unknown as [number, number],
+      })
+    l.annotate(toValue(annotate) as unknown as string)
+    if (draggable)
+      l.draggable()
   })
-  animateWithAttrs(props, animation)
   return l.node()
 })
 

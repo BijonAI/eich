@@ -10,7 +10,6 @@ export interface ParametricAttributes {
   'parametric-range': [number, number]
 }
 
-// 导出组件以便使用
 export const component = defineComponent<ParametricAttributes>((props) => {
   const {
     'parametric-fn': fn,
