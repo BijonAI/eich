@@ -1,38 +1,39 @@
-// import { animateWithAttrs, animation } from "@eich/animation";
-// import {
-//   builtins,
-//   defineComponent,
-//   effect,
-//   toValue,
-//   useAttrs,
-// } from '@eich/renderer'
-// import { polygon } from 'idea-math'
+import {
+  builtins,
+  defineComponent,
+  effect,
+  toValue,
+  useAttrs,
+} from '@eich/renderer'
+import { polygon } from 'idea-math'
 
-// interface PolygonAtrributes {
-//   '$points': [number, number][]
-//   '$setPoints': [number, number][]
-//   '$stroke': string
-//   '$stroke-width': number
-//   '$fill': string
-//   '$opacity': number
-// }
+export interface PolygonAttributes {
+  '$points': [number, number][]
+  '$set-unit': number
+  '$draggable': boolean
+}
 
-// const component = defineComponent<PolygonAtrributes>((props) => {
-//   const {
-//     points,
-//     setPoints,
-//     stroke,
-//     "stroke-width": strokeWidth,
-//     fill,
-//     opacity,
-//   } = useAttrs(props, [
-//     'points',
-//     'setPoints',
-//     'stroke',
-//     'stroke-width',
-//     'fill',
-//     'opacity',
-//   ])
-// })
+const component = defineComponent<PolygonAttributes>((props) => {
+  const {
+    points,
+    'set-unit': setUnit,
+    draggable,
+  } = useAttrs(props, ['points', 'set-unit', 'draggable'])
 
-// TODO
+  const p = polygon(
+    toValue(points as unknown as [number, number][]).map(point => ({
+      x: point[0],
+      y: point[1],
+    })),
+  )
+
+  effect(() => {
+    p.setUnit(Number(toValue(setUnit)))
+    if (draggable)
+      p.draggable()
+  })
+  return p.node()
+})
+
+builtins.set('polygon', component)
+export default component
