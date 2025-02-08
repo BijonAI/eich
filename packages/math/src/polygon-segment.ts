@@ -8,7 +8,7 @@ import {
 import { polygon } from 'idea-math'
 
 export interface PolygonAttributes {
-  '$points': [number, number][]
+  '$points': { x: number, y: number }[]
   '$set-unit': number
   '$draggable': boolean
 }
@@ -20,12 +20,7 @@ const component = defineComponent<PolygonAttributes>((props) => {
     draggable,
   } = useAttrs(props, ['points', 'set-unit', 'draggable'])
 
-  const p = polygon(
-    toValue(points as unknown as [number, number][]).map(point => ({
-      x: point[0],
-      y: point[1],
-    })),
-  )
+  const p = polygon(toValue(points as unknown as number[][]).map(([x, y]) => ({ x, y })))
 
   effect(() => {
     p.setUnit(Number(toValue(setUnit)))
@@ -35,5 +30,5 @@ const component = defineComponent<PolygonAttributes>((props) => {
   return p.node()
 })
 
-builtins.set('polygon', component)
+builtins.set('polygon-segment', component)
 export default component

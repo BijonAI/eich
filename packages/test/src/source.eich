@@ -5,6 +5,7 @@
     <line-segment $from="[100, 100]" $to="[200, 200]" $stroke-width="2" $draggable="true"/>
     <line-segment $from="[200, 200]" $to="[200, 0]" $stroke-width="2" $draggable="true"/>
 
+    <polygon-segment $points="[[1, 1], [2, 2], [2, 3]]" $set-unit="50" $draggable="true"/>
     <line-segment $from="[300, 0]" $to="[300, 200]" $stroke-width="2" $draggable="true"/>
     <line-segment $from="[300, 200]" $to="[500, 200]" $stroke-width="2" $draggable="true"/>
     <line-segment $from="[500, 200]" $to="[500, 0]" $stroke-width="2" $draggable="true"/>

@@ -9,7 +9,7 @@ export * from './utils'
 export { default as Vector } from './vector'
 
 /*
-  TODO
+  TODO: math-field
   搞懂了! 例如 LineSegment,
   应该就是 LineSegment from './line',
   然后注意 packages/eich/src/index.ts 内的 import { LineSegment } from '@eich/support-math' 和 builtins.set('line-segment', LineSegment)
