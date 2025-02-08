@@ -1,11 +1,7 @@
 {
   "name": "@eich/support-math",
   "type": "module",
-  "version": "0.1.4",
-  "private": false,
-  "publishConfig": {
-    "access": "public"
-  },
+  "version": "0.1.5",
   "description": "Math support for Eich framework",
   "author": "BugDuck Team",
   "license": "MIT",
