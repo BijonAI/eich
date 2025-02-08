@@ -1,27 +1,37 @@
-import { builtins, defineComponent, effect /* , useAttrs */ } from '@eich/renderer'
+import {
+  builtins,
+  defineComponent,
+  effect,
+  toValue,
+  useAttrs,
+} from '@eich/renderer'
 import { plane } from 'idea-math'
 import { wrap } from './utils'
 
 export interface PlaneAttributes {
-  width: number
-  height: number
+  $width: number
+  $height: number
+  $grid: number
+  $axes: string
+  $ticks: number
 }
 
 const component = defineComponent<PlaneAttributes>((props, children) => {
-  // TODO
-  // const { width, height } = useAttrs(props, ['width', 'height'])
+  const { width, height, grid, axes, ticks } = useAttrs(props, ['width', 'height', 'grid', 'axes', 'ticks'])
   const kids = children()
-  const coord = plane(
-    // toValue(width) as unknown as number,
-    // toValue(height) as unknown as number,
-  )
+  const p = plane(toValue(width) as unknown as number, toValue(height) as unknown as number)
+
   effect(() => {
-    coord.axes('black')
+    p.grid(Number(toValue(grid)))
+    p.axes(toValue(axes))
+    p.ticks(Number(toValue(ticks)))
   })
+
   kids.forEach((kid) => {
-    coord.add(wrap(kid))
+    p.add(wrap(kid))
   })
-  return coord.node()
+
+  return p.node()
 })
 
 builtins.set('plane', component)
