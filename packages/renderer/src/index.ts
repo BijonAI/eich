@@ -1,3 +1,6 @@
+import './middlewares/fallthrough'
+import './middlewares/ref'
+
 export { useAttr, useAttrs, useAttrValues } from './adhoc'
 export * from './html'
 

@@ -45,7 +45,7 @@ export const fallthrough = defineMiddleware({
       return
     }
 
-    const fallthrough = getComponentOptions(comp)?.fallthrough ?? false
+    const fallthrough = getComponentOptions(comp)?.fallthrough ?? true
 
     if (fallthrough && domNode instanceof Element) {
       bindAttrs(ctx, node.attrs, domNode)
