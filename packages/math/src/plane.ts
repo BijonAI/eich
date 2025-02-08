@@ -23,6 +23,7 @@ const component = defineComponent<PlaneAttributes>((props, children) => {
 
   effect(() => {
     p.grid(Number(toValue(grid)))
+    // TODO: axes bug
     p.axes(toValue(axes))
     p.ticks(Number(toValue(ticks)))
   })

@@ -29,7 +29,9 @@ import {
   Dot,
   LineSegment,
   MathField,
+  Parametric,
   Plane,
+  PolygonSegment,
   Vector,
 } from '@eich/support-math'
 import {
@@ -74,6 +76,8 @@ builtins.set('math-field', MathField)
 builtins.set('line-segment', LineSegment)
 builtins.set('vector', Vector)
 builtins.set('plane', Plane)
+builtins.set('parametric', Parametric)
+builtins.set('polygon-segment', PolygonSegment)
 
 builtins.set('highlight', Highlight)
 builtins.set('lower', Lower)
