@@ -8,18 +8,31 @@ import {
 import { dot } from 'idea-math'
 
 export interface DotAttributes {
+  // TODO
   $x: number
   $y: number
+  $stroke: string
+  $fill: string
+  $resize: number
+  $draggable: boolean
 }
 
 const component = defineComponent<DotAttributes>((props) => {
-  const { x, y } = useAttrs(props, ['x', 'y', 'draggable'])
-  const d = dot(
-    toValue(x) as unknown as number,
-    toValue(y) as unknown as number,
-  )
+  const { x, y, stroke, fill, draggable, resize } = useAttrs(props, [
+    'x',
+    'y',
+    'stroke',
+    'fill',
+    'draggable',
+    'resize',
+  ])
+  const d = dot(toValue(x) as unknown as number, toValue(y) as unknown as number)
   effect(() => {
-    d.move(toValue(x) as unknown as number, toValue(y) as unknown as number)
+    d.stroke(toValue(stroke))
+    d.fill(toValue(fill))
+    d.resize(Number(toValue(resize)))
+    if (draggable)
+      d.draggable()
   })
   return d.node()
 })

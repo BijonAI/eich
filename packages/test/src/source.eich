@@ -10,13 +10,6 @@
   <line-segment $from="[300, 0]" $to="[500, 0]" $stroke-width="2" $draggable="true"/>
 </math-field>
 
-<math-field width="1200" height="600" origin-x="200" origin-y="400">
-  <dot $x="0" $y="0" $draggable="true"/>
-  <dot $x="100" $y="100" $draggable="true"/>
-  <dot $x="200" $y="0" $draggable="true"/>
-  <vector $from="[100, 100]" $to="[200, 200]" $stroke-width="2" $draggable="true"/>
-</math-field>
-
 <flexbox direction="row" justify="center" align="center" $grow="1" $shrink="1" basis="auto" wrap="nowrap" $gap="10">
   <text>This is a flexbox container</text>
   <text>This is a flexbox container</text>
