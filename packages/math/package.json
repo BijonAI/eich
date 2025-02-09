@@ -26,7 +26,7 @@
     "@eich/animation": "workspace:^",
     "@eich/renderer": "workspace:^",
     "d3": "^7.8.5",
-    "idea-math": "0.4.1"
+    "idea-math": "latest"
   },
   "devDependencies": {
     "@types/d3": "^7.4.3"
