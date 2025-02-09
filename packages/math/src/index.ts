@@ -4,7 +4,7 @@ export { default as LineSegment } from './line-segment'
 export { default as MathField } from './math-field'
 export { default as Parametric } from './parametric'
 export { default as Plane } from './plane'
-export { default as PolygonSegment } from './polygon-segment'
+export { default as Poly } from './poly'
 export * from './utils'
 export { default as Vector } from './vector'
 

@@ -1,3 +1,4 @@
+import { animateWithAttrs, animation } from '@eich/animation'
 import { builtins, defineComponent, effect, toValue, useAttrs } from '@eich/renderer'
 import { field } from 'idea-math'
 import { wrap } from './utils'
@@ -20,6 +21,7 @@ const component = defineComponent<MathFieldAttributes>((props, children) => {
       wrap(child),
     )
   })
+  animateWithAttrs(props, animation, mathField.node())()
   return mathField.node()
 })
 

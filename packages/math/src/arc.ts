@@ -1,3 +1,4 @@
+import { animateWithAttrs, animation } from '@eich/animation'
 import { builtins, defineComponent, effect, toValue, useAttrs } from '@eich/renderer'
 import { arc } from 'idea-math'
 
@@ -52,6 +53,7 @@ const component = defineComponent<ArcAtrributes>((props) => {
         translate: toValue(translate) as unknown as [number, number],
       })
   })
+  animateWithAttrs(props, animation)
   return a.node()
 })
 

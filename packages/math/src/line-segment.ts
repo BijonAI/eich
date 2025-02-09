@@ -1,3 +1,4 @@
+import { animateWithAttrs, animation } from '@eich/animation'
 import {
   builtins,
   defineComponent,
@@ -98,6 +99,7 @@ const component = defineComponent<LineAtrributes>((props) => {
     if (draggable)
       l.draggable()
   })
+  animateWithAttrs(props, animation)
   return l.node()
 })
 

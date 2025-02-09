@@ -1,3 +1,4 @@
+import { animateWithAttrs, animation } from '@eich/animation'
 import {
   builtins,
   defineComponent,
@@ -27,8 +28,9 @@ const component = defineComponent<PolygonAttributes>((props) => {
     if (draggable)
       p.draggable()
   })
+  animateWithAttrs(props, animation)
   return p.node()
 })
 
-builtins.set('polygon-segment', component)
+builtins.set('poly', component)
 export default component
