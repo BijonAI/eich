@@ -140,6 +140,9 @@ importers:
 
   packages/layout:
     dependencies:
+      '@eich/animation':
+        specifier: workspace:^
+        version: link:../animation
       '@eich/renderer':
         specifier: workspace:^
         version: link:../renderer
@@ -174,8 +177,8 @@ importers:
         specifier: ^7.8.5
         version: 7.9.0
       idea-math:
-        specifier: latest
-        version: 0.3.0
+        specifier: 0.4.1
+        version: 0.4.1
     devDependencies:
       '@types/d3':
         specifier: ^7.4.3
@@ -1536,6 +1539,10 @@ packages:
     resolution: {integrity: sha512-QrWXB+ZQSVPmIWIhtEO9H+gwHaMGYiF5ChvoJ+K9ZGHG/sVsa6yiesAD1GC/x46sET00Xlwo1u49RVVVzvcSkw==}
     engines: {node: '>= 10'}
 
+  commander@8.3.0:
+    resolution: {integrity: sha512-OkTL9umf+He2DZkUq8f8J9of7yL6RJKI24dVITBmNfZBmri9zYZQrKkuXiKhyfPSu8tUhnVBB1iKXevvnlR4Ww==}
+    engines: {node: '>= 12'}
+
   comment-parser@1.4.1:
     resolution: {integrity: sha512-buhp5kePrmda3vhc5B9t7pUQXAb2Tnd0qgpkIhPhkHXxJpiPJ11H0ZEU0oBpJ2QztSbzG/ZxMj/CHsYJqRHmyg==}
     engines: {node: '>= 12.0.0'}
@@ -2260,8 +2267,8 @@ packages:
     resolution: {integrity: sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw==}
     engines: {node: '>=0.10.0'}
 
-  idea-math@0.3.0:
-    resolution: {integrity: sha512-lsCTfr7hZ4Iu54vLmBX3EpC0nJrquc95bc4otdUMl0LIoNrxTK/J3NuWPBBmXKQHiu8UTGwT3Rm1YRfXgWkIMA==}
+  idea-math@0.4.1:
+    resolution: {integrity: sha512-qjiZDlIqMJzTAMLoENam8EXvGG3S3YJXrhlKzeXCzs1M7GRBgVr1ggsu8w443jsFYlzWARbb8JZH3pD21OP+Eg==}
 
   ignore@5.3.2:
     resolution: {integrity: sha512-hsBTNUqQTDwkWtcdYI2i06Y/nUBEsNEDJKjWdigLvegy8kDuJAS8uRlpkkcQpyEXL0Z/pjDy5HBmMjRCJ2gq+g==}
@@ -2402,6 +2409,10 @@ packages:
 
   jsonc-parser@3.3.1:
     resolution: {integrity: sha512-HUgH65KyejrUFPvHFPbqOY0rsFip3Bo5wb4ngvdi1EpCYWUQDC5V+Y7mZws+DLkr4M//zQJoanu1SP+87Dv1oQ==}
+
+  katex@0.16.21:
+    resolution: {integrity: sha512-XvqR7FgOHtWupfMiigNzmh+MgUVmDGU2kXZm899ZkPfcuoPuFxyHmXsgATDpFZDAXCI8tvinaVcDo8PIIJSo4A==}
+    hasBin: true
 
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
@@ -4590,6 +4601,8 @@ snapshots:
 
   commander@7.2.0: {}
 
+  commander@8.3.0: {}
+
   comment-parser@1.4.1: {}
 
   concat-map@0.0.1: {}
@@ -5629,9 +5642,10 @@ snapshots:
     dependencies:
       safer-buffer: 2.1.2
 
-  idea-math@0.3.0:
+  idea-math@0.4.1:
     dependencies:
       gsap: 3.12.7
+      katex: 0.16.21
 
   ignore@5.3.2: {}
 
@@ -5738,6 +5752,10 @@ snapshots:
       semver: 7.7.1
 
   jsonc-parser@3.3.1: {}
+
+  katex@0.16.21:
+    dependencies:
+      commander: 8.3.0
 
   keyv@4.5.4:
     dependencies:

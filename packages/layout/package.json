@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@eich/renderer": "workspace:^",
+    "@eich/animation": "workspace:^",
     "@rbardini/html": "^1.0.1",
     "@vue/reactivity": "^3.5.13",
     "@vue/shared": "^3.5.13",

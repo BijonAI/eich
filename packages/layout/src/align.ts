@@ -1,4 +1,5 @@
 import type { MaybeRef } from '@eich/renderer'
+import { animateWithAttrs, animation } from '@eich/animation'
 import { builtins, defineComponent, effect, toValue, useAttrs } from '@eich/renderer'
 
 export type AlignType =
@@ -24,6 +25,7 @@ const component = defineComponent<AlignAttributes>((attrs, children) => {
     div.style.textAlign = toValue(types)
   })
   div.append(...children())
+  animateWithAttrs(attrs, animation, div)()
   return div
 })
 
