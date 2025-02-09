@@ -18,9 +18,9 @@ export interface PlaneAttributes {
 }
 
 const component = defineComponent<PlaneAttributes>((props, children) => {
-  const { width, height, grid, axes, ticks } = useAttrs(props, ['width', 'height', 'grid', 'axes', 'ticks'])
+  const { grid, axes, ticks } = useAttrs(props, ['grid', 'axes', 'ticks'])
   const kids = children()
-  const p = plane(toValue(width) as unknown as number, toValue(height) as unknown as number)
+  const p = plane()
 
   effect(() => {
     p.grid(Number(toValue(grid)))
