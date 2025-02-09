@@ -1,6 +1,6 @@
 import type { BlockAttributes } from './block'
-import { animateWithAttrs, animation } from '@eich/animation'
-import { defineComponent, effect, toValue, useAttrs } from '@eich/renderer'
+import { animateWithAttrs, animation } from '@eichjs/animation'
+import { defineComponent, effect, toValue, useAttrs } from '@eichjs/renderer'
 import block from './block'
 
 export interface FlexboxAttributes extends BlockAttributes {

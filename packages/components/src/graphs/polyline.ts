@@ -1,4 +1,4 @@
-import { builtins, defineComponent, getCurrentContext } from '@eich/renderer'
+import { builtins, defineComponent, getCurrentContext } from '@eichjs/renderer'
 
 export interface PolylineAttributes {
   $points?: string

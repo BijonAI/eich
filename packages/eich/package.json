@@ -28,12 +28,12 @@
     "access": "public"
   },
   "dependencies": {
-    "@eich/components": "workspace:^",
-    "@eich/layout": "workspace:^",
-    "@eich/model": "workspace:^",
-    "@eich/renderer": "workspace:^",
-    "@eich/support-math": "workspace:^",
-    "@eich/text": "workspace:^",
+    "@eichjs/components": "workspace:^",
+    "@eichjs/layout": "workspace:^",
+    "@eichjs/model": "workspace:^",
+    "@eichjs/renderer": "workspace:^",
+    "@eichjs/support-math": "workspace:^",
+    "@eichjs/text": "workspace:^",
     "@rbardini/html": "^1.0.1",
     "@vue/reactivity": "^3.5.13",
     "@vue/shared": "^3.5.13",

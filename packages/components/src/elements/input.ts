@@ -1,5 +1,5 @@
-import { animateWithAttrs, animation } from '@eich/animation'
-import { builtins, createDelegate, defineComponent, effect, getCurrentContext, toValue, useAttrs } from '@eich/renderer'
+import { animateWithAttrs, animation } from '@eichjs/animation'
+import { builtins, createDelegate, defineComponent, effect, getCurrentContext, toValue, useAttrs } from '@eichjs/renderer'
 
 export interface InputAttributes {
   'type'?: string

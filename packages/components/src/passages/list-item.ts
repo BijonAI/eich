@@ -1,4 +1,4 @@
-import { builtins, defineComponent } from '@eich/renderer'
+import { builtins, defineComponent } from '@eichjs/renderer'
 
 export interface ListItemAttributes {
   type: 'li'

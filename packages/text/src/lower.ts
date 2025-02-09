@@ -1,4 +1,4 @@
-import { builtins, defineComponent } from '@eich/renderer'
+import { builtins, defineComponent } from '@eichjs/renderer'
 
 export const component = defineComponent(() => {
   const span = document.createElement('span')

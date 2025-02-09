@@ -1,11 +1,11 @@
-import { animateWithAttrs, animation } from '@eich/animation'
+import { animateWithAttrs, animation } from '@eichjs/animation'
 import {
   builtins,
   defineComponent,
   effect,
   toValue,
   useAttrs,
-} from '@eich/renderer'
+} from '@eichjs/renderer'
 import { plane } from 'idea-math'
 import { wrap } from './utils'
 
@@ -18,9 +18,12 @@ export interface PlaneAttributes {
 }
 
 const component = defineComponent<PlaneAttributes>((props, children) => {
-  const { grid, axes, ticks } = useAttrs(props, ['grid', 'axes', 'ticks'])
+  const { grid, axes, ticks, width, height } = useAttrs(props, ['grid', 'axes', 'ticks', 'width', 'height'])
   const kids = children()
-  const p = plane()
+  const p = plane(
+    Number(toValue(width)) as unknown as number,
+    Number(toValue(height)) as unknown as number,
+  )
 
   effect(() => {
     p.grid(Number(toValue(grid)))

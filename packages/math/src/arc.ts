@@ -1,5 +1,5 @@
-import { animateWithAttrs, animation } from '@eich/animation'
-import { builtins, defineComponent, effect, toValue, useAttrs } from '@eich/renderer'
+import { animateWithAttrs, animation } from '@eichjs/animation'
+import { builtins, defineComponent, effect, toValue, useAttrs } from '@eichjs/renderer'
 import { arc } from 'idea-math'
 
 export interface ArcAtrributes {

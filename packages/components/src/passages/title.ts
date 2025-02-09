@@ -1,4 +1,4 @@
-import { builtins, defineComponent, useAttrs } from '@eich/renderer'
+import { builtins, defineComponent, useAttrs } from '@eichjs/renderer'
 
 export interface TitleAttributes {
   level: 1 | 2 | 3 | 4 | 5 | 6

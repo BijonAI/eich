@@ -5,7 +5,7 @@ import {
   ListItem,
   Span,
   Title,
-} from '@eich/components'
+} from '@eichjs/components'
 import {
   Align,
   Block,
@@ -15,9 +15,9 @@ import {
   Pages,
   Row,
   Transform,
-} from '@eich/layout'
-import { Link, Par } from '@eich/model'
-import { builtins } from '@eich/renderer'
+} from '@eichjs/layout'
+import { Link, Par } from '@eichjs/model'
+import { builtins } from '@eichjs/renderer'
 import {
   // TODO: math-field
   Arc,
@@ -28,7 +28,7 @@ import {
   Plane,
   Poly,
   Vector,
-} from '@eich/support-math'
+} from '@eichjs/support-math'
 import {
   Highlight,
   Lower,
@@ -41,8 +41,8 @@ import {
   Text,
   Underline,
   Upper,
-} from '@eich/text'
-import '@eich/renderer/builtins'
+} from '@eichjs/text'
+import '@eichjs/renderer/builtins'
 
 builtins.set('align', Align)
 builtins.set('block', Block)
@@ -86,10 +86,10 @@ builtins.set('text', Text)
 builtins.set('link', Link)
 builtins.set('par', Par)
 
-export * from '@eich/components'
-export * from '@eich/layout'
-export * from '@eich/model'
-export * from '@eich/renderer'
-export * from '@eich/renderer/builtins'
-export * from '@eich/support-math'
-export * from '@eich/text'
+export * from '@eichjs/components'
+export * from '@eichjs/layout'
+export * from '@eichjs/model'
+export * from '@eichjs/renderer'
+export * from '@eichjs/renderer/builtins'
+export * from '@eichjs/support-math'
+export * from '@eichjs/text'

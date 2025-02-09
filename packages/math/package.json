@@ -1,5 +1,5 @@
 {
-  "name": "@eich/support-math",
+  "name": "@eichjs/support-math",
   "type": "module",
   "version": "0.2.0",
   "description": "Math support for Eich framework",
@@ -23,8 +23,8 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@eich/animation": "workspace:^",
-    "@eich/renderer": "workspace:^",
+    "@eichjs/animation": "workspace:^",
+    "@eichjs/renderer": "workspace:^",
     "d3": "^7.9.0",
     "idea-math": "0.4.3"
   },

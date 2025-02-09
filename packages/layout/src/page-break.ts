@@ -1,5 +1,5 @@
-import { animateWithAttrs, animation } from '@eich/animation'
-import { builtins, defineComponent } from '@eich/renderer'
+import { animateWithAttrs, animation } from '@eichjs/animation'
+import { builtins, defineComponent } from '@eichjs/renderer'
 
 const component = defineComponent((_attrs, _children) => {
   const slot = document.createElement('slot')

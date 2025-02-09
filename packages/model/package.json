@@ -1,5 +1,5 @@
 {
-  "name": "@eich/model",
+  "name": "@eichjs/model",
   "type": "module",
   "version": "0.2.0",
   "description": "🧩 A front-end-based interactive content format, focus on composing the front-end ecosystem.",
@@ -28,7 +28,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@eich/renderer": "workspace:^",
+    "@eichjs/renderer": "workspace:^",
     "@rbardini/html": "^1.0.1",
     "@vue/reactivity": "^3.5.13",
     "@vue/shared": "^3.5.13",

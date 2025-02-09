@@ -1,4 +1,4 @@
-import { defineComponent, builtins } from "@eich/renderer"
+import { defineComponent, builtins } from "@eichjs/renderer"
 
 const Button = defineComponent((_, children) => {
   const button = document.createElement('button')

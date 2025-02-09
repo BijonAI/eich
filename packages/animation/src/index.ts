@@ -1,5 +1,5 @@
-import type { Attributes } from '@eich/renderer'
-import { createDelegate, getCurrentContext } from '@eich/renderer'
+import type { Attributes } from '@eichjs/renderer'
+import { createDelegate, getCurrentContext } from '@eichjs/renderer'
 import { animate } from './animate'
 import * as eases from './eases'
 import { fade } from './fade'

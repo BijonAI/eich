@@ -1,9 +1,9 @@
-import { animateWithAttrs, animation } from '@eich/animation'
+import { animateWithAttrs, animation } from '@eichjs/animation'
 import {
   builtins,
   createDelegate,
   defineComponent,
-} from '@eich/renderer'
+} from '@eichjs/renderer'
 
 export interface ButtonAttributes {
   '@click': string

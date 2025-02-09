@@ -9,9 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@eich/components": "workspace:^",
-    "@eich/layout": "workspace:^",
-    "@eich/renderer": "workspace:^",
+    "@eichjs/components": "workspace:^",
+    "@eichjs/layout": "workspace:^",
+    "@eichjs/renderer": "workspace:^",
     "eichjs": "workspace:^"
   },
   "devDependencies": {

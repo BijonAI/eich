@@ -1,6 +1,6 @@
-import type { MaybeRef } from '@eich/renderer'
-import { animateWithAttrs, animation } from '@eich/animation'
-import { builtins, defineComponent, effect, toValue, useAttrs } from '@eich/renderer'
+import type { MaybeRef } from '@eichjs/renderer'
+import { animateWithAttrs, animation } from '@eichjs/animation'
+import { builtins, defineComponent, effect, toValue, useAttrs } from '@eichjs/renderer'
 
 export type AlignType =
   'left' | 'center' | 'right'

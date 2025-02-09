@@ -1,4 +1,4 @@
-import { builtins, defineComponent, effect, toValue, useAttrs } from '@eich/renderer'
+import { builtins, defineComponent, effect, toValue, useAttrs } from '@eichjs/renderer'
 
 export interface ParagraphAtrributes {
   $leading?: number

@@ -1,6 +1,6 @@
 import type { FlexboxAttributes } from './flexbox'
-import { animateWithAttrs, animation } from '@eich/animation'
-import { defineComponent, effect } from '@eich/renderer'
+import { animateWithAttrs, animation } from '@eichjs/animation'
+import { defineComponent, effect } from '@eichjs/renderer'
 import flexbox from './flexbox'
 
 const component = defineComponent<FlexboxAttributes>((attrs, children, node) => {

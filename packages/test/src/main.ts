@@ -1,10 +1,10 @@
-import { parseSource, render } from '@eich/renderer'
+import { parseSource, render } from '@eichjs/renderer'
 
-import '@eich/renderer/middlewares/fallthrough'
-import '@eich/renderer/middlewares/ref'
-import '@eich/renderer/builtins'
-import '@eich/renderer/builtins/script'
-import '@eich/renderer/builtins/style'
+import '@eichjs/renderer/middlewares/fallthrough'
+import '@eichjs/renderer/middlewares/ref'
+import '@eichjs/renderer/builtins'
+import '@eichjs/renderer/builtins/script'
+import '@eichjs/renderer/builtins/style'
 import 'eichjs'
 
 // import './button'

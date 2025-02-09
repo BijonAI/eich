@@ -1,11 +1,11 @@
-import { animateWithAttrs, animation } from '@eich/animation'
+import { animateWithAttrs, animation } from '@eichjs/animation'
 import {
   builtins,
   defineComponent,
   effect,
   toValue,
   useAttrs,
-} from '@eich/renderer'
+} from '@eichjs/renderer'
 import { dot } from 'idea-math'
 
 export interface DotAttributes {

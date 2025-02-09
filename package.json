@@ -1,5 +1,5 @@
 {
-  "name": "@eich/monorepo",
+  "name": "@eichjs/monorepo",
   "private": true,
   "description": "🧩 A front-end-based interactive content format, focus on composing the front-end ecosystem.",
   "license": "MIT",

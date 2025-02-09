@@ -1,4 +1,4 @@
-import { createAdhoc, getCurrentContext } from '@eich/renderer'
+import { createAdhoc, getCurrentContext } from '@eichjs/renderer'
 
 interface AnimationInfo {
   name: string | string[] // requried
