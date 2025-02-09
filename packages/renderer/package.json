@@ -9,48 +9,24 @@
   },
   "exports": {
     ".": {
-      "dev": "./src/index.ts",
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "types": "./index.d.ts",
+      "import": "./index.js"
     },
     "./builtins": {
-      "types": "./dist/builtins/index.d.ts",
-      "import": "./dist/builtins/index.js",
-      "dev": "./src/builtins/index.ts"
+      "types": "./builtins/index.d.ts",
+      "import": "./builtins/index.js"
     },
     "./builtins/*": {
-      "types": "./dist/builtins/*.d.ts",
-      "import": "./dist/builtins/*.js",
-      "dev": "./src/builtins/*.ts"
+      "types": "./builtins/*.d.ts",
+      "import": "./builtins/*.js"
     },
     "./middlewares/*": {
-      "types": "./dist/middlewares/*.d.ts",
-      "import": "./dist/middlewares/*.js",
-      "dev": "./src/middlewares/*.ts"
+      "types": "./middlewares/*.d.ts",
+      "import": "./middlewares/*.js"
     }
   },
-  "types": "./dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "publish": "npm publish",
-    "build": "tsup",
-    "dev": "tsup --watch",
-    "pub": "pnpm publish",
-    "lint": "eslint ."
-  },
-  "publishConfig": {
-    "access": "public"
-  },
+  "types": "./index.d.ts",
   "dependencies": {
-    "@antfu/eslint-config": "^2.27.3",
-    "@vue/reactivity": "^3.5.13",
-    "@vue/shared": "^3.5.13",
-    "clsx": "^2.1.1",
-    "css-what": "^6.1.0",
-    "eslint": "9.9.0",
-    "morphdom": "^2.7.4",
-    "parse-entities": "^4.0.2"
+    "@vue/reactivity": "^3.5.13"
   }
 }
