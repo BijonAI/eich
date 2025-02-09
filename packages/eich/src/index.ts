@@ -1,15 +1,10 @@
 import {
   Button,
-  Circle,
-  Ellipse,
   Input,
-  Line,
-  Path,
-  Polygon,
-  Polyline,
-  Rect,
+  List,
+  ListItem,
   Span,
-  Table,
+  Title,
 } from '@eich/components'
 import {
   Align,
@@ -61,14 +56,10 @@ builtins.set('column', Column)
 builtins.set('button', Button)
 builtins.set('input', Input)
 builtins.set('span', Span)
-builtins.set('rect', Rect)
-builtins.set('line', Line)
-builtins.set('circle', Circle)
-builtins.set('ellipse', Ellipse)
-builtins.set('polygon', Polygon)
-builtins.set('polyline', Polyline)
-builtins.set('path', Path)
-builtins.set('table', Table)
+builtins.set('list', List)
+builtins.set('list-item', ListItem)
+builtins.set('title', Title)
+builtins.set('par', Par)
 
 // TODO: math-field
 builtins.set('arc', Arc)

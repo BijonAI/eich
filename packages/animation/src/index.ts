@@ -2,6 +2,7 @@ import type { Attributes } from '@eich/renderer'
 import { createDelegate, getCurrentContext } from '@eich/renderer'
 import { animate } from './animate'
 import * as eases from './eases'
+import { fade } from './fade'
 import { move } from './move'
 import { rotate } from './rotate'
 import { scale } from './scale'
@@ -59,6 +60,7 @@ export const animation = {
   move,
   scale,
   rotate,
+  fade,
 }
 
 export * from './animate'
