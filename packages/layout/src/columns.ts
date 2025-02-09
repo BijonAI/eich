@@ -1,3 +1,4 @@
+import { animateWithAttrs, animation } from '@eich/animation'
 import { builtins, defineComponent, effect, toValue, useAttrs } from '@eich/renderer'
 
 export interface ColumnsAttributes {
@@ -30,6 +31,7 @@ const component = defineComponent<ColumnsAttributes>((attrs, children) => {
   })
 
   div.appendChild(wrapper)
+  animateWithAttrs(attrs, animation, div)()
   return div
 })
 

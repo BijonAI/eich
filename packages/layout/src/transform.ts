@@ -1,3 +1,4 @@
+import { animateWithAttrs, animation } from '@eich/animation'
 import { builtins, defineComponent, effect, toValue, useAttrs } from '@eich/renderer'
 
 export type AngleUnit = 'deg' | 'rad'
@@ -45,6 +46,7 @@ const component = defineComponent<TransformAttributes>((attrs, children) => {
     }
   })
   div.append(...children())
+  animateWithAttrs(attrs, animation, div)()
   return div
 })
 

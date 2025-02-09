@@ -1,3 +1,4 @@
+import { animateWithAttrs, animation } from '@eich/animation'
 import { builtins, defineComponent, effect, toValue, useAttrs } from '@eich/renderer'
 
 export interface PagesAttributes {
@@ -30,6 +31,7 @@ const components = defineComponent<PagesAttributes>((attrs, children) => {
     if (toValue(height))
       pages.forEach(page => page.style.height = toValue(height)!)
   })
+  pages.forEach(page => animateWithAttrs(attrs, animation, page)())
   return pages
 })
 

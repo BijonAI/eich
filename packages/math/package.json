@@ -1,7 +1,7 @@
 {
   "name": "@eich/support-math",
   "type": "module",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Math support for Eich framework",
   "author": "BugDuck Team",
   "license": "MIT",
@@ -25,8 +25,8 @@
   "dependencies": {
     "@eich/animation": "workspace:^",
     "@eich/renderer": "workspace:^",
-    "d3": "^7.8.5",
-    "idea-math": "latest"
+    "d3": "^7.9.0",
+    "idea-math": "0.4.3"
   },
   "devDependencies": {
     "@types/d3": "^7.4.3"

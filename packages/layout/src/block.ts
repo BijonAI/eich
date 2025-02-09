@@ -1,3 +1,4 @@
+import { animateWithAttrs, animation } from '@eich/animation'
 import { builtins, defineComponent, effect, toValue, useAttrs } from '@eich/renderer'
 
 export interface BlockAttributes {
@@ -47,6 +48,7 @@ const component = defineComponent<BlockAttributes>((attrs, children) => {
     div.style.borderColor = toValue(borderColor) ?? 'none'
   })
   div.append(...children())
+  animateWithAttrs(attrs, animation, div)()
   return div
 })
 
