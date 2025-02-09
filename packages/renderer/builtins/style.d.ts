@@ -1,6 +1,5 @@
-import { C as Component, A as Attributes } from '../renderer-CivwDcFn.js';
+import { C as Component, A as Attributes } from '../renderer-BiPXz9GD.js';
 import '@vue/reactivity';
-import 'node:querystring';
 
 declare const component: Component<Attributes, {}>;
 

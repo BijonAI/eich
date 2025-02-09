@@ -1,6 +1,5 @@
-import { P as PostMiddleware } from '../renderer-CivwDcFn.js';
+import { P as PostMiddleware } from '../renderer-BiPXz9GD.js';
 import '@vue/reactivity';
-import 'node:querystring';
 
 interface FallthroughOptions {
     fallthrough: boolean;

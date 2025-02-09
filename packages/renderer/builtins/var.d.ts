@@ -1,6 +1,5 @@
-import { C as Component } from '../renderer-CivwDcFn.js';
+import { C as Component } from '../renderer-BiPXz9GD.js';
 import '@vue/reactivity';
-import 'node:querystring';
 
 interface VarAttributes {
     $value: string;

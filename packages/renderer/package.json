@@ -27,6 +27,11 @@
   },
   "types": "./index.d.ts",
   "dependencies": {
-    "@vue/reactivity": "^3.5.13"
+    "@vue/reactivity": "^3.5.13",
+    "@vue/shared": "^3.5.13",
+    "clsx": "^2.1.1",
+    "css-what": "^6.1.0",
+    "morphdom": "^2.7.4",
+    "parse-entities": "^4.0.2"
   }
 }

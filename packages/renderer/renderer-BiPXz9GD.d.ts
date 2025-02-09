@@ -1,5 +1,4 @@
 import { Reactive } from '@vue/reactivity';
-import { ParseOptions as ParseOptions$1 } from 'node:querystring';
 
 declare enum TextMode {
     DATA = 0,
@@ -116,7 +115,7 @@ interface EichBasicNode {
 type EichContext = Record<string, any>;
 declare function toRoots(doc: DocumentNode): EichSourceNode[];
 
-declare function parseSource(input: string, options?: Omit<ParseOptions$1, 'resolver'>): DocumentNode;
+declare function parseSource(input: string, options?: Omit<ParseOptions, 'resolver'>): DocumentNode;
 declare function parse(input: string): EichSourceNode[];
 declare function isEichTextNode(node: EichSourceNode): node is EichTextNode;
 declare function isEichIfNode(node: EichSourceNode): node is EichIfNode;
