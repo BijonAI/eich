@@ -1,5 +1,3 @@
-import obfu from 'javascript-obfuscator'
-import { minify } from 'terser'
 import { defineConfig } from 'tsup'
 
 export default defineConfig({
@@ -10,6 +8,5 @@ export default defineConfig({
   sourcemap: false,
   clean: true,
   dts: true,
-  splitting: false,
   minify: true,
 })

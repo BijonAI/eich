@@ -1,5 +1,5 @@
 {
-  "name": "@eich/renderer",
+  "name": "@eichjs/renderer",
   "type": "module",
   "version": "0.2.0",
   "description": "Reactive Template Engine",
