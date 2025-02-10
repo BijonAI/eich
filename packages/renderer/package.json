@@ -1,5 +1,5 @@
 {
-  "name": "@eichjs/renderer",
+  "name": "@eich/renderer",
   "type": "module",
   "version": "0.2.0",
   "description": "Reactive Template Engine",
@@ -9,23 +9,40 @@
   },
   "exports": {
     ".": {
-      "types": "./index.d.ts",
-      "import": "./index.js"
+      "dev": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
     },
     "./builtins": {
-      "types": "./builtins/index.d.ts",
-      "import": "./builtins/index.js"
+      "types": "./dist/builtins/index.d.ts",
+      "import": "./dist/builtins/index.js",
+      "dev": "./src/builtins/index.ts"
     },
     "./builtins/*": {
-      "types": "./builtins/*.d.ts",
-      "import": "./builtins/*.js"
+      "types": "./dist/builtins/*.d.ts",
+      "import": "./dist/builtins/*.js",
+      "dev": "./src/builtins/*.ts"
     },
     "./middlewares/*": {
-      "types": "./middlewares/*.d.ts",
-      "import": "./middlewares/*.js"
+      "types": "./dist/middlewares/*.d.ts",
+      "import": "./dist/middlewares/*.js",
+      "dev": "./src/middlewares/*.ts"
     }
   },
-  "types": "./index.d.ts",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "publish": "npm publish",
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "pub": "pnpm publish",
+    "lint": "eslint ."
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@vue/reactivity": "^3.5.13",
     "@vue/shared": "^3.5.13",
@@ -33,5 +50,12 @@
     "css-what": "^6.1.0",
     "morphdom": "^2.7.4",
     "parse-entities": "^4.0.2"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^2.27.3",
+    "@types/terser": "^3.12.0",
+    "eslint": "9.9.0",
+    "tsup": "^8.3.6",
+    "typescript": "^5.7.3"
   }
 }
