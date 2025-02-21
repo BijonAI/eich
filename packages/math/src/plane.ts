@@ -1,4 +1,4 @@
-import { animateWithAttrs, animation } from '@eichjs/animation'
+
 import {
   builtins,
   defineComponent,
@@ -35,7 +35,7 @@ const component = defineComponent<PlaneAttributes>((props, children) => {
   kids.forEach((kid) => {
     p.add(wrap(kid))
   })
-  animateWithAttrs(props, animation)
+  
   return p.node()
 })
 

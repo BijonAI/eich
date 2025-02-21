@@ -1,4 +1,4 @@
-import { animateWithAttrs, animation } from '@eichjs/animation'
+
 import { builtins, defineComponent, effect, toValue, useAttrs } from '@eichjs/renderer'
 
 export interface FontAttributes {
@@ -60,7 +60,7 @@ const component = defineComponent<FontAttributes>((attrs, children) => {
     element.append(...children())
   })
 
-  animateWithAttrs(attrs, animation, element)()
+  
 
   return element
 })

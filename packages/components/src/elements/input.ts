@@ -1,4 +1,4 @@
-import { animateWithAttrs, animation } from '@eichjs/animation'
+
 import { builtins, createDelegate, defineComponent, effect, getCurrentContext, toValue, useAttrs } from '@eichjs/renderer'
 
 export interface InputAttributes {
@@ -22,7 +22,7 @@ export const component = defineComponent<InputAttributes>((attrs, children) => {
     delegate(element)
   })
 
-  animateWithAttrs(attrs, animation, element)()
+  
   if (attrs.model) {
     const context = getCurrentContext()
     element.addEventListener('input', () => {

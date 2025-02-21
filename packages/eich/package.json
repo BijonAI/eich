@@ -28,6 +28,7 @@
     "access": "public"
   },
   "dependencies": {
+    "@eichjs/animation": "workspace:^",
     "@eichjs/components": "workspace:^",
     "@eichjs/layout": "workspace:^",
     "@eichjs/model": "workspace:^",

@@ -28,6 +28,7 @@
     "access": "public"
   },
   "dependencies": {
+    "@eichjs/animation": "workspace:^",
     "@eichjs/renderer": "workspace:^",
     "@rbardini/html": "^1.0.1",
     "@vue/reactivity": "^3.5.13",

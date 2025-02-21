@@ -1,3 +1,4 @@
+import animation from '@eichjs/animation'
 import {
   Button,
   Input,
@@ -11,13 +12,11 @@ import {
   Block,
   Column,
   Flexbox,
-  PageBreak,
-  Pages,
   Row,
   Transform,
 } from '@eichjs/layout'
 import { Link, Par } from '@eichjs/model'
-import { builtins } from '@eichjs/renderer'
+import { builtins, middlewares } from '@eichjs/renderer'
 import {
   // TODO: math-field
   Arc,
@@ -42,13 +41,15 @@ import {
   Underline,
   Upper,
 } from '@eichjs/text'
+import '@eichjs/renderer/middlewares/fallthrough'
+import '@eichjs/renderer/middlewares/ref'
 import '@eichjs/renderer/builtins'
+import '@eichjs/renderer/builtins/script'
+import '@eichjs/renderer/builtins/style'
 
 builtins.set('align', Align)
 builtins.set('block', Block)
 builtins.set('transform', Transform)
-builtins.set('pages', Pages)
-builtins.set('page-break', PageBreak)
 builtins.set('flexbox', Flexbox)
 builtins.set('row', Row)
 builtins.set('column', Column)
@@ -85,6 +86,8 @@ builtins.set('text', Text)
 
 builtins.set('link', Link)
 builtins.set('par', Par)
+
+middlewares.post.set('animation', animation)
 
 export * from '@eichjs/components'
 export * from '@eichjs/layout'

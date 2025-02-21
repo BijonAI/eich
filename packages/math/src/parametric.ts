@@ -1,4 +1,4 @@
-import { animateWithAttrs, animation } from '@eichjs/animation'
+
 import {
   builtins,
   defineComponent,
@@ -34,7 +34,7 @@ const component = defineComponent<ParametricAttributes>((props) => {
     if (draggable)
       p.draggable()
   })
-  animateWithAttrs(props, animation)
+  
   return p.node()
 })
 

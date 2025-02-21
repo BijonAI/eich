@@ -1,4 +1,4 @@
-import { animateWithAttrs, animation } from '@eichjs/animation'
+
 import {
   builtins,
   createDelegate,
@@ -16,7 +16,7 @@ const component = defineComponent(
     const button = document.createElement('button')
     button.append(...children())
 
-    animateWithAttrs(attrs, animation, button)()
+    
     delegate(button)
     return button
   },

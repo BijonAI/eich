@@ -1,5 +1,5 @@
 import type { BlockAttributes } from './block'
-import { animateWithAttrs, animation } from '@eichjs/animation'
+
 import { defineComponent, effect, toValue, useAttrs } from '@eichjs/renderer'
 import block from './block'
 
@@ -30,7 +30,7 @@ const component = defineComponent<FlexboxAttributes>((attrs, children, node) => 
     flexbox.style.flexWrap = toValue(wrap) ?? 'nowrap'
     flexbox.style.gap = toValue(gap) ?? '0'
   })
-  animateWithAttrs(attrs, animation, flexbox)()
+  
   return flexbox
 })
 

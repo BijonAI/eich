@@ -1,4 +1,3 @@
-import { animateWithAttrs, animation } from '@eichjs/animation'
 import {
   builtins,
   defineComponent,
@@ -84,7 +83,6 @@ const component = defineComponent<DotAttributes>((props) => {
     if (draggable)
       d.draggable()
   })
-  animateWithAttrs(props, animation)
   return d.node()
 })
 

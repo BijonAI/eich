@@ -1,5 +1,5 @@
 import type { Context } from '@eichjs/renderer'
-import { defineMiddleware, middlewares } from '@eichjs/renderer'
+import { createDelegate, defineMiddleware, middlewares } from '@eichjs/renderer'
 import { animate } from './animate'
 import * as easings from './easing'
 import presets from './presets'
@@ -71,6 +71,8 @@ const animation = defineMiddleware({
         else process()
       }
     })
+    const nodes = Array.isArray(domNode) ? domNode : [domNode]
+    nodes.forEach(node => createDelegate(events)(node))
   },
 })
 

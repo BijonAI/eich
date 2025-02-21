@@ -13,7 +13,7 @@
   </plane>
 </math-field>
 
-<flexbox direction="row" justify="center" align="center" $grow="1" $shrink="1" basis="auto" wrap="nowrap" $gap="10">
+<flexbox direction="row" justify="center" align="center" $grow="1" $shrink="1" basis="auto" wrap="nowrap" $gap="10" animate:click="move(200,300),2000">
   <text>This is a flexbox container</text>
   <text>This is a flexbox container</text>
   <text>This is a flexbox container</text>

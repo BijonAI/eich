@@ -1,4 +1,4 @@
-import { animateWithAttrs, animation } from '@eichjs/animation'
+
 import {
   builtins,
   defineComponent,
@@ -81,7 +81,7 @@ const component = defineComponent<VectorAttributes>((props) => {
     if (draggable)
       v.draggable()
   })
-  animateWithAttrs(props, animation)
+  
   return v.node()
 })
 
