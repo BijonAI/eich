@@ -18,3 +18,19 @@
   <text>This is a flexbox container</text>
   <text>This is a flexbox container</text>
 </flexbox>
+
+<table>
+  <header>
+    <text>Name</text>
+    <text>Age</text>
+    <text>Gender</text>
+  </header>
+  <side>
+    
+  </side>
+  <row>
+    <text>John</text>
+    <text>25</text>
+    <text>Male</text>
+  </row>
+</table>
