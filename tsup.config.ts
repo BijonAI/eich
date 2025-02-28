@@ -7,4 +7,5 @@ export default defineConfig({
   globalName: 'Eich',
   clean: true,
   dts: true,
+  sourcemap: true,
 })

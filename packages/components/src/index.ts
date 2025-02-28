@@ -1,5 +1,6 @@
 import Button from './elements/button'
 import Input from './elements/input'
+import Image from './image'
 // import Line from './graphs/line'
 // import Path from './graphs/path'
 // import Polygon from './graphs/polygon'
@@ -11,6 +12,6 @@ import ListItem from './passages/list-item'
 // import Par from './passages/par'
 import Title from './passages/title'
 import Span from './span'
-// import Table from './table/table'
+import Table from './table/table'
 
-export { Button, Input, List, ListItem, Span, Title }
+export { Button, Image, Input, List, ListItem, Span, Table, Title }

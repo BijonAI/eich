@@ -18,6 +18,7 @@
   <text>This is a flexbox container</text>
   <text>This is a flexbox container</text>
 </flexbox>
+<image $src="'https://avatars.githubusercontent.com/u/1430279?s=80&v=4'" $width="1000" $height="1000" />
 
 <table>
   <header>

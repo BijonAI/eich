@@ -5,7 +5,7 @@ export default defineConfig({
   format: 'esm',
   tsconfig: './tsconfig.json',
   target: ['es6'],
-  sourcemap: false,
+  sourcemap: true,
   clean: true,
   dts: true,
   minify: true,
