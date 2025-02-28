@@ -19,6 +19,16 @@
   <text>This is a flexbox container</text>
 </flexbox>
 <image $src="'https://avatars.githubusercontent.com/u/1430279?s=80&v=4'" $width="1000" $height="1000" />
+<video
+  $src="'https://a0ef0e9e-4c18-4a0a-b0f4-0b55f26789f9.mdnplay.dev/shared-assets/videos/flower.webm'"
+  $width="640"
+  $height="360"
+  $poster="'poster.jpg'"
+  $controls="true"
+  $autoplay="false"
+  $muted="true"
+  crossorigin="anonymous"
+/>
 
 <table>
   <header>

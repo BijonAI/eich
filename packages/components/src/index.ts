@@ -13,5 +13,6 @@ import ListItem from './passages/list-item'
 import Title from './passages/title'
 import Span from './span'
 import Table from './table/table'
+import Video from './video'
 
-export { Button, Image, Input, List, ListItem, Span, Table, Title }
+export { Button, Image, Input, List, ListItem, Span, Table, Title, Video }
