@@ -1,7 +1,5 @@
 import Button from './elements/button'
 import Input from './elements/input'
-import Circle from './graphs/circle'
-import Ellipse from './graphs/ellipse'
 // import Line from './graphs/line'
 // import Path from './graphs/path'
 // import Polygon from './graphs/polygon'
@@ -15,4 +13,4 @@ import Title from './passages/title'
 import Span from './span'
 // import Table from './table/table'
 
-export { Button, Circle, Ellipse, Input, List, ListItem, Span, Title }
+export { Button, Input, List, ListItem, Span, Title }
