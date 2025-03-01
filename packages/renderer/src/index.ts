@@ -12,3 +12,5 @@ export { querySelector, querySelectorAll } from './selector'
 export * from './utils'
 
 export * from '@vue/reactivity'
+
+export * from './watcher'
