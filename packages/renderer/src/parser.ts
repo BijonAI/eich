@@ -37,13 +37,10 @@ export type ChildNode =
   | FragmentNode
   | DirectiveNode
 
-export type Node =
-  | ChildNode
-  | AttributeNode
-
 export interface BaseNode {
   type: NodeType
   parent?: FragmentNode | DocumentNode | ElementNode
+  domNode?: Node | Node[]
 }
 
 export interface ValueNode extends BaseNode {
@@ -676,4 +673,13 @@ export function queryNode(filter: (node: ChildNode) => boolean, node: ChildNode[
 
   visit(nodes, 1)
   return results
+}
+
+export function getRootNode(node: ChildNode): ChildNode {
+  let parent = node
+  while (parent.parent != null) {
+    parent = parent.parent
+  }
+
+  return parent
 }

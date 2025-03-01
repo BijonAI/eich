@@ -270,7 +270,7 @@ export function querySelector(root: ChildNode | ChildNode[], selector: string): 
   }
 
   const results = queryNode(
-    node => matchesAny(node, parsed),
+    node => matchesAny(node, parsed!),
     root,
     1,
   )
@@ -285,7 +285,7 @@ export function querySelectorAll(root: ChildNode | ChildNode[], selector: string
   }
 
   return new Set(queryNode(
-    node => matchesAny(node, parsed),
+    node => matchesAny(node, parsed!),
     root,
     false,
   ))

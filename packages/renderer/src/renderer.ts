@@ -113,11 +113,18 @@ export function renderNode(node: EichSourceNode): Node | Node[] {
     domNode = renderComp(comp, node)
   }
 
+  if (domNode == null) {
+    domNode = []
+  }
+
+
   if (middlewares.post.size > 0) {
     middlewares.post.forEach((middleware) => {
       middleware(node, context, domNode, comp)
     })
   }
+
+  node.raw.domNode = domNode
 
   return domNode
 }
