@@ -31,6 +31,46 @@ export function createAdhoc(src: unknown, context?: Context): unknown {
   }
 }
 
+export type TypeConstructors = 
+  | StringConstructor
+  | NumberConstructor
+  | BooleanConstructor
+  | ObjectConstructor
+  | ArrayConstructor
+
+export type TypedAttrsRef<T extends Record<string, TypeConstructors>> = {
+  [P in keyof T]?: ReturnType<T[P]>
+}
+
+export function useTypedAttrs<const T extends Record<string, TypeConstructors>>(attrs: any, keys: T, context: Context = getCurrentContext()): TypedAttrsRef<T> {
+  const o: any = {}
+  for (const k in attrs) {
+    if (typeof attrs[`$${k}`] == 'string') {
+      const adhoc = _createAdhoc(attrs[`$${k}`], context)
+      o[k] = computed(() => {
+        const value = adhoc()
+        if (keys[k] == Array) {
+          return Array.isArray(value) ? value : []
+        } else if (keys[k] != Object) {
+          return (keys[k] as any)(value)
+        } else {
+          return value
+        }
+      })
+    }
+    else if (attrs[k] != null) {
+      if (keys[k] == Array) {
+        o[k] = Array.isArray(attrs[k]) ? attrs[k] : []
+      } else if (keys[k] != Object) {
+        o[k] = (keys[k] as any)(attrs[k])
+      } else {
+        o[k] = attrs[k]
+      }
+    }
+  }
+  return o
+}
+
 export function useAttrs<const K extends string>(attrs: Attributes, keys: K[], context: Context = getCurrentContext()): { [P in K]?: ComputedRef<string> | string } {
   const o: any = {}
   for (const k of keys) {
