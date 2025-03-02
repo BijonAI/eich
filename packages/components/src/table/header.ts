@@ -1,4 +1,4 @@
-import { builtins, defineComponent, effect, toValue, useAttrs } from "@eichjs/renderer"
+import { builtins, defineComponent, effect, toValue, useAttrs } from '@eichjs/renderer'
 
 export interface HeaderAttributes {
   $height: number
@@ -10,7 +10,7 @@ const component = defineComponent<HeaderAttributes>((attrs, children) => {
   const tr = document.createElement('tr')
   header.appendChild(tr)
   const kids = children()
-  kids.forEach(kid => {
+  kids.forEach((kid) => {
     const td = document.createElement('td')
     td.appendChild(kid)
     tr.appendChild(td)

@@ -30,18 +30,41 @@
   crossorigin="anonymous"
 />
 
-<table>
-  <header>
-    <text>Name</text>
-    <text>Age</text>
-    <text>Gender</text>
-  </header>
-  <side>
-    
-  </side>
-  <row>
-    <text>John</text>
-    <text>25</text>
-    <text>Male</text>
-  </row>
+
+<table width="100%" border="2px solid #1976d2" border-collapse="collapse" border-spacing="5px" caption-side="bottom" height="1000px" align="center" bgcolor="#f0f0f0"  >
+  <thead>
+    <tr>
+      <th scope="col">Person</th>
+      <th scope="col">Most interest in</th>
+      <th scope="col">Age</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">Chris</th>
+      <td>HTML tables</td>
+      <td>22</td>
+    </tr>
+    <tr>
+      <th scope="row">Dennis</th>
+      <td>Web accessibility</td>
+      <td>45</td>
+    </tr>
+    <tr>
+      <th scope="row">Sarah</th>
+      <td>JavaScript frameworks</td>
+      <td>29</td>
+    </tr>
+    <tr>
+      <th scope="row">Karen</th>
+      <td>Web performance</td>
+      <td>36</td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <th scope="row" colspan="2">Average age</th>
+      <td>33</td>
+    </tr>
+  </tfoot>
 </table>
