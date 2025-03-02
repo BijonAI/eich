@@ -57,8 +57,21 @@ const component = defineComponent<TableAttributes>((attrs, children) => {
 
   // Apply styles
   effect(() => {
-    table.style.border = toValue(border) ?? 'none'
-    table.style.borderWidth = toValue(borderWidth) ?? '0'
+    const borderValue = toValue(border)
+    const borderWidthValue = toValue(borderWidth)
+
+    if (borderValue) {
+      table.style.border = borderValue
+    }
+    else {
+      table.style.border = 'none'
+    }
+
+    // 只有在明确设置了 borderWidth 时才应用它
+    if (borderWidthValue) {
+      table.style.borderWidth = borderWidthValue
+    }
+
     table.style.borderCollapse = toValue(borderCollapse) ?? 'separate'
     table.style.borderSpacing = toValue(borderSpacing) ?? '2px'
     table.style.width = toValue(width) ?? 'auto'
