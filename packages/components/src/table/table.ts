@@ -1,120 +1,121 @@
 import { builtins, defineComponent, effect, toValue, useAttrs } from '@eichjs/renderer'
 
 export interface TableAttributes {
-  // Style attributes
+  // Basic style attributes
   '$border': string
-  '$border-width': number
-  '$border-collapse': 'collapse' | 'separate'
-  '$border-spacing': string
   '$width': string
   '$height': string
-  '$caption-side': 'top' | 'bottom'
+  '$border-width': number
+  '$border-style': string
+  '$border-color': string
 
-  // HTML attributes
-  'align': 'left' | 'center' | 'right'
-  'bgcolor': string
-  'cellpadding': number | string
-  'cellspacing': number | string
-  'frame': 'void' | 'above' | 'below' | 'hsides' | 'vsides' | 'lhs' | 'rhs' | 'box' | 'border'
-  'rules': 'none' | 'groups' | 'rows' | 'cols' | 'all'
-  'summary': string
+  // Table layout attributes
+  '$border-collapse': 'collapse' | 'separate'
+  '$border-spacing': string
+  '$caption-side': 'top' | 'bottom'
+  '$empty-cells': 'show' | 'hide'
+  '$table-layout': 'auto' | 'fixed'
+
+  // Alignment and text attributes
+  '$vertical-align': 'top' | 'middle' | 'bottom'
+  '$text-align': 'left' | 'center' | 'right'
+
+  // Color and appearance attributes
+  '$background-color': string
+  '$color': string
+  '$padding': string
+  '$border-radius': string
+  '$box-shadow': string
 }
 
 const component = defineComponent<TableAttributes>((attrs, children) => {
   const {
     border,
     'border-width': borderWidth,
+    'border-style': borderStyle,
+    'border-color': borderColor,
     'border-collapse': borderCollapse,
     'border-spacing': borderSpacing,
+    'border-radius': borderRadius,
     width,
     height,
     'caption-side': captionSide,
-    align,
-    bgcolor,
-    cellpadding,
-    cellspacing,
-    frame,
-    rules,
-    summary,
+    'empty-cells': emptyCells,
+    'table-layout': tableLayout,
+    'vertical-align': verticalAlign,
+    'text-align': textAlign,
+    'background-color': backgroundColor,
+    color,
+    padding,
+    'box-shadow': boxShadow,
   } = useAttrs(attrs, [
     'border',
     'border-width',
+    'border-style',
+    'border-color',
     'border-collapse',
     'border-spacing',
+    'border-radius',
     'width',
     'height',
     'caption-side',
-    'align',
-    'bgcolor',
-    'cellpadding',
-    'cellspacing',
-    'frame',
-    'rules',
-    'summary',
+    'empty-cells',
+    'table-layout',
+    'vertical-align',
+    'text-align',
+    'background-color',
+    'color',
+    'padding',
+    'box-shadow',
   ])
 
   const table = document.createElement('table')
 
+  // 设置样式的通用函数
+  const setStyleIfExists = (
+    element: HTMLElement,
+    styleKey: string,
+    value: unknown,
+  ) => {
+    const styleValue = toValue(value)
+    if (styleValue) {
+      element.style[styleKey as any] = styleValue as string
+    }
+  }
+
   // Apply styles
   effect(() => {
     const borderValue = toValue(border)
-    const borderWidthValue = toValue(borderWidth)
 
     if (borderValue) {
       table.style.border = borderValue
     }
     else {
-      table.style.border = 'none'
+      // 处理单独的边框属性
+      setStyleIfExists(table, 'borderWidth', borderWidth)
+      setStyleIfExists(table, 'borderStyle', borderStyle)
+      setStyleIfExists(table, 'borderColor', borderColor)
     }
 
-    // 只有在明确设置了 borderWidth 时才应用它
-    if (borderWidthValue) {
-      table.style.borderWidth = borderWidthValue
-    }
+    // 表格布局属性
+    setStyleIfExists(table, 'borderCollapse', borderCollapse)
+    setStyleIfExists(table, 'borderSpacing', borderSpacing)
+    setStyleIfExists(table, 'width', width)
+    setStyleIfExists(table, 'height', height)
+    setStyleIfExists(table, 'captionSide', captionSide)
+    setStyleIfExists(table, 'emptyCells', emptyCells)
+    setStyleIfExists(table, 'tableLayout', tableLayout)
 
-    table.style.borderCollapse = toValue(borderCollapse) ?? 'separate'
-    table.style.borderSpacing = toValue(borderSpacing) ?? '2px'
-    table.style.width = toValue(width) ?? 'auto'
-    table.style.height = toValue(height) ?? 'auto'
-    table.style.captionSide = toValue(captionSide) ?? 'top'
-  })
+    // 对齐与文本属性
+    setStyleIfExists(table, 'verticalAlign', verticalAlign)
+    setStyleIfExists(table, 'textAlign', textAlign)
 
-  // Apply HTML attributes
-  effect(() => {
-    const alignValue = toValue(align)
-    if (alignValue)
-      table.setAttribute('align', alignValue)
-    else table.removeAttribute('align')
-
-    const bgcolorValue = toValue(bgcolor)
-    if (bgcolorValue)
-      table.setAttribute('bgcolor', bgcolorValue)
-    else table.removeAttribute('bgcolor')
-
-    const cellpaddingValue = toValue(cellpadding)
-    if (cellpaddingValue !== undefined)
-      table.setAttribute('cellpadding', cellpaddingValue.toString())
-    else table.removeAttribute('cellpadding')
-
-    const cellspacingValue = toValue(cellspacing)
-    if (cellspacingValue !== undefined)
-      table.setAttribute('cellspacing', cellspacingValue.toString())
-    else table.removeAttribute('cellspacing')
-
-    const frameValue = toValue(frame)
-    if (frameValue)
-      table.setAttribute('frame', frameValue)
-    else table.removeAttribute('frame')
-
-    const rulesValue = toValue(rules)
-    if (rulesValue)
-      table.setAttribute('rules', rulesValue)
-    else table.removeAttribute('rules')
-
-    const summaryValue = toValue(summary)
-    if (summaryValue)
-      table.setAttribute('summary', summaryValue)
-    else table.removeAttribute('summary')
+    // 颜色与外观属性
+    setStyleIfExists(table, 'backgroundColor', backgroundColor)
+    setStyleIfExists(table, 'color', color)
+    setStyleIfExists(table, 'padding', padding)
+    setStyleIfExists(table, 'borderRadius', borderRadius)
+    setStyleIfExists(table, 'boxShadow', boxShadow)
   })
 
   table.append(...children())
