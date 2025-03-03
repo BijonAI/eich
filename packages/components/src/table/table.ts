@@ -1,32 +1,31 @@
 import { builtins, defineComponent, effect, toValue, useAttrs } from '@eichjs/renderer'
-import { setStyleIfExists } from '../utils'
 
 export interface TableAttributes {
   // Basic style attributes
-  '$border': string
-  '$width': string
-  '$height': string
-  '$border-width': number
-  '$border-style': string
-  '$border-color': string
+  '$border': CSSStyleDeclaration['border']
+  '$width': CSSStyleDeclaration['width']
+  '$height': CSSStyleDeclaration['height']
+  '$border-width': CSSStyleDeclaration['borderWidth']
+  '$border-style': CSSStyleDeclaration['borderStyle']
+  '$border-color': CSSStyleDeclaration['borderColor']
 
   // Table layout attributes
-  '$border-collapse': 'collapse' | 'separate'
-  '$border-spacing': string
-  '$caption-side': 'top' | 'bottom'
-  '$empty-cells': 'show' | 'hide'
-  '$table-layout': 'auto' | 'fixed'
+  '$border-collapse': CSSStyleDeclaration['borderCollapse']
+  '$border-spacing': CSSStyleDeclaration['borderSpacing']
+  '$caption-side': CSSStyleDeclaration['captionSide']
+  '$empty-cells': CSSStyleDeclaration['emptyCells']
+  '$table-layout': CSSStyleDeclaration['tableLayout']
 
   // Alignment and text attributes
-  '$vertical-align': 'top' | 'middle' | 'bottom'
-  '$text-align': 'left' | 'center' | 'right'
+  '$vertical-align': CSSStyleDeclaration['verticalAlign']
+  '$text-align': CSSStyleDeclaration['textAlign']
 
   // Color and appearance attributes
-  '$background-color': string
-  '$color': string
-  '$padding': string
-  '$border-radius': string
-  '$box-shadow': string
+  '$background-color': CSSStyleDeclaration['backgroundColor']
+  '$color': CSSStyleDeclaration['color']
+  '$padding': CSSStyleDeclaration['padding']
+  '$border-radius': CSSStyleDeclaration['borderRadius']
+  '$box-shadow': CSSStyleDeclaration['boxShadow']
 }
 
 const component = defineComponent<TableAttributes>((attrs, children) => {
@@ -80,31 +79,30 @@ const component = defineComponent<TableAttributes>((attrs, children) => {
       table.style.border = borderValue
     }
     else {
-      // 处理单独的边框属性
-      setStyleIfExists(table, 'borderWidth', borderWidth)
-      setStyleIfExists(table, 'borderStyle', borderStyle)
-      setStyleIfExists(table, 'borderColor', borderColor)
+      table.style.borderWidth = toValue(borderWidth) ?? ''
+      table.style.borderStyle = toValue(borderStyle) ?? ''
+      table.style.borderColor = toValue(borderColor) ?? ''
     }
 
     // 表格布局属性
-    setStyleIfExists(table, 'borderCollapse', borderCollapse)
-    setStyleIfExists(table, 'borderSpacing', borderSpacing)
-    setStyleIfExists(table, 'width', width)
-    setStyleIfExists(table, 'height', height)
-    setStyleIfExists(table, 'captionSide', captionSide)
-    setStyleIfExists(table, 'emptyCells', emptyCells)
-    setStyleIfExists(table, 'tableLayout', tableLayout)
+    table.style.borderCollapse = toValue(borderCollapse) ?? ''
+    table.style.borderSpacing = toValue(borderSpacing) ?? ''
+    table.style.width = toValue(width) ?? ''
+    table.style.height = toValue(height) ?? ''
+    table.style.captionSide = toValue(captionSide) ?? ''
+    table.style.emptyCells = toValue(emptyCells) ?? ''
+    table.style.tableLayout = toValue(tableLayout) ?? ''
 
     // 对齐与文本属性
-    setStyleIfExists(table, 'verticalAlign', verticalAlign)
-    setStyleIfExists(table, 'textAlign', textAlign)
+    table.style.verticalAlign = toValue(verticalAlign) ?? ''
+    table.style.textAlign = toValue(textAlign) ?? ''
 
     // 颜色与外观属性
-    setStyleIfExists(table, 'backgroundColor', backgroundColor)
-    setStyleIfExists(table, 'color', color)
-    setStyleIfExists(table, 'padding', padding)
-    setStyleIfExists(table, 'borderRadius', borderRadius)
-    setStyleIfExists(table, 'boxShadow', boxShadow)
+    table.style.backgroundColor = toValue(backgroundColor) ?? ''
+    table.style.color = toValue(color) ?? ''
+    table.style.padding = toValue(padding) ?? ''
+    table.style.borderRadius = toValue(borderRadius) ?? ''
+    table.style.boxShadow = toValue(boxShadow) ?? ''
   })
 
   table.append(...children())
