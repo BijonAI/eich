@@ -12,6 +12,8 @@ import ListItem from './passages/list-item'
 // import Par from './passages/par'
 import Title from './passages/title'
 import Span from './span'
+import Caption from './table/caption'
+import Colgroup from './table/colgroup'
 import Table from './table/table'
 import Td from './table/td'
 import Th from './table/th'
@@ -19,4 +21,4 @@ import Thead from './table/thead'
 import Tr from './table/tr'
 import Video from './video'
 
-export { Button, Image, Input, List, ListItem, Span, Table, Td, Th, Thead, Title, Tr, Video }
+export { Button, Caption, Colgroup, Image, Input, List, ListItem, Span, Table, Td, Th, Thead, Title, Tr, Video }
