@@ -1,4 +1,5 @@
 import { builtins, defineComponent, effect, toValue, useAttrs } from '@eichjs/renderer'
+import { setStyleIfExists } from '../utils'
 
 export interface TableAttributes {
   // Basic style attributes
@@ -70,18 +71,6 @@ const component = defineComponent<TableAttributes>((attrs, children) => {
   ])
 
   const table = document.createElement('table')
-
-  // 设置样式的通用函数
-  const setStyleIfExists = (
-    element: HTMLElement,
-    styleKey: string,
-    value: unknown,
-  ) => {
-    const styleValue = toValue(value)
-    if (styleValue) {
-      element.style[styleKey as any] = styleValue as string
-    }
-  }
 
   // Apply styles
   effect(() => {
