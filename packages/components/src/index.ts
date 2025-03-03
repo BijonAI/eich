@@ -17,9 +17,10 @@ import Colgroup from './table/colgroup'
 import Table from './table/table'
 import Tbody from './table/tbody'
 import Td from './table/td'
+import Tfoot from './table/tfoot'
 import Th from './table/th'
 import Thead from './table/thead'
 import Tr from './table/tr'
 import Video from './video'
 
-export { Button, Caption, Colgroup, Image, Input, List, ListItem, Span, Table, Tbody, Td, Th, Thead, Title, Tr, Video }
+export { Button, Caption, Colgroup, Image, Input, List, ListItem, Span, Table, Tbody, Td, Tfoot, Th, Thead, Title, Tr, Video }
