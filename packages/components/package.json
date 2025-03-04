@@ -22,7 +22,9 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "pub": "pnpm publish",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "publishConfig": {
     "access": "public"
@@ -36,5 +38,11 @@
     "es-html-parser": "^0.0.10",
     "htmlparser2": "^10.0.0",
     "morphdom": "^2.7.4"
+  },
+  "devDependencies": {
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "jsdom": "^26.0.0",
+    "vitest": "^3.0.7"
   }
 }
