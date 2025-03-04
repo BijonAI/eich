@@ -40,6 +40,13 @@ export function setCurrentContext(context: Context): void {
   activeContext = context
 }
 
+export function provideWith(children: () => Node[], context: Context): Node[] {
+  return runInContext(
+    context,
+    children,
+  )
+}
+
 export function mergeContext(target: Context, from: Context): Context {
   return reactive(Object.assign(toRefs(target), toRefs(from)))
 }

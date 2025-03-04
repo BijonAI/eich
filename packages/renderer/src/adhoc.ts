@@ -1,4 +1,4 @@
-import { computed, type ComputedRef } from '@vue/reactivity'
+import { computed, reactive, type ComputedRef } from '@vue/reactivity'
 import { type Attributes, type Context, getCurrentContext } from './renderer'
 
 export type Adhoc<T> = (context?: Context) => T
@@ -68,7 +68,7 @@ export function useTypedAttrs<const T extends Record<string, TypeConstructors>>(
       }
     }
   }
-  return o
+  return reactive(o)
 }
 
 export function useAttrs<const K extends string>(attrs: Attributes, keys: K[], context: Context = getCurrentContext()): { [P in K]?: ComputedRef<string> | string } {

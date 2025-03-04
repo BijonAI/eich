@@ -190,6 +190,36 @@ importers:
         specifier: ^7.4.3
         version: 7.4.3
 
+  packages/mind:
+    dependencies:
+      '@eichjs/animation':
+        specifier: workspace:^
+        version: link:../animation
+      '@eichjs/renderer':
+        specifier: workspace:^
+        version: link:../renderer
+      '@joint/core':
+        specifier: ^4.1.3
+        version: 4.1.3
+      '@rbardini/html':
+        specifier: ^1.0.1
+        version: 1.0.1
+      '@vue/reactivity':
+        specifier: ^3.5.13
+        version: 3.5.13
+      '@vue/shared':
+        specifier: ^3.5.13
+        version: 3.5.13
+      es-html-parser:
+        specifier: ^0.0.10
+        version: 0.0.10
+      htmlparser2:
+        specifier: ^10.0.0
+        version: 10.0.0
+      morphdom:
+        specifier: ^2.7.4
+        version: 2.7.4
+
   packages/model:
     dependencies:
       '@eichjs/renderer':
@@ -822,6 +852,9 @@ packages:
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
     engines: {node: '>=12'}
+
+  '@joint/core@4.1.3':
+    resolution: {integrity: sha512-X769blCoVxtx6NNm/cbHDXDOa+Gt7eZwrJMLnqJw8c5NkjmcYWCY1kA3ep8RfRRVG76f3QLNd9a8Q/aItI/WWw==}
 
   '@jridgewell/gen-mapping@0.3.8':
     resolution: {integrity: sha512-imAbBGkb+ebQyxKgzv5Hu2nmROxoDOXHh80evxdoXNOrvAnVx7zimzc1Oo5h9RlfV4vPXaE2iM5pOFbvOCClWA==}
@@ -3793,6 +3826,8 @@ snapshots:
       strip-ansi-cjs: strip-ansi@6.0.1
       wrap-ansi: 8.1.0
       wrap-ansi-cjs: wrap-ansi@7.0.0
+
+  '@joint/core@4.1.3': {}
 
   '@jridgewell/gen-mapping@0.3.8':
     dependencies:
