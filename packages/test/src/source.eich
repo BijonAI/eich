@@ -68,3 +68,93 @@
     </tr>
   </tfoot>
 </table>
+<style>
+
+.block {
+  background-color: #8ca0ff;
+  width: 50px !important;
+  height: 50px !important;
+}
+
+.grid-container {
+  border: 1px solid #ccc;
+  margin: 20px 0;
+  padding: 10px;
+}
+
+.tall-block {
+  background-color: #ff9f9f;
+  width: 50px !important;
+  height: 100px !important;
+}
+
+.wide-block {
+  background-color: #9fff9f;
+  width: 100px !important;
+  height: 50px !important;
+}
+
+</style>
+
+<!-- Test 1: Basic Grid with template columns and rows -->
+<grid class="grid-container" 
+  $template-columns="'repeat(3, 1fr)'"
+  $template-rows="'50px 50px'"
+  $gap="'10px'">
+  <block class="block"></block>
+  <block class="block"></block>
+  <block class="block"></block>
+  <block class="block"></block>
+  <block class="block"></block>
+  <block class="block"></block>
+</grid>
+
+<!-- Test 2: Grid with alignment properties -->
+<grid class="grid-container"
+  $template-columns="'repeat(3, 100px)'"
+  $template-rows="'100px'"
+  $justify-content="'space-between'"
+  $align-items="'center'"
+  height="200px">
+  <block class="block"></block>
+  <block class="block"></block>
+  <block class="block"></block>
+</grid>
+
+<!-- Test 3: Grid with template areas -->
+<grid class="grid-container"
+  $template-areas="'header header header sidebar main main footer footer footer'"
+  $template-columns="'100px 1fr 1fr'"
+  $template-rows="'50px 200px 50px'"
+  $gap="'10px'">
+  <block class="block" style="grid-area: header; width: 100% !important;"></block>
+  <block class="block" style="grid-area: sidebar;"></block>
+  <block class="wide-block" style="grid-area: main; width: 100% !important;"></block>
+  <block class="block" style="grid-area: footer; width: 100% !important;"></block>
+</grid>
+
+<!-- Test 4: Auto-flow and dense packing -->
+<grid class="grid-container"
+  $template-columns="'repeat(4, 80px)'"
+  $auto-flow="'dense'"
+  $gap="'10px'">
+  <block class="wide-block"></block>
+  <block class="block"></block>
+  <block class="tall-block"></block>
+  <block class="block"></block>
+  <block class="block"></block>
+  <block class="wide-block"></block>
+  <block class="block"></block>
+</grid>
+
+<!-- Test 5: Place properties shorthand -->
+<grid class="grid-container"
+  $template-columns="'repeat(3, 1fr)'"
+  $template-rows="'100px'"
+  $place-content="'center space-between'"
+  $place-items="'center stretch'"
+  height="200px">
+  <block class="block"></block>
+  <block class="tall-block"></block>
+  <block class="block"></block>
+</grid>
