@@ -1,3 +1,54 @@
+<script>
+const svgWidth = ref(1000)
+const svgHeight = ref(1000)
+
+const cx = ref(100)
+const cy = ref(100)
+const r = ref(50)
+
+const x = ref(100)
+const y = ref(100)
+const width = ref(100)
+const height = ref(100)
+
+const pD = ref('M150 5 L75 200 L225 200 Z')
+
+const points = ref('0,0 50,150 100,75 150,50 200,140 250,140'
+)
+
+function handleClick() {
+  console.log('click')
+  cx.value += 10
+  cy.value += 10
+  r.value += 10
+  x.value += 10
+  y.value += 10
+  width.value += 10
+  height.value += 10
+}
+
+return {
+  svgWidth,
+  svgHeight,
+  handleClick,
+  cx,
+  cy,
+  r,
+  pD,
+  points,
+  x,
+  y,
+  width,
+  height,
+}
+</script>
+<svg $width="svgWidth" $height="svgHeight">
+  <polyline $points="points" fill="none" stroke="black" stroke-width="2" />
+  <rect $x="x" $y="y" $width="width" $height="height" fill="red" />
+</svg>
+
+<button @click="handleClick">Click me</button>
+
 <math-field $width="1200" $height="600" $origin-x="0" $origin-y="0">
   <plane $width="1200" $height="600" $grid="10" $ticks="25">
     <line-segment $from="[0, 0]" $to="[0, 200]" $stroke-width="2" $draggable="true" />
