@@ -12,6 +12,12 @@ import ListItem from './passages/list-item'
 // import Par from './passages/par'
 import Title from './passages/title'
 import Span from './span'
+import Circle from './svg/circle'
+import Path from './svg/path'
+import Polygon from './svg/polygon'
+import Polyline from './svg/polyline'
+import Rect from './svg/rect'
+import Svg from './svg/svg'
 import Caption from './table/caption'
 import Colgroup from './table/colgroup'
 import Table from './table/table'
@@ -23,4 +29,4 @@ import Thead from './table/thead'
 import Tr from './table/tr'
 import Video from './video'
 
-export { Button, Caption, Colgroup, Image, Input, List, ListItem, Span, Table, Tbody, Td, Tfoot, Th, Thead, Title, Tr, Video }
+export { Button, Caption, Circle, Colgroup, Image, Input, List, ListItem, Path, Polygon, Polyline, Rect, Span, Svg, Table, Tbody, Td, Tfoot, Th, Thead, Title, Tr, Video }
