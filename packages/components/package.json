@@ -22,7 +22,9 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "pub": "pnpm publish",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "publishConfig": {
     "access": "public"

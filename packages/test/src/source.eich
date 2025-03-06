@@ -1,3 +1,54 @@
+<script>
+const svgWidth = ref(1000)
+const svgHeight = ref(1000)
+
+const cx = ref(100)
+const cy = ref(100)
+const r = ref(50)
+
+const x = ref(100)
+const y = ref(100)
+const width = ref(100)
+const height = ref(100)
+
+const pD = ref('M150 5 L75 200 L225 200 Z')
+
+const points = ref('0,0 50,150 100,75 150,50 200,140 250,140'
+)
+
+function handleClick() {
+  console.log('click')
+  cx.value += 10
+  cy.value += 10
+  r.value += 10
+  x.value += 10
+  y.value += 10
+  width.value += 10
+  height.value += 10
+}
+
+return {
+  svgWidth,
+  svgHeight,
+  handleClick,
+  cx,
+  cy,
+  r,
+  pD,
+  points,
+  x,
+  y,
+  width,
+  height,
+}
+</script>
+<svg $width="svgWidth" $height="svgHeight">
+  <polyline $points="points" fill="none" stroke="black" stroke-width="2" />
+  <rect $x="x" $y="y" $width="width" $height="height" fill="red" />
+</svg>
+
+<button @click="handleClick">Click me</button>
+
 <math-field $width="1200" $height="600" $origin-x="0" $origin-y="0">
   <plane $width="1200" $height="600" $grid="10" $ticks="25">
     <line-segment $from="[0, 0]" $to="[0, 200]" $stroke-width="2" $draggable="true" />
@@ -19,19 +70,142 @@
   <text>This is a flexbox container</text>
 </flexbox>
 <image $src="'https://avatars.githubusercontent.com/u/1430279?s=80&v=4'" $width="1000" $height="1000" />
+<video
+  $src="'https://a0ef0e9e-4c18-4a0a-b0f4-0b55f26789f9.mdnplay.dev/shared-assets/videos/flower.webm'"
+  $width="640"
+  $height="360"
+  $poster="'poster.jpg'"
+  $controls="true"
+  $autoplay="false"
+  $muted="true"
+  crossorigin="anonymous"
+/>
 
-<table>
-  <header>
-    <text>Name</text>
-    <text>Age</text>
-    <text>Gender</text>
-  </header>
-  <side>
-    
-  </side>
-  <row>
-    <text>John</text>
-    <text>25</text>
-    <text>Male</text>
-  </row>
+
+<table width="100%" border="2px solid #1976d2" border-collapse="collapse" border-spacing="5px" caption-side="bottom" height="1000px" align="center" bgcolor="#f0f0f0"  >
+  <thead>
+    <tr>
+      <th scope="col">Person</th>
+      <th scope="col">Most interest in</th>
+      <th scope="col">Age</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">Chris</th>
+      <td>HTML tables</td>
+      <td>22</td>
+    </tr>
+    <tr>
+      <th scope="row">Dennis</th>
+      <td>Web accessibility</td>
+      <td>45</td>
+    </tr>
+    <tr>
+      <th scope="row">Sarah</th>
+      <td>JavaScript frameworks</td>
+      <td>29</td>
+    </tr>
+    <tr>
+      <th scope="row">Karen</th>
+      <td>Web performance</td>
+      <td>36</td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <th scope="row" colspan="2">Average age</th>
+      <td>33</td>
+    </tr>
+  </tfoot>
 </table>
+<style>
+
+.block {
+  background-color: #8ca0ff;
+  width: 50px !important;
+  height: 50px !important;
+}
+
+.grid-container {
+  border: 1px solid #ccc;
+  margin: 20px 0;
+  padding: 10px;
+}
+
+.tall-block {
+  background-color: #ff9f9f;
+  width: 50px !important;
+  height: 100px !important;
+}
+
+.wide-block {
+  background-color: #9fff9f;
+  width: 100px !important;
+  height: 50px !important;
+}
+
+</style>
+
+<!-- Test 1: Basic Grid with template columns and rows -->
+<grid class="grid-container" 
+  $template-columns="'repeat(3, 1fr)'"
+  $template-rows="'50px 50px'"
+  $gap="'10px'">
+  <block class="block"></block>
+  <block class="block"></block>
+  <block class="block"></block>
+  <block class="block"></block>
+  <block class="block"></block>
+  <block class="block"></block>
+</grid>
+
+<!-- Test 2: Grid with alignment properties -->
+<grid class="grid-container"
+  $template-columns="'repeat(3, 100px)'"
+  $template-rows="'100px'"
+  $justify-content="'space-between'"
+  $align-items="'center'"
+  height="200px">
+  <block class="block"></block>
+  <block class="block"></block>
+  <block class="block"></block>
+</grid>
+
+<!-- Test 3: Grid with template areas -->
+<grid class="grid-container"
+  $template-areas="'header header header sidebar main main footer footer footer'"
+  $template-columns="'100px 1fr 1fr'"
+  $template-rows="'50px 200px 50px'"
+  $gap="'10px'">
+  <block class="block" style="grid-area: header; width: 100% !important;"></block>
+  <block class="block" style="grid-area: sidebar;"></block>
+  <block class="wide-block" style="grid-area: main; width: 100% !important;"></block>
+  <block class="block" style="grid-area: footer; width: 100% !important;"></block>
+</grid>
+
+<!-- Test 4: Auto-flow and dense packing -->
+<grid class="grid-container"
+  $template-columns="'repeat(4, 80px)'"
+  $auto-flow="'dense'"
+  $gap="'10px'">
+  <block class="wide-block"></block>
+  <block class="block"></block>
+  <block class="tall-block"></block>
+  <block class="block"></block>
+  <block class="block"></block>
+  <block class="wide-block"></block>
+  <block class="block"></block>
+</grid>
+
+<!-- Test 5: Place properties shorthand -->
+<grid class="grid-container"
+  $template-columns="'repeat(3, 1fr)'"
+  $template-rows="'100px'"
+  $place-content="'center space-between'"
+  $place-items="'center stretch'"
+  height="200px">
+  <block class="block"></block>
+  <block class="tall-block"></block>
+  <block class="block"></block>
+</grid>

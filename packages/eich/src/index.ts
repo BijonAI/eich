@@ -12,11 +12,17 @@ import {
   Block,
   Column,
   Flexbox,
+  Grid,
   Row,
   Transform,
 } from '@eichjs/layout'
 import { Link, Par } from '@eichjs/model'
 import { builtins, middlewares } from '@eichjs/renderer'
+import '@eichjs/renderer/builtins'
+import '@eichjs/renderer/builtins/script'
+import '@eichjs/renderer/builtins/style'
+import '@eichjs/renderer/middlewares/fallthrough'
+import '@eichjs/renderer/middlewares/ref'
 import {
   // TODO: math-field
   Arc,
@@ -41,11 +47,6 @@ import {
   Underline,
   Upper,
 } from '@eichjs/text'
-import '@eichjs/renderer/middlewares/fallthrough'
-import '@eichjs/renderer/middlewares/ref'
-import '@eichjs/renderer/builtins'
-import '@eichjs/renderer/builtins/script'
-import '@eichjs/renderer/builtins/style'
 
 builtins.set('align', Align)
 builtins.set('block', Block)
@@ -53,6 +54,7 @@ builtins.set('transform', Transform)
 builtins.set('flexbox', Flexbox)
 builtins.set('row', Row)
 builtins.set('column', Column)
+builtins.set('grid', Grid)
 
 builtins.set('button', Button)
 builtins.set('input', Input)
@@ -96,3 +98,4 @@ export * from '@eichjs/renderer'
 export * from '@eichjs/renderer/builtins'
 export * from '@eichjs/support-math'
 export * from '@eichjs/text'
+
