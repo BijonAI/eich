@@ -2,16 +2,16 @@ import { builtins, defineComponent, effect, useAttrs } from '@eichjs/renderer'
 import { setAttributeIfExists } from './utils'
 
 export interface CircleAttributes {
-  cx?: string | number
-  cy?: string | number
-  r?: string | number
-  fill?: string
-  stroke?: string
-  strokeWidth?: string | number
-  class?: string
-  style?: string
-  transform?: string
-  opacity?: string | number
+  $cx?: string | number
+  $cy?: string | number
+  $r?: string | number
+  $fill?: string
+  $stroke?: string
+  '$stroke-width'?: string | number
+  $class?: string
+  $style?: string
+  $transform?: string
+  $opacity?: string | number
 }
 
 const component = defineComponent<CircleAttributes>((attrs) => {
@@ -21,7 +21,7 @@ const component = defineComponent<CircleAttributes>((attrs) => {
     r,
     fill,
     stroke,
-    strokeWidth,
+    'stroke-width': strokeWidth,
     class: className,
     style,
     transform,
@@ -32,7 +32,7 @@ const component = defineComponent<CircleAttributes>((attrs) => {
     'r',
     'fill',
     'stroke',
-    'strokeWidth',
+    'stroke-width',
     'class',
     'style',
     'transform',

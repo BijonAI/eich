@@ -2,19 +2,18 @@ import { builtins, defineComponent, effect, useAttrs } from '@eichjs/renderer'
 import { setAttributeIfExists } from './utils'
 
 export interface SvgAttributes {
-  width?: string | number
-  height?: string | number
-  viewBox?: string
-  fill?: string
-  stroke?: string
-  strokeWidth?: string | number
-  xmlns?: string
-  preserveAspectRatio?: string
-  class?: string
-  style?: string
-  transform?: string
-  opacity?: string | number
-  children?: any
+  $width?: string | number
+  $height?: string | number
+  '$view-box'?: string
+  $fill?: string
+  $stroke?: string
+  '$stroke-width'?: string | number
+  $xmlns?: string
+  '$preserve-aspect-ratio'?: string
+  $class?: string
+  $style?: string
+  $transform?: string
+  $opacity?: string | number
 }
 
 const component = defineComponent<SvgAttributes>((attrs, children) => {
@@ -24,9 +23,9 @@ const component = defineComponent<SvgAttributes>((attrs, children) => {
     viewBox,
     fill,
     stroke,
-    strokeWidth,
+    'stroke-width': strokeWidth,
     xmlns = 'http://www.w3.org/2000/svg',
-    preserveAspectRatio,
+    'preserve-aspect-ratio': preserveAspectRatio,
     class: className,
     style,
     transform,
@@ -37,9 +36,9 @@ const component = defineComponent<SvgAttributes>((attrs, children) => {
     'viewBox',
     'fill',
     'stroke',
-    'strokeWidth',
+    'stroke-width',
     'xmlns',
-    'preserveAspectRatio',
+    'preserve-aspect-ratio',
     'class',
     'style',
     'transform',

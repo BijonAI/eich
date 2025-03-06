@@ -3,29 +3,29 @@ import { setAttributeIfExists } from './utils'
 
 export interface RectAttributes {
   // Points data
-  x?: string | number
-  y?: string | number
-  width?: string | number
-  height?: string | number
+  $x?: string | number
+  $y?: string | number
+  $width?: string | number
+  $height?: string | number
 
   // Common SVG attributes
-  fill?: string
-  stroke?: string
-  strokeWidth?: string | number
-  opacity?: string | number
-  class?: string
-  style?: string
-  transform?: string
+  $fill?: string
+  $stroke?: string
+  '$stroke-width'?: string | number
+  $opacity?: string | number
+  $class?: string
+  $style?: string
+  $transform?: string
 
   // Specific styling attributes
-  fillOpacity?: string | number
-  strokeOpacity?: string | number
-  strokeDasharray?: string
-  strokeDashoffset?: string | number
-  strokeLinecap?: 'butt' | 'round' | 'square'
-  strokeLinejoin?: 'miter' | 'round' | 'bevel'
-  strokeMiterlimit?: string | number
-  filter?: string
+  '$fill-opacity'?: string | number
+  '$stroke-opacity'?: string | number
+  '$stroke-dasharray'?: string
+  '$stroke-dashoffset'?: string | number
+  '$stroke-linecap'?: 'butt' | 'round' | 'square'
+  '$stroke-linejoin'?: 'miter' | 'round' | 'bevel'
+  '$stroke-miterlimit'?: string | number
+  $filter?: string
 }
 
 const component = defineComponent<RectAttributes>((attrs) => {
@@ -36,18 +36,18 @@ const component = defineComponent<RectAttributes>((attrs) => {
     height,
     fill,
     stroke,
-    strokeWidth,
+    'stroke-width': strokeWidth,
     opacity,
     class: className,
     style,
     transform,
-    fillOpacity,
-    strokeOpacity,
-    strokeDasharray,
-    strokeDashoffset,
-    strokeLinecap,
-    strokeLinejoin,
-    strokeMiterlimit,
+    'fill-opacity': fillOpacity,
+    'stroke-opacity': strokeOpacity,
+    'stroke-dasharray': strokeDasharray,
+    'stroke-dashoffset': strokeDashoffset,
+    'stroke-linecap': strokeLinecap,
+    'stroke-linejoin': strokeLinejoin,
+    'stroke-miterlimit': strokeMiterlimit,
     filter,
   } = useAttrs(attrs, [
     'x',
@@ -56,18 +56,18 @@ const component = defineComponent<RectAttributes>((attrs) => {
     'height',
     'fill',
     'stroke',
-    'strokeWidth',
+    'stroke-width',
     'opacity',
     'class',
     'style',
     'transform',
-    'fillOpacity',
-    'strokeOpacity',
-    'strokeDasharray',
-    'strokeDashoffset',
-    'strokeLinecap',
-    'strokeLinejoin',
-    'strokeMiterlimit',
+    'fill-opacity',
+    'stroke-opacity',
+    'stroke-dasharray',
+    'stroke-dashoffset',
+    'stroke-linecap',
+    'stroke-linejoin',
+    'stroke-miterlimit',
     'filter',
   ])
 
