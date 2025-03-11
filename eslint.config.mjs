@@ -7,5 +7,6 @@ export default antfu({
   ignores: [
     'packages/renderer/**/*.*',
     'packages/test/**/*.{ts,js,tsx,jsx,json,html,css}',
+    'examples/**/*.{ts,js,tsx,jsx,json,html,css}',
   ],
 })
