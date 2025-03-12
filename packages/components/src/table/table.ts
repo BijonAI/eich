@@ -1,9 +1,9 @@
 import {
   builtins,
   defineComponent,
-  effect,
   toValue,
   useAttrs,
+  watch
 } from '@eichjs/renderer'
 
 export interface TableAttributes {
@@ -77,38 +77,96 @@ const component = defineComponent<TableAttributes>((attrs, children) => {
 
   const table = document.createElement('table')
 
-  // Apply styles
-  effect(() => {
-    const borderValue = toValue(border)
+  table.style.width = toValue(width) ?? ''
+  table.style.height = toValue(height) ?? ''
+  table.style.border = toValue(border) ?? ''
+  table.style.borderWidth = toValue(borderWidth) ?? ''
+  table.style.borderStyle = toValue(borderStyle) ?? ''
+  table.style.borderColor = toValue(borderColor) ?? ''
+  table.style.borderCollapse = toValue(borderCollapse) ?? ''
+  table.style.borderSpacing = toValue(borderSpacing) ?? ''
+  table.style.captionSide = toValue(captionSide) ?? ''
+  table.style.emptyCells = toValue(emptyCells) ?? ''
+  table.style.tableLayout = toValue(tableLayout) ?? ''
+  table.style.verticalAlign = toValue(verticalAlign) ?? ''
+  table.style.textAlign = toValue(textAlign) ?? ''
+  table.style.backgroundColor = toValue(backgroundColor) ?? ''
+  table.style.color = toValue(color) ?? ''
+  table.style.padding = toValue(padding) ?? ''
+  table.style.borderRadius = toValue(borderRadius) ?? ''
+  table.style.boxShadow = toValue(boxShadow) ?? ''
 
-    if (borderValue) {
-      table.style.border = borderValue
-    }
-    else {
-      table.style.borderWidth = toValue(borderWidth) ?? ''
-      table.style.borderStyle = toValue(borderStyle) ?? ''
-      table.style.borderColor = toValue(borderColor) ?? ''
-    }
+  watch(()=> toValue(width), (newValue) => {
+    table.style.width = newValue ?? ''
+  })
 
-    // 表格布局属性
-    table.style.borderCollapse = toValue(borderCollapse) ?? ''
-    table.style.borderSpacing = toValue(borderSpacing) ?? ''
-    table.style.width = toValue(width) ?? ''
-    table.style.height = toValue(height) ?? ''
-    table.style.captionSide = toValue(captionSide) ?? ''
-    table.style.emptyCells = toValue(emptyCells) ?? ''
-    table.style.tableLayout = toValue(tableLayout) ?? ''
+  watch(()=> toValue(height), (newValue) => {
+    table.style.height = newValue ?? ''
+  })
 
-    // 对齐与文本属性
-    table.style.verticalAlign = toValue(verticalAlign) ?? ''
-    table.style.textAlign = toValue(textAlign) ?? ''
+  watch(()=> toValue(border), (newValue) => {
+    table.style.border = newValue ?? ''
+  })
 
-    // 颜色与外观属性
-    table.style.backgroundColor = toValue(backgroundColor) ?? ''
-    table.style.color = toValue(color) ?? ''
-    table.style.padding = toValue(padding) ?? ''
-    table.style.borderRadius = toValue(borderRadius) ?? ''
-    table.style.boxShadow = toValue(boxShadow) ?? ''
+  watch(()=> toValue(borderWidth), (newValue) => {
+    table.style.borderWidth = newValue ?? ''
+  })
+
+  watch(()=> toValue(borderStyle), (newValue) => {
+    table.style.borderStyle = newValue ?? ''
+  })
+
+  watch(()=> toValue(borderColor), (newValue) => {
+    table.style.borderColor = newValue ?? ''
+  })
+
+
+  watch(()=> toValue(borderCollapse), (newValue) => {
+    table.style.borderCollapse = newValue ?? ''
+  })
+
+  watch(()=> toValue(borderSpacing), (newValue) => {
+    table.style.borderSpacing = newValue ?? ''
+  })
+
+  watch(()=> toValue(captionSide), (newValue) => {
+    table.style.captionSide = newValue ?? ''
+  })
+
+  watch(()=> toValue(emptyCells), (newValue) => {
+    table.style.emptyCells = newValue ?? ''
+  })
+
+  watch(()=> toValue(tableLayout), (newValue) => {
+    table.style.tableLayout = newValue ?? ''
+  })
+
+  watch(()=> toValue(verticalAlign), (newValue) => {
+    table.style.verticalAlign = newValue ?? ''
+  })
+
+  watch(()=> toValue(textAlign), (newValue) => {
+    table.style.textAlign = newValue ?? ''
+  })
+
+  watch(()=> toValue(backgroundColor), (newValue) => {
+    table.style.backgroundColor = newValue ?? ''
+  })
+
+  watch(()=> toValue(color), (newValue) => {
+    table.style.color = newValue ?? ''
+  })
+
+  watch(()=> toValue(padding), (newValue) => {
+    table.style.padding = newValue ?? ''
+  })
+
+  watch(()=> toValue(borderRadius), (newValue) => {
+    table.style.borderRadius = newValue ?? ''
+  })
+
+  watch(()=> toValue(boxShadow), (newValue) => {
+    table.style.boxShadow = newValue ?? ''
   })
 
   table.append(...children())
