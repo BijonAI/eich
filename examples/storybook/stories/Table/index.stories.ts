@@ -9,17 +9,17 @@ export default {
     return createTable(args)
   },
   argTypes: {
-    $border: { control: 'text' },
-    $width: { control: 'text' },
-    $height: { control: 'text' },
+    '$border': { control: 'text' },
+    '$width': { control: 'text' },
+    '$height': { control: 'text' },
     '$caption-side': { control: 'text' },
     '$empty-cells': { control: 'text' },
     '$table-layout': { control: 'text' },
     '$vertical-align': { control: 'text' },
     '$text-align': { control: 'text' },
-    '$background-color': { control: 'text' },
-    $color: { control: 'text' },
-    $padding: { control: 'text' },
+    '$background-color': { control: 'color' },
+    '$color': { control: 'color' },
+    '$padding': { control: 'text' },
     '$box-shadow': { control: 'text' },
     '$border-width': { control: 'text' },
     '$border-style': { control: 'text' },
@@ -34,7 +34,14 @@ export default {
 
 // More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
 export const Default = {
-  args: {},
+  args: {
+    $width: '500px',
+    $height: '500px',
+    $border: '1px dashed #e81111',
+    $padding: '10px',
+    $color: '#333',
+    $background: '#fff',
+  },
 }
 
 export const Border = {
@@ -43,14 +50,9 @@ export const Border = {
   },
 }
 
-export const Width = {
+export const Size = {
   args: {
-    $width: '100px',
-  },
-}
-
-export const Height = {
-  args: {
-    $height: '100px',
+    $width: '500px',
+    $height: '500px',
   },
 }

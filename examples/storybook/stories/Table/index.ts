@@ -1,5 +1,5 @@
 import type { TableAttributes } from '@eichjs/components'
-import { Table, Td, Tr, Caption } from '@eichjs/components'
+import { Caption, Table, Td, Tr } from '@eichjs/components'
 import { builtins, parse, renderRoots } from '@eichjs/renderer'
 
 export function createTable({

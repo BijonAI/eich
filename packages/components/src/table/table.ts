@@ -1,4 +1,10 @@
-import { builtins, defineComponent, effect, toValue, useAttrs } from '@eichjs/renderer'
+import {
+  builtins,
+  defineComponent,
+  effect,
+  toValue,
+  useAttrs,
+} from '@eichjs/renderer'
 
 export interface TableAttributes {
   // Basic style attributes
@@ -9,7 +15,7 @@ export interface TableAttributes {
   '$border-style': CSSStyleDeclaration['borderStyle']
   '$border-color': CSSStyleDeclaration['borderColor']
 
-  // Table layout attributes
+  // Table layout attributeks
   '$border-collapse': CSSStyleDeclaration['borderCollapse']
   '$border-spacing': CSSStyleDeclaration['borderSpacing']
   '$caption-side': CSSStyleDeclaration['captionSide']
