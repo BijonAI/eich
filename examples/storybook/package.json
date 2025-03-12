@@ -1,0 +1,31 @@
+{
+  "name": "@eichjs/examples",
+  "version": "1.0.0",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "keywords": [],
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "storybook dev -p 6006",
+    "build": "storybook build"
+  },
+  "dependencies": {
+    "@eichjs/components": "workspace:^",
+    "@eichjs/layout": "workspace:^",
+    "@eichjs/renderer": "workspace:^",
+    "eichjs": "workspace:^"
+  },
+  "devDependencies": {
+    "@chromatic-com/storybook": "^3.2.5",
+    "@storybook/addon-essentials": "^8.6.4",
+    "@storybook/addon-interactions": "^8.6.4",
+    "@storybook/blocks": "^8.6.4",
+    "@storybook/html": "^8.6.4",
+    "@storybook/html-vite": "^8.6.4",
+    "@storybook/test": "^8.6.4",
+    "@types/node": "22.5.0",
+    "storybook": "^8.6.4"
+  }
+}

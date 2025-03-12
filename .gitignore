@@ -128,10 +128,10 @@ dist
 .yarn/install-state.gz
 .pnp.*
 /.idea/
-/.vscode/
 
 # VSCode Counter
 .VSCodeCounter
 
 # MacOS
 .DS_Store
+*storybook.log

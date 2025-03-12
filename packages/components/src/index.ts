@@ -1,3 +1,4 @@
+import type { TableAttributes } from './table/table'
 import Button from './elements/button'
 import Input from './elements/input'
 import Image from './image'
@@ -29,4 +30,30 @@ import Thead from './table/thead'
 import Tr from './table/tr'
 import Video from './video'
 
-export { Button, Caption, Circle, Colgroup, Image, Input, List, ListItem, Path, Polygon, Polyline, Rect, Span, Svg, Table, Tbody, Td, Tfoot, Th, Thead, Title, Tr, Video }
+export {
+  Button,
+  Caption,
+  Circle,
+  Colgroup,
+  Image,
+  Input,
+  List,
+  ListItem,
+  Path,
+  Polygon,
+  Polyline,
+  Rect,
+  Span,
+  Svg,
+  Table,
+  Tbody,
+  Td,
+  Tfoot,
+  Th,
+  Thead,
+  Title,
+  Tr,
+  Video,
+}
+
+export type { TableAttributes }

@@ -1,0 +1,10 @@
+{
+  "editor.formatOnSave": true,
+  "cSpell.words": ["Eich", "eichjs"],
+  "prettier.enable": false,
+  "svg.preview.background": "transparent",
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.organizeImports": "explicit"
+  }
+}

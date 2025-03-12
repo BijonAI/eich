@@ -1,4 +1,3 @@
-
 import {
   builtins,
   createDelegate,
@@ -16,7 +15,6 @@ const component = defineComponent(
     const button = document.createElement('button')
     button.append(...children())
 
-    
     delegate(button)
     return button
   },
