@@ -1,5 +1,5 @@
 import type { TableAttributes } from '@eichjs/components'
-import { Caption, Table, Td, Tr } from '@eichjs/components'
+import { Table } from '@eichjs/components'
 import { builtins, parse, renderRoots } from '@eichjs/renderer'
 
 export function createTable({
@@ -23,9 +23,6 @@ export function createTable({
   '$box-shadow': boxShadow,
 }: TableAttributes) {
   builtins.set('table', Table)
-  builtins.set('tr', Tr)
-  builtins.set('td', Td)
-  builtins.set('caption', Caption)
 
   const container = document.createElement('div')
 
